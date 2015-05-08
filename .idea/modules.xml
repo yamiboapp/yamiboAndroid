@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/yamibo.iml" filepath="$PROJECT_DIR$/app/yamibo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yamibo/yamibo.iml" filepath="$PROJECT_DIR$/yamibo/yamibo.iml" />
       <module fileurl="file://$PROJECT_DIR$/yamiboAndroid.iml" filepath="$PROJECT_DIR$/yamiboAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/yamibolib/yamibolib.iml" filepath="$PROJECT_DIR$/yamibolib/yamibolib.iml" />
     </modules>
