@@ -19,25 +19,15 @@ public class YMBApplication extends Application {
         return instance;
     }
 
+    public static YMBApplication _instance() {
+        return instance;
+    }
+
     public Object getService(String name) {
         if (services == null) {
             services = new ServiceManager(this);
         }
         return services.getService(name);
-    }
-
-    public HttpService httpService() {
-        if (httpService == null) {
-            httpService = (HttpService) getService("http");
-        }
-        return httpService;
-    }
-
-    public CacheService mapiCacheService() {
-        if (mapiCacheService == null) {
-            mapiCacheService = (CacheService) getService("mapi_cache");
-        }
-        return mapiCacheService;
     }
 
     public MApiService mapiService() {

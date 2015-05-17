@@ -8,6 +8,8 @@ import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.yamibo.main.yamibolib.app.YMBApplication;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,7 +31,7 @@ public class Environment {
     private static PackageInfo pkgInfo() {
         if (packageInfo == null) {
             try {
-                Context c = DPApplication._instance();
+                Context c = YMBApplication._instance();
                 packageInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
             } catch (PackageManager.NameNotFoundException e) {
             }
@@ -57,7 +59,7 @@ public class Environment {
     public static String uuid() {
 
         if (uuid == null) {
-            DPApplication c = DPApplication._instance();
+            YMBApplication c = YMBApplication._instance();
             if (c == null) {
                 return null;
             }
@@ -68,12 +70,6 @@ public class Environment {
             SharedPreferences prefs = c.getApplicationContext().getSharedPreferences("bookinguuid",
                     Context.MODE_PRIVATE);
             String str = prefs.getString("uuid", "");
-            if (TextUtils.isEmpty(str)) {
-                str = oldUdid();
-                if (!TextUtils.isEmpty(str)) {
-                    prefs.edit().putString("uuid", str).commit();
-                }
-            }
 
             if (!TextUtils.isEmpty(str)) {
                 // uuid should look like uuid.
@@ -120,7 +116,7 @@ public class Environment {
             String cachedImei = null;
             try {
                 // do not use file storage, use cached instead
-                File path = new File(DPApplication._instance().getCacheDir(), "cached_imei");
+                File path = new File(YMBApplication._instance().getCacheDir(), "cached_imei");
                 FileInputStream fis = new FileInputStream(path);
                 byte[] buf = new byte[1024];
                 int l;
@@ -147,7 +143,7 @@ public class Environment {
             // cache fail, read from telephony manager
             if (imei == null) {
                 try {
-                    TelephonyManager tel = (TelephonyManager) DPApplication._instance().getSystemService(
+                    TelephonyManager tel = (TelephonyManager) YMBApplication._instance().getSystemService(
                             Context.TELEPHONY_SERVICE);
                     imei = tel.getDeviceId();
                     if (imei != null) {
@@ -170,7 +166,7 @@ public class Environment {
                 }
                 if (imei != null) {
                     try {
-                        File path = new File(DPApplication._instance().getCacheDir(), "cached_imei");
+                        File path = new File(YMBApplication._instance().getCacheDir(), "cached_imei");
                         FileOutputStream fos = new FileOutputStream(path);
                         String str = deviceIdentity + "\n" + imei + "\n";
                         try {
@@ -182,7 +178,7 @@ public class Environment {
                         e.printStackTrace();
                     }
                 } else {
-                    File path = new File(DPApplication._instance().getCacheDir(), "cached_imei");
+                    File path = new File(YMBApplication._instance().getCacheDir(), "cached_imei");
                     path.delete();
                 }
             }
@@ -205,7 +201,7 @@ public class Environment {
             StringBuilder sb = new StringBuilder("MApi 1.0 (");
 
             try {
-                Context c = DPApplication._instance();
+                Context c = YMBApplication._instance();
                 PackageInfo packageInfo = c.getPackageManager().getPackageInfo(c.getPackageName(),
                         0);
 
@@ -217,13 +213,6 @@ public class Environment {
 
             // 只是保护一下
             try {
-                String source = source();
-                if (source != null)
-                    sb.append(" ").append(source);
-                else
-                    sb.append(" null");
-
-                sb.append(" ").append(source2());
                 sb.append("; Android ");
                 sb.append(Build.VERSION.RELEASE);
                 sb.append(")");
