@@ -12,12 +12,35 @@ import com.yamibo.main.yamibolib.Utils.Log;
 import org.apache.http.HttpHost;
 
 public class NetworkInfoHelper {
+    public static final int NETWORK_TYPE_UNKNOWN = 0;
+    public static final int NETWORK_TYPE_WIFI = 1;
+    public static final int NETWORK_TYPE_2G = 2;
+    public static final int NETWORK_TYPE_3G = 3;
+    public static final int NETWORK_TYPE_4G = 4;
     private Context context;
     private ConnectivityManager connectivityManager;
     private TelephonyManager teleManager;
 
     public NetworkInfoHelper(Context context) {
         this.context = context;
+    }
+
+    /**
+     * 判断是否有网络连接
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
     }
 
     protected ConnectivityManager connectivityManager() {
@@ -140,12 +163,6 @@ public class NetworkInfoHelper {
         }
     }
 
-    public static final int NETWORK_TYPE_UNKNOWN = 0;
-    public static final int NETWORK_TYPE_WIFI = 1;
-    public static final int NETWORK_TYPE_2G = 2;
-    public static final int NETWORK_TYPE_3G = 3;
-    public static final int NETWORK_TYPE_4G = 4;
-
     /*
      * 返回详细的网络类型
      */
@@ -198,23 +215,5 @@ public class NetworkInfoHelper {
                 }
         }
         return NETWORK_TYPE_UNKNOWN;
-    }
-
-    /**
-     * 判断是否有网络连接
-     *
-     * @param context
-     * @return
-     */
-    public static boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
     }
 }

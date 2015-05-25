@@ -194,7 +194,7 @@ public class Environment {
     /**
      * 请求MApi服务器使用的UserAgent及pragma-os （Http Header）
      * <p/>
-     * MApi 1.0 (com.dianping.v1 4.2.1 androidmarket Nexus_One; Android 2.2)
+     * MApi 1.0 (com.yamibo.v1 4.2.1 androidmarket Nexus_One; Android 2.2)
      */
     public static String mapiUserAgent() {
         if (mapiUserAgent == null) {
@@ -208,7 +208,7 @@ public class Environment {
                 sb.append(packageInfo.packageName);
                 sb.append(" ").append(versionName());
             } catch (Exception e) {
-                sb.append("com.dianping.v1 5.6");
+                sb.append("com.yamibo.v1 5.6");
             }
 
             // 只是保护一下
@@ -218,7 +218,7 @@ public class Environment {
                 sb.append(")");
                 mapiUserAgent = sb.toString();
             } catch (Exception e) {
-                mapiUserAgent = "MApi 1.0 (com.dianping.v1 5.6 null null; Android "
+                mapiUserAgent = "MApi 1.0 (com.yamibo.v1 5.6 null null; Android "
                         + Build.VERSION.RELEASE + ")";
             }
 

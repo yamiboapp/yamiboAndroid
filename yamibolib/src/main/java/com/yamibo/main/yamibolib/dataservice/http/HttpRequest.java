@@ -1,12 +1,14 @@
 package com.yamibo.main.yamibolib.dataservice.http;
 
 
+import com.yamibo.main.yamibolib.dataservice.Request;
+
 import org.apache.http.NameValuePair;
 
 import java.io.InputStream;
 import java.util.List;
 
-public interface HttpRequest extends com.yamibo.main.yamibolib.dataservice.http.Request {
+public interface HttpRequest extends Request {
 
     /**
      * HTTP方法，常用的有GET和POST<br>

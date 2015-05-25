@@ -7,7 +7,7 @@ package com.yamibo.main.yamibolib.dataservice;
  * @param <R> Response的具体类型
  * @author Yimin
  */
-public interface DataService<T extends com.yamibo.main.yamibolib.dataservice.http.Request, R extends Response> {
+public interface DataService<T extends Request, R extends Response> {
 
     /**
      * 异步获取Request请求<br>

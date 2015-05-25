@@ -3,24 +3,23 @@ package com.yamibo.main.yamibolib.dataservice;
 /**
  * 最基本的包含url的Request<br>
  * 不包含比较函数，只有当引用相等时才相等
- * 
+ *
  * @author Yimin
- * 
  */
-public class BasicRequest implements com.yamibo.main.yamibolib.dataservice.http.Request {
-	private String url;
+public class BasicRequest implements Request {
+    private String url;
 
-	public BasicRequest(String url) {
-		this.url = url;
-	}
+    public BasicRequest(String url) {
+        this.url = url;
+    }
 
-	@Override
-	public String url() {
-		return url;
-	}
+    @Override
+    public String url() {
+        return url;
+    }
 
-	@Override
-	public String toString() {
-		return url;
-	}
+    @Override
+    public String toString() {
+        return url;
+    }
 }
