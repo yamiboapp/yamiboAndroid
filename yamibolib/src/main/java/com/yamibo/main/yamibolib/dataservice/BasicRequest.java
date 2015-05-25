@@ -1,4 +1,4 @@
-package com.dianping.dataservice;
+package com.yamibo.main.yamibolib.dataservice;
 
 /**
  * 最基本的包含url的Request<br>
@@ -7,7 +7,7 @@ package com.dianping.dataservice;
  * @author Yimin
  * 
  */
-public class BasicRequest implements Request {
+public class BasicRequest implements com.yamibo.main.yamibolib.dataservice.http.Request {
 	private String url;
 
 	public BasicRequest(String url) {

@@ -2,7 +2,11 @@ package com.yamibo.main.yamibolib.app;
 
 import android.app.Application;
 
-import org.apache.http.protocol.HttpService;
+import com.yamibo.main.yamibolib.accountservice.AccountService;
+import com.yamibo.main.yamibolib.configservice.ConfigService;
+import com.yamibo.main.yamibolib.dataservice.http.HttpService;
+import com.yamibo.main.yamibolib.locationservice.LocationService;
+import com.yamibo.main.yamibolib.statistics.StatisticsService;
 
 /**
  * Created by wangxiaoyan on 15/4/20.
@@ -10,6 +14,12 @@ import org.apache.http.protocol.HttpService;
 public class YMBApplication extends Application {
     private static YMBApplication instance;
     private ServiceManager services;
+    private HttpService httpService;
+    private ConfigService configService;
+    private AccountService accountService;
+    private LocationService locationService;
+    private StatisticsService statisticsService;
+
 
     public static YMBApplication instance() {
         if (instance == null) {
@@ -30,11 +40,11 @@ public class YMBApplication extends Application {
         return services.getService(name);
     }
 
-    public MApiService mapiService() {
-        if (mapiService == null) {
-            mapiService = (MApiService) getService("mapi");
+    public HttpService httpService() {
+        if (httpService == null) {
+            httpService = (HttpService) getService("http");
         }
-        return mapiService;
+        return httpService;
     }
 
     public ConfigService configService() {
@@ -56,5 +66,12 @@ public class YMBApplication extends Application {
             locationService = (LocationService) getService("location");
         }
         return locationService;
+    }
+
+    public StatisticsService statisticsService() {
+        if (statisticsService == null) {
+            statisticsService = (StatisticsService) getService("statistics");
+        }
+        return statisticsService;
     }
 }

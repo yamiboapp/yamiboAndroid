@@ -1,10 +1,9 @@
 package com.yamibo.main.yamibolib.accountservice;
 
-import java.util.List;
-
 import org.apache.http.NameValuePair;
+import org.json.JSONObject;
 
-import com.dianping.archive.DPObject;
+import java.util.List;
 
 /**
  * 账户服务: 负责登录，第三方账号登录，注册
@@ -29,7 +28,7 @@ public interface AccountService {
 	 * 没有登录时返回null <br>
 	 * 注意用户账户信息不包含Token
 	 */
-	public DPObject profile();
+	public JSONObject profile();
 
 	/** 没有登录时返回0 */
 	public int id();
@@ -66,7 +65,7 @@ public interface AccountService {
 	 * 任意字段更新都会触发AccountListener.onProfileChanged事件<br>
 	 * 
 	 */
-	public void update(DPObject profile);
+	public void update(JSONObject profile);
 
 	/**
 	 * 用Activity implement AccountListener,在DPActivity里面会帮你removeListener

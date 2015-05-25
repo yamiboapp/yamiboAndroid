@@ -1,4 +1,4 @@
-package com.dianping.dataservice;
+package com.yamibo.main.yamibolib.dataservice.http;
 
 /**
  * 一个基于url的数据请求<br>

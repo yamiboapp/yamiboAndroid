@@ -1,4 +1,4 @@
-package com.dianping.dataservice;
+package com.yamibo.main.yamibolib.dataservice;
 
 /**
  * DataService异步调用方式的回传代理
@@ -6,7 +6,7 @@ package com.dianping.dataservice;
  * 完整的网络监听接口,可以跟RequestHandler一样传入监听器
  * 
  */
-public interface FullRequestHandle<T extends Request, R extends Response> extends
+public interface FullRequestHandle<T extends com.yamibo.main.yamibolib.dataservice.http.Request, R extends Response> extends
         RequestHandler<T, R> {
 
     /**

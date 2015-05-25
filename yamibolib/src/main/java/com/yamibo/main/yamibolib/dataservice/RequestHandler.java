@@ -1,4 +1,6 @@
-package com.dianping.dataservice;
+package com.yamibo.main.yamibolib.dataservice;
+
+import com.yamibo.main.yamibolib.dataservice.http.Request;
 
 /**
  * DataService异步调用方式的回传代理
