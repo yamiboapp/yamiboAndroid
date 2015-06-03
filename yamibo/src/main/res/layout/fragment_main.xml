@@ -9,4 +9,24 @@
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!--DEBUG_CODE for location service data-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Debug Large Text"
+        android:id="@+id/debug_text"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Debug Button"
+        android:id="@+id/debug_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/debug_text"
+        android:layout_alignEnd="@+id/debug_text"
+        android:layout_marginBottom="168dp"
+        android:onClick="debugShow" />
+
 </RelativeLayout>

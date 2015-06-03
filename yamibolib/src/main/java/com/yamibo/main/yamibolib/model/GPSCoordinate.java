@@ -117,6 +117,11 @@ public class GPSCoordinate implements Parcelable {
     // Parcelable
     //
 
+    /**
+     * 距离公式 haversine formula
+     * @param point
+     * @return
+     */
     public double distanceTo(GPSCoordinate point) {
         if (point == this)
             return 0;
