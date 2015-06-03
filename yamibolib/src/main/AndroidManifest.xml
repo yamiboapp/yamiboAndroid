@@ -26,6 +26,7 @@
     <!-- point out the name of the location service Application here to avoid Class application cast error
      android:name=".locationservice.impl.BDLocationApplication"-->
     <application
+        android:name="com.yamibo.main.yamibolib.app.YMBApplication"
         android:allowBackup="true"
         android:label="@string/app_name">
 

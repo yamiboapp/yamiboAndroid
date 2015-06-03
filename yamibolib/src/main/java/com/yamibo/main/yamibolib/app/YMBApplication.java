@@ -20,7 +20,6 @@ public class YMBApplication extends Application {
     private LocationService locationService;
     private StatisticsService statisticsService;
 
-
     public static YMBApplication instance() {
         if (instance == null) {
             throw new IllegalStateException("Application has not been created");
@@ -31,6 +30,12 @@ public class YMBApplication extends Application {
 
     public static YMBApplication _instance() {
         return instance;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        locationService().start();
     }
 
     public Object getService(String name) {

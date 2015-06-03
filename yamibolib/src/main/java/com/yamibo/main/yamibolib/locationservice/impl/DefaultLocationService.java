@@ -10,17 +10,16 @@ import com.baidu.location.LocationClientOption;
 import com.yamibo.main.yamibolib.Utils.Log;
 import com.yamibo.main.yamibolib.locationservice.LocationListener;
 import com.yamibo.main.yamibolib.locationservice.LocationService;
+import com.yamibo.main.yamibolib.locationservice.model.City;
+import com.yamibo.main.yamibolib.locationservice.model.Location;
 import com.yamibo.main.yamibolib.model.GPSCoordinate;
 
-import com.baidu.location.LocationClient;
-
-
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wangxiaoyan on 15/5/25.
  * Clover: implemented on 01/06/25, use BDLocationApplication class based on Baidu sample, member variables are added correspondingly
- *
  */
 public class DefaultLocationService implements LocationService {
 
@@ -30,18 +29,20 @@ public class DefaultLocationService implements LocationService {
     /**
      * to be read by the textView for shown to mobile activity
      */
-    public String debugMessage=null;
+    public String debugMessage = null;
 
     //Baidu service
     // client and listener are in the BDLocationApplication's member field
-    private BDLocationApplication mBDLocationApplication =null;
-    private BDLocation mBDlocationResult=null;
+    private BDLocationApplication mBDLocationApplication = null;
+    private BDLocation mBDlocationResult = null;
 
 
     /**
      * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
      */
-    private static final boolean IS_DEBUG_ENABLED=true;
+    private static final boolean IS_DEBUG_ENABLED = true;
+
+    private List<LocationListener> mListeners = new ArrayList<>();
 
 
     /**
@@ -49,40 +50,41 @@ public class DefaultLocationService implements LocationService {
      * locationClient and Listener instantiated
      * link onReceived callback
      * listener not registered! service not started! use start();
+     *
      * @param context
      */
     public DefaultLocationService(Context context) {
         mContext = context;
         mBDLocationApplication = new BDLocationApplication(mContext);
-        mBDLocationApplication.targetService=this;
+        mBDLocationApplication.targetService = this;
     }
 
     @Override
     public int status() {
         int mStatus;
-        if(mBDLocationApplication==null)
+        if (mBDLocationApplication == null)
             return LocationService.STATUS_FAIL;
-        if(mBDLocationApplication.isLocationReceived)
-            mStatus=LocationService.STATUS_LOCATED;
-        else{
-            if(mBDLocationApplication.isLocationDemand)
-                mStatus=LocationService.STATUS_TRYING;
+        if (mBDLocationApplication.isLocationReceived)
+            mStatus = LocationService.STATUS_LOCATED;
+        else {
+            if (mBDLocationApplication.isLocationDemand)
+                mStatus = LocationService.STATUS_TRYING;
             else
-                mStatus=LocationService.STATUS_FAIL;
+                mStatus = LocationService.STATUS_FAIL;
         }
         return mStatus;
     }
 
     @Override
     public boolean hasLocation() {
-        if(mBDlocationResult!=null)
+        if (mBDlocationResult != null)
             return true;
         return false;
     }
 
     @Override
     //TODO
-    public JSONObject location() {
+    public Location location() {
         return null;
     }
 
@@ -100,14 +102,14 @@ public class DefaultLocationService implements LocationService {
 
     @Override
     public String address() {
-        if(hasLocation())
-            return(mBDlocationResult.getAddrStr());
+        if (hasLocation())
+            return (mBDlocationResult.getAddrStr());
         return null;
     }
 
     @Override
     //TODO
-    public JSONObject city() {
+    public City city() {
         return null;
     }
 
@@ -118,10 +120,10 @@ public class DefaultLocationService implements LocationService {
      * register listener, init option, start service, requestLocation
      */
     public boolean start() {
-        if(mBDLocationApplication ==null){
+        if (mBDLocationApplication == null) {
             return false;
         }
-        if(isLocationEnabled(mContext)) {
+        if (isLocationEnabled(mContext)) {
             mBDLocationApplication.addListener();
             mBDLocationApplication.initLocation();
             mBDLocationApplication.start();
@@ -130,12 +132,10 @@ public class DefaultLocationService implements LocationService {
             debugLog("location service starts");
             debugShow("location service starts");
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-
 
 
     @Override
@@ -145,7 +145,7 @@ public class DefaultLocationService implements LocationService {
      * in Baidu service sample, listener is not removed when client stops?
      */
     public void stop() {
-        if(mBDLocationApplication==null)
+        if (mBDLocationApplication == null)
             return;
 
         //reset flags
@@ -163,53 +163,46 @@ public class DefaultLocationService implements LocationService {
      * return true if location demand has been sent
      */
     public boolean refresh() {
-        if(mBDLocationApplication ==null)
+        if (mBDLocationApplication == null)
             return false;
         mBDLocationApplication.requestLocation();
         return mBDLocationApplication.isLocationDemand;
     }
 
     /**
-     * @param timeMS
-     * 设置发起定位请求的间隔时间为>=1000 (ms) 时为循环更新
-     * default value -1 means no automatic update.
-     * to TEST: 热切换
+     * @param timeMS 设置发起定位请求的间隔时间为>=1000 (ms) 时为循环更新
+     *               default value -1 means no automatic update.
+     *               to TEST: 热切换
      */
-    public void newUpdateTime(int timeMS){
+    public void newUpdateTime(int timeMS) {
         mBDLocationApplication.setSpan(timeMS);
         mBDLocationApplication.initLocation();
     }
 
     /**
-     *
-     * @param isNeedAddress
-     * to TEST: 热切换
-     *
+     * @param isNeedAddress to TEST: 热切换
      */
-    public void newAddressAppearance(boolean isNeedAddress){
+    public void newAddressAppearance(boolean isNeedAddress) {
         mBDLocationApplication.setIsNeedAddress(isNeedAddress);
         mBDLocationApplication.initLocation();
     }
 
     /**
-     *
      * @param input LocationClientOption.LocationMode.Hight_Accuracy 高精度模式
      *              , Battery_Saving 低功耗模式
      *              , Device_Sensors 仅设备(Gps)模式
-     * 热切换 in demo sample
+     *              热切换 in demo sample
      */
-    public void newLocationMode(LocationClientOption.LocationMode input){
+    public void newLocationMode(LocationClientOption.LocationMode input) {
         mBDLocationApplication.setLocationMode(input);
         mBDLocationApplication.initLocation();
     }
 
     /**
-     *
      * @param input choose "gcj02","bd09ll","bd09"
-     * @return
-     * 热切换 in demo
+     * @return 热切换 in demo
      */
-    public void newCoordMode(String input){
+    public void newCoordMode(String input) {
         mBDLocationApplication.setCoordMode(input);
     }
 
@@ -220,6 +213,9 @@ public class DefaultLocationService implements LocationService {
      * maybe overload with no parameter?
      */
     public void addListener(LocationListener listener) {
+        if (listener != null && !mListeners.contains(listener)) {
+            mListeners.add(listener);
+        }
     }
 
 
@@ -230,6 +226,7 @@ public class DefaultLocationService implements LocationService {
      */
     @Override
     public void removeListener(LocationListener listener) {
+        mListeners.remove(listener);
     }
 
 
@@ -240,25 +237,24 @@ public class DefaultLocationService implements LocationService {
     }
 
 
-    public static boolean isLocationEnabled(Context context){
-        if(context==null)
+    public static boolean isLocationEnabled(Context context) {
+        if (context == null)
             return false;
 
-        int locationMode=0;
+        int locationMode = 0;
         String locationProviders;
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-            try{
-                locationMode= Settings.Secure.getInt(context.getContentResolver(),Settings.Secure.LOCATION_MODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
 
-            }catch(Settings.SettingNotFoundException e){
+            } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
             }
-            return locationMode!=Settings.Secure.LOCATION_MODE_OFF;
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
 
-        }
-        else{
-            locationProviders=Settings.Secure.getString(context.getContentResolver(),Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
 
@@ -268,26 +264,32 @@ public class DefaultLocationService implements LocationService {
 
     /**
      * this message can be shown in the debut_text field on mobile by click the debug_button
+     *
      * @param Message
      */
-    private void debugShow(String Message){
-        if(IS_DEBUG_ENABLED)
-            debugMessage=Message;
+    private void debugShow(String Message) {
+        if (IS_DEBUG_ENABLED)
+            debugMessage = Message;
     }
-    private void debugLog(String Message){
-        if(IS_DEBUG_ENABLED)
-            Log.i("DefaultLocationSerivce","DEBUG_"+Message);
+
+    private void debugLog(String Message) {
+        if (IS_DEBUG_ENABLED)
+            Log.i("DefaultLocationSerivce", "DEBUG_" + Message);
     }
 
     /**
      * to be called by BDLocationListener's onReceive
      * when received, update mBDlocationResult
-     *
      */
     public void onReceiveBDLocation(BDLocation locationResult) {
-        if(mBDLocationApplication==null)
+        if (mBDLocationApplication == null)
             return;
-        this.mBDlocationResult=locationResult;
+        this.mBDlocationResult = locationResult;
+        // TODO
+        // 初始化这里LocationServier所有的变量,包括locaion,city,等等等等
+        for (LocationListener listener : mListeners) {
+            listener.onLocationChanged(this);
+        }
 
         debugLog("LocationService receive location from BDLocation");
         debugShow(BDLocationApplication.toStringOutput(mBDlocationResult));

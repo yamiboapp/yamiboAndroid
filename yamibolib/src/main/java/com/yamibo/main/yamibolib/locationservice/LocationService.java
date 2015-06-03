@@ -1,9 +1,9 @@
 package com.yamibo.main.yamibolib.locationservice;
 
 
+import com.yamibo.main.yamibolib.locationservice.model.City;
+import com.yamibo.main.yamibolib.locationservice.model.Location;
 import com.yamibo.main.yamibolib.model.GPSCoordinate;
-
-import org.json.JSONObject;
 
 /**
  * 定位服务
@@ -54,7 +54,7 @@ public interface LocationService {
      *
      * @return 当hasLocation()返回true时，一定不为空
      */
-    JSONObject location();
+    Location location();
 
     /**
      * 真实坐标
@@ -87,7 +87,7 @@ public interface LocationService {
      *
      * @return 当hasLocation()返回true时，一定不为空
      */
-    JSONObject city();
+    City city();
 
     /**
      * 启动定位
