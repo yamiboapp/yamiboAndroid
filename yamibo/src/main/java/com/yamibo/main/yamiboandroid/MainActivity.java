@@ -106,7 +106,7 @@ public class MainActivity extends ActionBarActivity
         listener1=new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
-                debugLog("the debug Listener1 has received location");
+                debugLog("the debug listener1 has received location");
             }
         };
         mBDLocationClient.registerLocationListener(listener1);
@@ -266,7 +266,7 @@ public class MainActivity extends ActionBarActivity
 
            if(mBDLocationClient!=null){
                int code=mBDLocationClient.requestLocation();
-               debugLog("location request has returned code: "+code);
+               debugLog("location request has returned code= "+code);
            }
 
 
