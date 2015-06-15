@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -129,18 +130,28 @@ class AndroidLocationService implements APILocationService {
 
 
     /**
-     * flag isLocationDemand and isStarted reset to false
+     * flag isLocationDemand and isStarted reset to false, clear listeners
      */
     @Override
     public void stop() {
         if (locationManager == null)
             return;
 
-        for (LocationListener listener: mapListeners.keySet())
-            removeListener(listener);
-        isStarted=false;
-        resetProgressFlag();
-        debugLog("location service stops");
+/** this iteration will cause error as KeySet is changing in the loop?
+ for (LocationListener listener: mapListeners.keySet())
+ removeListener(listener);
+ */
+
+        try{for(AndroidListener androidListener:mapListeners.values())
+            locationManager.removeUpdates(androidListener);}
+        catch (Exception e){
+            debugLog("error remove all android listner updates "+e.toString());
+        }finally {
+            mapListeners.clear();
+            isStarted=false;
+            resetProgressFlag();
+            debugLog("location service stops");
+        }
     }
 
     @Override
@@ -150,8 +161,6 @@ class AndroidLocationService implements APILocationService {
         boolean state=false;
         for(AndroidListener androidListener:mapListeners.values()) {
             state=(state || requestLocation(androidListener));
-            if(state)
-                break;
         }
         isLocationReceived=false;
         return state;
@@ -161,18 +170,28 @@ class AndroidLocationService implements APILocationService {
     public void addListener(LocationListener listener) {
         if (listener != null && !mapListeners.containsKey(listener)) {
             AndroidListener androidListener=new AndroidListener(listener,this);
-            androidListener.debugMessage="register android Listener which is added to android listener array of size "+mapListeners.size();
+            androidListener.debugMessage="register android Listener which is added to android listeners' set of size "+mapListeners.values().size();
             registerListener(androidListener);
             mapListeners.put(listener, androidListener);
         }
+        debugLog("\nsize " +mapListeners.keySet().size()+" keySet: "+mapListeners.keySet().toString()
+                +"size " +mapListeners.values().size()+" values: "+mapListeners.values().toString());
     }
 
     @Override
     public void removeListener(LocationListener listener) {
         if (listener != null && mapListeners.containsKey(listener)) {
             unregisterListener(mapListeners.get(listener));
-            mapListeners.remove(listener);
+            //remove entries (should exist one) associated with the given listener
+            for(Iterator<Map.Entry<LocationListener, AndroidListener>> it = mapListeners.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<LocationListener, AndroidListener> entry = it.next();
+                if (entry.getKey().equals(listener)) {
+                    it.remove();
+                }
+            }
         }
+        debugLog("\nsize " + mapListeners.keySet().size() + " keySet: " + mapListeners.keySet().toString()
+                + "size " + mapListeners.values().size() + " values: " + mapListeners.values().toString());
     }
 
     @Override
@@ -182,9 +201,13 @@ class AndroidLocationService implements APILocationService {
         refresh();
     }
 
+    /**
+     *
+     * @return Android case, test if client exits (no need to explicitly start it)
+     */
     @Override
     public boolean isClientStarted() {
-        return false;
+        return (locationManager!=null);
     }
 
 

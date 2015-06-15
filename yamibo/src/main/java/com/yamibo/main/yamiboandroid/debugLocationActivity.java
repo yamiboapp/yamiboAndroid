@@ -119,7 +119,7 @@ public class debugLocationActivity extends ActionBarActivity {
         }
     }
 
-    public void debugShow(View view) {
+    public void updateMessage(View view) {
         //startActivity(intent);
 /*        debugText=(TextView)findViewById(R.id.debug_text);
         BDLocation result=mBDLocationClient.getLastKnownLocation();
@@ -139,12 +139,12 @@ public class debugLocationActivity extends ActionBarActivity {
                 textMessage.setText(debugMessage);
                 debugLog("debugText updated");
             } else
-                debugLog("debugText is null!");
+                debugLog("debugText is a null pointer!");
         }
     }
     private void debugLog(String debugMessage){
         if(IS_DEBUG_ENABLED){
-            Log.i("main", "DEBUG_" + debugMessage);
+            Log.i("DEBUG_debugActivity:",debugMessage);
         }
     }
 }

@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -226,7 +227,7 @@ public class BDLocationService implements APILocationService {
 
         // bdLocationClient.start();
         int code= bdLocationClient.requestLocation();
-        debugLog("request code = "+code);
+        debugLog("request code = " + code);
         switch (code)
         {
             case 0:
@@ -259,17 +260,34 @@ public class BDLocationService implements APILocationService {
     /**
      * BD client stop
      * 测试结果：可以重复停止
+     * reset flags, clear listeners
      */
     public void stop() {
         if (bdLocationClient == null)
             return;
 
-        for (LocationListener listener: mapListeners.keySet())
+/** this iteration will cause error (because KeySet is changing in the loop?)
+      for (LocationListener listener: mapListeners.keySet())
             removeListener(listener);
-        bdLocationClient.stop();
-        isStarted=false;
-        resetProgressFlag();
-        debugLog("location service stops");
+ */
+        /**
+         * when multiple listners exist, asynchronous unregister listener!!!<br>
+         * if first clear map or stop client, then unregister listener will cause error
+         */
+        try{
+            for(BDListener listener:mapListeners.values())
+                bdLocationClient.unRegisterLocationListener(listener);
+        }
+        catch (Exception e){
+            debugLog("error in unregister listeners "+e.toString());
+        }finally {
+            mapListeners.clear();
+            bdLocationClient.stop();
+            isStarted=false;
+            resetProgressFlag();
+            debugLog("location service stops");
+        }
+
     }
 
     @Override
@@ -284,18 +302,32 @@ public class BDLocationService implements APILocationService {
     public void addListener(LocationListener listener) {
         if (listener != null && !mapListeners.containsKey(listener)) {
             BDListener bdListener=new BDListener(listener,this);
-            bdListener.debugMessage="register BD Listener which is added to BDlistener array of size "+mapListeners.size();
+
+            bdListener.debugMessage="BD Listener (added to BDlisteners' set of size "+mapListeners.values().size()+")";
+            debugLog("new and register "+bdListener.debugMessage);
             registerListener(bdListener);
             mapListeners.put(listener,bdListener);
         }
+        debugLog("\nsize " +mapListeners.keySet().size()+" keySet: "+mapListeners.keySet().toString()
+                +"size " +mapListeners.values().size()+" values: "+mapListeners.values().toString());
     }
 
     @Override
     public void removeListener(LocationListener listener) {
         if (listener != null && mapListeners.containsKey(listener)) {
             unregisterListener(mapListeners.get(listener));
-            mapListeners.remove(listener);
+            //remove entries (should exist one) associated with the given listener
+            for(Iterator<Map.Entry<LocationListener, BDListener>> it = mapListeners.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<LocationListener, BDListener> entry = it.next();
+                if (entry.getKey().equals(listener)) {
+                    it.remove();
+                }
+            }
         }
+        else
+            debugLog("listener is null or not contained as key");
+        debugLog("\nsize " + mapListeners.keySet().size() + " keySet: " + mapListeners.keySet().toString()
+                + "size " + mapListeners.values().size() + " values: " + mapListeners.values().toString());
     }
 
     @Override
