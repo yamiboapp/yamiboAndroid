@@ -17,6 +17,7 @@ class AndroidListener implements android.location.LocationListener {
 
     // use this to unregister the listener so that single update can be realized
     private AndroidLocationService androidService =null;
+    String debugMessage=null;
 
     /**
      * 仅ANDROID API 使用。用于进行单次更新操作。
@@ -35,7 +36,7 @@ class AndroidListener implements android.location.LocationListener {
         // send result to supervisorService
         if(!isAutoRequestUpdate)
             androidService.unregisterListener(this);
-        debugLog("Android on location changed received:\n" + location.toString());
+        debugLog("\n"+debugMessage + "onLocationChanged:\n" + location.toString());
 
         com.yamibo.main.yamibolib.locationservice.model.Location LocationResult = androidService.toLocation(location);
         //invoke service to retrieve this location

@@ -37,7 +37,7 @@ public class BDLocationService implements APILocationService {
      */
     Map<LocationListener, BDListener> mapListeners=new HashMap<LocationListener, BDListener>();
 
-    BDListener myListener;
+    //BDListener myListener;
 
     private Context mContext;
 
@@ -60,7 +60,7 @@ public class BDLocationService implements APILocationService {
     private LocationClient bdLocationClient;
 
     private LocationClientOption.LocationMode locationMode = LocationClientOption.LocationMode.Hight_Accuracy;
-    private int updateInterval=5000;//default requestLocation not auto update
+    private int updateInterval=3000;//default requestLocation not auto update
 
     /**
      * 返回街道名称
@@ -113,7 +113,7 @@ public class BDLocationService implements APILocationService {
         setUpdateInterval(updateInterval);
         debugLog("updateInterval:" + updateInterval);
         setProvider(providerChoice);
-        myListener=new BDListener(null,this);
+        //myListener=new BDListener(null,this);
     }
 
     /**
@@ -121,7 +121,7 @@ public class BDLocationService implements APILocationService {
      * @param location
      * @return its String format for Output
      */
-    static String bdLocationToString(BDLocation location){
+    public static String bdLocationToString(BDLocation location){
         StringBuffer sb = new StringBuffer(256);
         sb.append("time : ");
         sb.append(location.getTime());
@@ -202,8 +202,8 @@ public class BDLocationService implements APILocationService {
         /*for(BDListener listener:mapListeners.values())
             registerListener(listener);
         */
-        if(myListener!=null)
-            registerListener(myListener);
+        /*if(myListener!=null)
+            registerListener(myListener);*/
         //parameter input in the register
         bdLocationClient.start();
         isStarted=true;
@@ -284,6 +284,7 @@ public class BDLocationService implements APILocationService {
     public void addListener(LocationListener listener) {
         if (listener != null && !mapListeners.containsKey(listener)) {
             BDListener bdListener=new BDListener(listener,this);
+            bdListener.debugMessage="add and register BD Listener number "+mapListeners.size();
             registerListener(bdListener);
             mapListeners.put(listener,bdListener);
         }

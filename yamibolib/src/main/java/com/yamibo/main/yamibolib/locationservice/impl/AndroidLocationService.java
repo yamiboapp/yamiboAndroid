@@ -73,7 +73,7 @@ class AndroidLocationService implements APILocationService {
      * when this field is inferior than 1000, listener will be made with interval 1000
      * and noAutoRequestUpdate
      */
-    private int updateInterval=-1;
+    private int updateInterval=3000;
 
 
     public AndroidLocationService(Context mContext,
@@ -161,6 +161,7 @@ class AndroidLocationService implements APILocationService {
     public void addListener(LocationListener listener) {
         if (listener != null && !mapListeners.containsKey(listener)) {
             AndroidListener androidListener=new AndroidListener(listener,this);
+            androidListener.debugMessage="android Listener number "+mapListeners.size();
             registerListener(androidListener);
             mapListeners.put(listener, androidListener);
         }

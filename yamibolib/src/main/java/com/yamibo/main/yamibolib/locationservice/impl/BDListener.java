@@ -17,6 +17,7 @@ class BDListener implements BDLocationListener {
     private DefaultLocationService supervisorService =null;
 
     private BDLocationService bdService =null;
+    String debugMessage=null;
 
     public BDListener(LocationListener supervisorListener, BDLocationService bdService){
         this.supervisorListener=supervisorListener;
@@ -27,7 +28,7 @@ class BDListener implements BDLocationListener {
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
 
-        debugLog("BDlocation received" + bdLocationToString(bdLocation));
+        debugLog("\n"+debugMessage + "onReceiveLocation: \n" + bdLocationToString(bdLocation));
 
         Location LocationResult = BDLocationService.toLocation(bdLocation);
 

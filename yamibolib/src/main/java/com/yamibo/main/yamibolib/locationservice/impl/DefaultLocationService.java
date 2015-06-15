@@ -67,8 +67,8 @@ public class DefaultLocationService implements LocationService {
     /**
      * 默认的serviceMode为百度定位（适用中国）或AndroidAPI定位（适用中国之外）
      */
-    private int serviceMode=BAIDU_MODE;
-    // private int serviceMode=ANDROID_API_MODE;
+    //private int serviceMode=BAIDU_MODE;
+     private int serviceMode=ANDROID_API_MODE;
     /**
      * 是否允许程序根据定位结果自动选择定位服务
      */
@@ -80,7 +80,7 @@ public class DefaultLocationService implements LocationService {
     /**
      * 当更新时间小于1000ms时，为单次更新
      */
-    private int updateInterval =5000;
+    private int updateInterval =-1;
 
     /**
      * 默认选择GPS and/or Network进行定位
@@ -316,17 +316,38 @@ public class DefaultLocationService implements LocationService {
         debugLog("location service stops");
     }
 
-    @Override
     /**
      * Clover
      * requestLocation (asynchronous)
      * return true if location demand has been sent
      */
+    /*    @Override
     public boolean refresh() {
         if (mBDLocationApplication == null)
             return false;
         mBDLocationApplication.requestLocation();
         return mBDLocationApplication.isLocationDemand;
+    }
+    */
+    /**
+     *  让所有已知监听器发送异步刷新当前位置的请求。可多次调用<br>
+     * 如果当前系统定位开关未打开，会直接返回false<br>
+     * 注意：百度的返回值由它的定位服务统一提供<br>
+     *     AndroidAPI 至少一个listener获取位置时返回值为true
+     */
+    @Override
+    public boolean refresh() {
+        if(!isLocationEnabled(mContext))
+            return false;
+        resetReceivedFlag();
+        debugLog("goto apiLocationService.refresh()");
+        return apiLocationService.refresh();
+    }
+    /**
+     * 重置发送/接到 位置信息的flags
+     */
+    private void resetReceivedFlag() {
+        isLocationReceived=false;
     }
 
     /**
@@ -366,18 +387,35 @@ public class DefaultLocationService implements LocationService {
         mBDLocationApplication.setCoordMode(input);
     }
 
-    @Override
+
     /**
      * NEED to be changed: LocationListener is not a parameter for BD listener servive;
      * not used here
      * maybe overload with no parameter?
      */
+        /*@Override
     public void addListener(LocationListener listener) {
         if (listener != null && !mListeners.contains(listener)) {
             mListeners.add(listener);
+
         }
     }
-
+*/
+    /**
+     * @param listener 任何有Location listener interface的监听器<br>
+     *     <p/>
+     *同一个监听器不会被重复添加
+     */
+    @Override
+    public void addListener(LocationListener listener) {
+        if(activeListeners.contains(listener)){
+            debugLog("listener is already active and known by the service!");
+            return;
+        }
+        activeListeners.add(listener);
+        debugLog("new LocationListener of number " + activeListeners.size());
+        apiLocationService.addListener(listener);
+    }
 
     /**
      * NEED to be changed: LocationListener is not a parameter for BD listener servive;

@@ -25,6 +25,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.yamibo.main.yamibolib.locationservice.impl.DefaultLocationService;
+
+import static com.yamibo.main.yamibolib.locationservice.impl.BDLocationService.bdLocationToString;
 /*
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -62,7 +64,7 @@ public class MainActivity extends ActionBarActivity
     protected LocationClient mBDLocationClient = null;
     private LocationClientOption.LocationMode tempMode = LocationClientOption.LocationMode.Hight_Accuracy;
     private String tempcoor="gcj02";
-    private int frequence=1000;
+    private int frequence=-1;
     private boolean isNeedAddress=true;
     private Context mContext;
     private BDLocationListener listener1=null;
@@ -71,7 +73,7 @@ public class MainActivity extends ActionBarActivity
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(tempMode);//设置定位模式
         option.setCoorType(tempcoor);//返回的定位结果是百度经纬度，默认值gcj02
-        int span=1000;//设置发起定位请求的间隔时间为1000ms
+        int span=frequence;//设置发起定位请求的间隔时间为1000ms
         if(frequence>=1000)//Baidu: 前后两次请求定位时间间隔不能小于1000ms。
             span=frequence;
         else
@@ -106,7 +108,7 @@ public class MainActivity extends ActionBarActivity
         listener1=new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
-                debugLog("the debug listener1 has received location");
+                debugLog("the debug listener1 has received location "+bdLocationToString(bdLocation));
             }
         };
         mBDLocationClient.registerLocationListener(listener1);
@@ -266,7 +268,7 @@ public class MainActivity extends ActionBarActivity
 
            if(mBDLocationClient!=null){
                int code=mBDLocationClient.requestLocation();
-               debugLog("location request has returned code= "+code);
+               debugLog("mBDLocationClient location request has returned code= "+code);
            }
 
 
