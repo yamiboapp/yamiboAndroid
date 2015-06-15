@@ -49,38 +49,37 @@ public class DefaultLocationService implements LocationService {
 
     private Context mContext;
 
+    //TODO reset the following to private
     /**
      * 监听器队列
+     *
      */
-    private List<LocationListener> activeListeners = new ArrayList<>();
-
+    public List<LocationListener> activeListeners = new ArrayList<>();
     /**
-     * 用于实例化 百度 BDLocationClient 或 Android locationManager
+     * 当更新时间小于1000ms时，为单次更新
      */
-    private APILocationService apiLocationService = null;
+    public int updateInterval =2000;
+    /**
+     * 默认的serviceMode为百度定位（适用中国）或AndroidAPI定位（适用中国之外）
+     */
+    //public int serviceMode=BAIDU_MODE;
+     public int serviceMode=ANDROID_API_MODE;
+    /**
+     * 是否允许程序根据定位结果自动选择定位服务
+     */
+    public boolean isAutoSwitchService =false;
 
     /**
      * 任意定位服务取得的上次程序定位的结果
      * TODO user:  add methods storing and reading lastKnownLocation
      */
-    private Location lastKnownLocation = null;
+    protected Location lastKnownLocation = null;
     /**
-     * 默认的serviceMode为百度定位（适用中国）或AndroidAPI定位（适用中国之外）
+     * 用于实例化 百度 BDLocationClient 或 Android locationManager
      */
-    //private int serviceMode=BAIDU_MODE;
-     private int serviceMode=ANDROID_API_MODE;
-    /**
-     * 是否允许程序根据定位结果自动选择定位服务
-     */
-    private boolean isAutoSwitchService =false;
+    private APILocationService apiLocationService = null;
 
 
-
-
-    /**
-     * 当更新时间小于1000ms时，为单次更新
-     */
-    private int updateInterval =-1;
 
     /**
      * 默认选择GPS and/or Network进行定位
@@ -413,7 +412,7 @@ public class DefaultLocationService implements LocationService {
             return;
         }
         activeListeners.add(listener);
-        debugLog("new LocationListener of number " + activeListeners.size());
+        debugLog("new LocationListener add to activeListeners array of size " + activeListeners.size());
         apiLocationService.addListener(listener);
     }
 
@@ -495,5 +494,6 @@ public class DefaultLocationService implements LocationService {
 
     public void onReceiveLocation(Location locationResult) {
         debugLog("code to be updated");
+        //com.yamibo.main.DebugLocationActivity.debugMessage=locationResult.toString();
     }
 }

@@ -35,7 +35,8 @@ public class YMBApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        locationService().start();
+        //TODO after debug, let it start as designed?
+        //locationService().start();
     }
 
     public Object getService(String name) {

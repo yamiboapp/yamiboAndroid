@@ -284,7 +284,7 @@ public class BDLocationService implements APILocationService {
     public void addListener(LocationListener listener) {
         if (listener != null && !mapListeners.containsKey(listener)) {
             BDListener bdListener=new BDListener(listener,this);
-            bdListener.debugMessage="add and register BD Listener number "+mapListeners.size();
+            bdListener.debugMessage="register BD Listener which is added to BDlistener array of size "+mapListeners.size();
             registerListener(bdListener);
             mapListeners.put(listener,bdListener);
         }

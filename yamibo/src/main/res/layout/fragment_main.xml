@@ -15,17 +15,17 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Debug Large Text"
-        android:id="@+id/debug_text"
+        android:id="@+id/textMessage"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Debug Button"
+        android:text="gotoDebugLocation"
         android:id="@+id/debug_button"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/debug_text"
-        android:layout_alignEnd="@+id/debug_text"
+        android:layout_alignRight="@+id/textMessage"
+        android:layout_alignEnd="@+id/textMessage"
         android:layout_marginBottom="168dp"
         android:onClick="debugShow" />
 

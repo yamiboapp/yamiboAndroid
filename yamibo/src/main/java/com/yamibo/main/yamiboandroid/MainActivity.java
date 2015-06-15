@@ -1,22 +1,20 @@
 package com.yamibo.main.yamiboandroid;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -64,7 +62,7 @@ public class MainActivity extends ActionBarActivity
     protected LocationClient mBDLocationClient = null;
     private LocationClientOption.LocationMode tempMode = LocationClientOption.LocationMode.Hight_Accuracy;
     private String tempcoor="gcj02";
-    private int frequence=-1;
+    private int frequence=2000;
     private boolean isNeedAddress=true;
     private Context mContext;
     private BDLocationListener listener1=null;
@@ -101,9 +99,10 @@ public class MainActivity extends ActionBarActivity
         /**
          * DEBUG_CODE for testing the functionality of the location service lib
          */
-        locationService=new DefaultLocationService(getApplicationContext());
-        locationService.start();
+        //locationService=new DefaultLocationService(getApplicationContext());
+        //locationService.start();
 
+        /* debug BD code test pass
         mBDLocationClient=new LocationClient(getApplicationContext());
         listener1=new BDLocationListener() {
             @Override
@@ -114,14 +113,14 @@ public class MainActivity extends ActionBarActivity
         mBDLocationClient.registerLocationListener(listener1);
         applyOption();
         mBDLocationClient.start();
-
+*/
 
 
         debugButton=(Button)findViewById(R.id.debug_button);
         if(debugButton!=null)
             debugLog("debugButton created");
         //debugText reference seems to be null when called by debugShow(), why?
-        debugText=(TextView)findViewById(R.id.debug_text);
+        debugText=(TextView)findViewById(R.id.textMessage);
         if(debugText!=null)
             debugLog("debugText created");
 /*
@@ -243,6 +242,8 @@ public class MainActivity extends ActionBarActivity
      * and request a new loaction (won't be shown this time
      */
     public void debugShow(View view) {
+        Intent intent=new Intent(this, debugLocationActivity.class);
+        startActivity(intent);
 /*        debugText=(TextView)findViewById(R.id.debug_text);
         BDLocation result=mBDLocationClient.getLastKnownLocation();
 
@@ -254,7 +255,7 @@ public class MainActivity extends ActionBarActivity
 */
         //The debugText in onCreate seems to be null here? relocate the element
        if(IS_DEBUG_ENABLED) {
-           debugText = (TextView) findViewById(R.id.debug_text);
+           debugText = (TextView) findViewById(R.id.textMessage);
            debugButton=(Button)findViewById(R.id.debug_button);
 
            if (debugText != null)
