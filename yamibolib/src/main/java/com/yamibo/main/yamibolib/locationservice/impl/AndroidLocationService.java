@@ -170,7 +170,8 @@ class AndroidLocationService implements APILocationService {
     public void addListener(LocationListener listener) {
         if (listener != null && !mapListeners.containsKey(listener)) {
             AndroidListener androidListener=new AndroidListener(listener,this);
-            androidListener.debugMessage="register android Listener which is added to android listeners' set of size "+mapListeners.values().size();
+            androidListener.debugMessage="android Listener (added to android listeners' set of size "+mapListeners.values().size()+")";
+            debugLog("register "+androidListener.debugMessage);
             registerListener(androidListener);
             mapListeners.put(listener, androidListener);
         }

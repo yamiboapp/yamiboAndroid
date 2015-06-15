@@ -143,20 +143,7 @@ public class DefaultLocationService implements LocationService {
     private List<LocationListener> mListeners = new ArrayList<>();
 
 
-    /**
-     * Clover:
-     * locationClient and Listener instantiated
-     * link onReceived callback
-     * listener not registered! service not started! use start();
-     *
-     * @param context
-     */
-    /* TODO previous
-    public DefaultLocationService(Context context) {
-        mContext = context;
-        mBDLocationApplication = new BDLocationApplication(mContext);
-        mBDLocationApplication.targetService = this;
-    }*/
+
     /**
      * Clover:
      * locationClient and Listener instantiated
@@ -170,7 +157,15 @@ public class DefaultLocationService implements LocationService {
         mContext = context;
         //TODO user: read stored lastKnownLocation
 
+        constructAPIService();
+
+
+    }
+
+    private void constructAPIService() {
+        debugLog("construct API service");
         if(lastKnownLocation!=null&&isAutoSwitchService){
+            debugLog("autoswitch api based on lastKnownLocation");
             if(lastKnownLocation.getRegion()==Location.IN_CN)
                 serviceMode=BAIDU_MODE;
             else
@@ -205,23 +200,7 @@ public class DefaultLocationService implements LocationService {
         return apiLocationService.status();
     }
 
-    /* TODO remove previous
-    @Override
-    public int status() {
-        int mStatus;
-        if (mBDLocationApplication == null)
-            return LocationService.STATUS_FAIL;
-        if (mBDLocationApplication.isLocationReceived)
-            mStatus = LocationService.STATUS_LOCATED;
-        else {
-            if (mBDLocationApplication.isLocationDemand)
-                mStatus = LocationService.STATUS_TRYING;
-            else
-                mStatus = LocationService.STATUS_FAIL;
-        }
-        return mStatus;
-    }
-*/
+
     /**
      * 当有可用位置时返回true（仅包括最近一次取得的，和之前存储的）<br>
      * 这个位置不一定是最新的，请用requestLocation()来更新，
@@ -236,14 +215,6 @@ public class DefaultLocationService implements LocationService {
             return false;
     }
 
-    /*TODO remove previous
-    @Override
-    public boolean hasLocation() {
-        if (mBDlocationResult != null)
-            return true;
-        return false;
-    }
-    */
 
     /**
      * 最近一次的位置结果（包括实例读取的存储结果，可能过时）<br>
@@ -296,63 +267,14 @@ public class DefaultLocationService implements LocationService {
         return lastKnownLocation.city();
     }
 
-    /*TODO remove previous
-    @Override
-    //TODO
-    public Location location() {
-        return null;
-    }
 
-    @Override
-    //TODO
-    public GPSCoordinate realCoordinate() {
-        return null;
-    }
-
-    @Override
-    //TODO
-    public GPSCoordinate offsetCoordinate() {
-        return null;
-    }
-
-    @Override
-    public String address() {
-        if (hasLocation())
-            return (mBDlocationResult.getAddrStr());
-        return null;
-    }
-
-    @Override
-    //TODO
-    public City city() {
-        return null;
-    }
-*/
 
     /**
      * Clover:
      *
      * register listener, init option, start service, requestLocation
      */
-    /* TODO previous @Override
-    public boolean start() {
-        if (mBDLocationApplication == null) {
-            return false;
-        }
-        if (isLocationEnabled(mContext)) {
-            mBDLocationApplication.addListener();
-            mBDLocationApplication.initLocation();
-            mBDLocationApplication.start();
-            mBDLocationApplication.requestLocation();
 
-            debugLog("location service starts");
-            debugShow("location service starts");
-            return true;
-        } else {
-            return false;
-        }
-    }
-    */
     @Override
     /**
      *
@@ -396,20 +318,7 @@ public class DefaultLocationService implements LocationService {
      * unregister listener and stop client
      * in Baidu service sample, listener is not removed when client stops?
      */
-    /*TODO remove previous
-    @Override
-    public void stop() {
-        if (mBDLocationApplication == null)
-            return;
 
-        //reset flags
-        mBDLocationApplication.resetFlag();
-        mBDLocationApplication.removeListener();
-        mBDLocationApplication.stop();
-
-        debugLog("location service stops");
-    }
-*/
 
     /**
      * Clover
@@ -461,45 +370,7 @@ public class DefaultLocationService implements LocationService {
     }
 
 
-    /**
-     * @param timeMS 设置发起定位请求的间隔时间为>=1000 (ms) 时为循环更新
-     *               default value -1 means no automatic update.
-     *               to TEST: 热切换
-     */
-    /*TODO remove previous
-    public void newUpdateTime(int timeMS) {
-        mBDLocationApplication.setSpan(timeMS);
-        mBDLocationApplication.initLocation();
-    }
-    public void newAddressAppearance(boolean isNeedAddress) {
-        mBDLocationApplication.setIsNeedAddress(isNeedAddress);
-        mBDLocationApplication.initLocation();
-    }
 
-
-    public void newLocationMode(LocationClientOption.LocationMode input) {
-        mBDLocationApplication.setLocationMode(input);
-        mBDLocationApplication.initLocation();
-    }
-
-    public void newCoordMode(String input) {
-        mBDLocationApplication.setCoordMode(input);
-    }
-    */
-
-    /**
-     * NEED to be changed: LocationListener is not a parameter for BD listener servive;
-     * not used here
-     * maybe overload with no parameter?
-     */
-        /*@Override
-    public void addListener(LocationListener listener) {
-        if (listener != null && !mListeners.contains(listener)) {
-            mListeners.add(listener);
-
-        }
-    }
-*/
     /**
      * @param listener 任何有Location listener interface的监听器<br>
      *     <p/>
@@ -522,12 +393,7 @@ public class DefaultLocationService implements LocationService {
      * not used here
      * maybe overload with no parameter?
      */
-    /*TODO remove previous
-    @Override
-    public void removeListener(LocationListener listener) {
-        mListeners.remove(listener);
-    }
-    */
+
 
     /**
      * 删除监听器
@@ -545,12 +411,7 @@ public class DefaultLocationService implements LocationService {
             debugLog("listener is null or not contained as activeListeners");
     }
 
-/*todo remove previous
-    @Override
-        public void selectCoordinate(int type, GPSCoordinate coord) {
 
-    }
-*/
 
     //TODO QUESTION: 这个方法用来做什么的？默认坐标是怎么回事？另外用户传来的GPS里并未指定address和City（使用默认的上海）<br>
     // 目前仅当用户明确指定坐标时，将其当成offsetCoordinate并更新lastKnownResult
@@ -621,10 +482,14 @@ public class DefaultLocationService implements LocationService {
 
         if(isAutoSwitchService) {
             debugLog("switch service!");
-            if (lastKnownLocation.getRegion() == Location.IN_CN && serviceMode != BAIDU_MODE)
+            if (lastKnownLocation.getRegion() == Location.IN_CN && serviceMode != BAIDU_MODE) {
                 switchServiceMode(BAIDU_MODE);
-            if (lastKnownLocation.getRegion() == Location.NOT_IN_CN && serviceMode==BAIDU_MODE)
+                debugLog("autoSwitch to Baidu mode");
+            }
+            if (lastKnownLocation.getRegion() == Location.NOT_IN_CN && serviceMode==BAIDU_MODE) {
                 switchServiceMode(ANDROID_API_MODE);
+                debugLog("autoSwitch to Android mode");
+            }
         }
         debugLog("client started? " + apiLocationService.isClientStarted());
     }
@@ -641,7 +506,10 @@ public class DefaultLocationService implements LocationService {
         }
         debugLog("restart service with the new service mode");
         serviceMode=newServiceMode;
-        restart();
+        stop();
+        constructAPIService();
+        resetReceivedFlag();
+        start();
     }
 
     private void restart() {
@@ -651,37 +519,11 @@ public class DefaultLocationService implements LocationService {
     }
 
     /**
-     * this message can be shown in the debut_text field on mobile by click the debug_button
-     *
-     * @param Message
+     * only for debug
      */
-    /*todo remove previous
-    private void debugShow(String Message) {
-        if (IS_DEBUG_ENABLED)
-            debugMessage = Message;
-    }
+    public void reconstructAPIService(){
+        stop();
+        constructAPIService();
 
-    private void debugLog(String Message) {
-        if (IS_DEBUG_ENABLED)
-            Log.i("DefaultLocationSerivce", "DEBUG_" + Message);
     }
-*/
-    /**
-     * to be called by BDLocationListener's onReceive
-     * when received, update mBDlocationResult
-     */
-    public void onReceiveBDLocation(BDLocation locationResult) {
-        if (mBDLocationApplication == null)
-            return;
-        this.mBDlocationResult = locationResult;
-        // TODO
-        // 初始化这里LocationServier所有的变量,包括locaion,city,等等等等
-        for (LocationListener listener : mListeners) {
-            listener.onLocationChanged(this);
-        }
-
-        debugLog("LocationService receive location from BDLocation");
-//        debugShow(BDLocationApplication.toStringOutput(mBDlocationResult));
-    }
-
 }

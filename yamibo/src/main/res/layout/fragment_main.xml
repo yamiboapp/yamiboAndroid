@@ -4,7 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity$PlaceholderFragment">
+    tools:context=".MainActivity$PlaceholderFragment"
+    >
 
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -14,8 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Debug Large Text"
-        android:id="@+id/textMessage"
+        android:text="click the button to go to debug Location activity page"
+        android:id="@+id/debug_text"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <Button
@@ -27,6 +28,6 @@
         android:layout_alignRight="@+id/textMessage"
         android:layout_alignEnd="@+id/textMessage"
         android:layout_marginBottom="168dp"
-        android:onClick="debugShow" />
+        android:onClick="goDebugLocation" />
 
 </RelativeLayout>

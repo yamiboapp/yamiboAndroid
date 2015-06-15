@@ -35,7 +35,7 @@ public class YMBApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //TODO after debug, let it start as designed?
+        //TODO temporary change: comment out the following for debug purpose
         //locationService().start();
     }
 

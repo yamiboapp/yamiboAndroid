@@ -15,10 +15,11 @@
         android:layout_height="wrap_content"
         android:text="read input and start"
         android:id="@+id/start"
-        android:layout_centerVertical="true"
+        android:onClick="clickStart"
+        android:layout_below="@+id/textMessage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="clickStart" />
+        android:layout_marginTop="173dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -64,9 +65,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="enter int updateInterval"
+        android:id="@+id/textView"
         android:layout_above="@+id/refresh"
-        android:layout_toRightOf="@+id/removeLastListener"
-        android:layout_toEndOf="@+id/removeLastListener" />
+        android:layout_alignLeft="@+id/reconstructAPI"
+        android:layout_alignStart="@+id/reconstructAPI" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -74,10 +76,10 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editInterval"
-        android:layout_above="@+id/addNewListener"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:text="2000" />
+        android:text="2000"
+        android:layout_above="@+id/isAutoSwitchApi"
+        android:layout_alignLeft="@+id/isAutoSwitchApi"
+        android:layout_alignStart="@+id/isAutoSwitchApi" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -100,5 +102,15 @@
         android:layout_alignLeft="@+id/isAutoSwitchApi"
         android:layout_alignStart="@+id/isAutoSwitchApi"
         android:checked="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="reconstruct service"
+        android:id="@+id/reconstructAPI"
+        android:onClick="clickReconstructAPIService"
+        android:layout_alignTop="@+id/start"
+        android:layout_toRightOf="@+id/start"
+        android:layout_toEndOf="@+id/start" />
 
 </RelativeLayout>

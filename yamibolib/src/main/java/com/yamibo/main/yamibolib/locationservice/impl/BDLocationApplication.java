@@ -9,9 +9,7 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Clover:
- * modified from default BD location service sample: use getApplication() in activity to control this, and register its name in manifest.xml
- * here: remove its Application inheritance in order to easily instantiate this class in helper class
+ * TODO remove unused class
  */
 class BDLocationApplication {
     BDLocation locationResult;
@@ -114,10 +112,10 @@ class BDLocationApplication {
             debugLog("BDlocation received" + toStringOutput(locationResult));
 
             //invoke service to retrieve this location
-            if(targetService!=null)
+           /* if(targetService!=null)
                 targetService.onReceiveBDLocation(locationResult);
             else
-                debugLog("targetService not assigned!!");
+                debugLog("targetService not assigned!!");*/
         }
     }
 

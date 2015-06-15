@@ -67,13 +67,8 @@ public class debugLocationActivity extends ActionBarActivity {
 
     public void clickStart(View view){
         if (locationService != null) {
-            debugLog("activity demand refresh");
-            locationService.updateInterval=Integer.parseInt(editInterval.getText().toString());
-            if(isUseBd.isChecked())
-                locationService.serviceMode=DefaultLocationService.BAIDU_MODE;
-            else
-                locationService.serviceMode=DefaultLocationService.ANDROID_API_MODE;
-            locationService.isAutoSwitchService=isAutoSwitchAPI.isChecked();
+            debugLog("activity demand start");
+
 
             locationService.start();
         }
@@ -103,7 +98,7 @@ public class debugLocationActivity extends ActionBarActivity {
             locationService.addListener(new LocationListener() {
                 @Override
                 public void onLocationChanged(LocationService sender) {
-                    debugLog("add a new Location Listener to activeListener array of size "+locationService.activeListeners.size());
+                    debugLog("add a new Location Listener to activeListener array of size " + locationService.activeListeners.size());
                 }
             });
         }
@@ -116,6 +111,18 @@ public class debugLocationActivity extends ActionBarActivity {
                 LocationListener lastListener = locationService.activeListeners.get(locationService.activeListeners.size() - 1);
                 locationService.removeListener(lastListener);
             }
+        }
+    }
+    public void clickReconstructAPIService(View view){
+        locationService.updateInterval=Integer.parseInt(editInterval.getText().toString());
+        if(isUseBd.isChecked())
+            locationService.serviceMode=DefaultLocationService.BAIDU_MODE;
+        else
+            locationService.serviceMode=DefaultLocationService.ANDROID_API_MODE;
+        locationService.isAutoSwitchService=isAutoSwitchAPI.isChecked();
+        if(locationService.activeListeners!=null){
+                debugLog("activity demand reconstruct API service with new parameters");
+                locationService.reconstructAPIService();
         }
     }
 
