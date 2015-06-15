@@ -149,11 +149,47 @@ public class DefaultLocationService implements LocationService {
      *
      * @param context
      */
+    /* TODO previous
     public DefaultLocationService(Context context) {
         mContext = context;
         mBDLocationApplication = new BDLocationApplication(mContext);
         mBDLocationApplication.targetService = this;
+    }*/
+    /**
+     * Clover:
+     * locationClient and Listener instantiated
+     * link onReceived callback
+     * listener not registered! service not started! use start();
+     *
+     * Creat manager for BAIDU location by default
+     * @param context
+     */
+    public DefaultLocationService(Context context) {
+        mContext = context;
+        //TODO user: read stored lastKnownLocation
+
+        if(lastKnownLocation!=null&&isAutoSwitchService){
+            if(lastKnownLocation.getRegion()==Location.IN_CN)
+                serviceMode=BAIDU_MODE;
+            else
+                serviceMode=ANDROID_API_MODE;
+        }
+
+        switch (serviceMode) {
+            case BAIDU_MODE:
+                apiLocationService = new BDLocationService(mContext,updateInterval,providerChoice,this);
+                debugLog("Baidu location mode selected.");
+                break;
+            case ANDROID_API_MODE:
+                apiLocationService =new AndroidLocationService(mContext,updateInterval,providerChoice,this);
+                debugLog("Android API location mode selected");
+                break;
+            default:
+                debugLog("Unknown location mode selected!");
+                return;
+        }
     }
+
 
     @Override
     public int status() {
@@ -209,12 +245,13 @@ public class DefaultLocationService implements LocationService {
         return null;
     }
 
-    @Override
+
     /**
      * Clover:
      *
      * register listener, init option, start service, requestLocation
      */
+    /* TODO previous @Override
     public boolean start() {
         if (mBDLocationApplication == null) {
             return false;
@@ -231,6 +268,33 @@ public class DefaultLocationService implements LocationService {
         } else {
             return false;
         }
+    }
+    */
+    @Override
+    /**
+     *
+     * 若具体API尚未开始进行定位工作（未调用过start()或者调用stop()之后），
+     * 会创建一个新的监听器并开始定位。
+     *
+     */
+    public boolean start() {
+        if(apiLocationService ==null||!isLocationEnabled(mContext))
+            return false;
+        if(activeListeners.isEmpty()){
+            LocationListener listener=new LocationListener() {
+                @Override
+                public void onLocationChanged(LocationService sender) {
+                    debugLog("A listener auto generated while service start() " +
+                            "and the activeListeners arrays is empty");
+                }
+            };
+            addListener(listener);
+        }
+        else {
+            debugLog("Use existeing listeners");
+        }
+
+        return apiLocationService.start();
     }
 
 
