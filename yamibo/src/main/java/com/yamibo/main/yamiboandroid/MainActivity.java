@@ -20,6 +20,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.yamibo.main.yamibolib.locationservice.impl.DefaultLocationService;
 /*
 import com.baidu.location.BDLocation;
@@ -55,14 +59,15 @@ public class MainActivity extends ActionBarActivity
     /**
      * DEBUG_CODE to remove
      */
- /*   protected LocationClient mBDLocationClient = null;
+    protected LocationClient mBDLocationClient = null;
     private LocationClientOption.LocationMode tempMode = LocationClientOption.LocationMode.Hight_Accuracy;
     private String tempcoor="gcj02";
     private int frequence=1000;
     private boolean isNeedAddress=true;
     private Context mContext;
+    private BDLocationListener listener1=null;
     //Baidu sample, set opton for the client
-    private void initLocation() {
+    private void applyOption() {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(tempMode);//设置定位模式
         option.setCoorType(tempcoor);//返回的定位结果是百度经纬度，默认值gcj02
@@ -70,12 +75,12 @@ public class MainActivity extends ActionBarActivity
         if(frequence>=1000)//Baidu: 前后两次请求定位时间间隔不能小于1000ms。
             span=frequence;
         else
-            com.yamibo.main.yamibolib.Utils.Log.i("DEBUG initLocation", "Invalid frequence. use default value");
+            com.yamibo.main.yamibolib.Utils.Log.i("DEBUG applyOption", "Invalid frequence. use default value");
         option.setScanSpan(span);
         option.setIsNeedAddress(isNeedAddress);
         mBDLocationClient.setLocOption(option);
         com.yamibo.main.yamibolib.Utils.Log.i("DEBUG", "initiate Location done");
-    }*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +101,20 @@ public class MainActivity extends ActionBarActivity
          */
         locationService=new DefaultLocationService(getApplicationContext());
         locationService.start();
+
+        mBDLocationClient=new LocationClient(getApplicationContext());
+        listener1=new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                debugLog("the debug Listener1 has received location");
+            }
+        };
+        mBDLocationClient.registerLocationListener(listener1);
+        applyOption();
+        mBDLocationClient.start();
+
+
+
         debugButton=(Button)findViewById(R.id.debug_button);
         if(debugButton!=null)
             debugLog("debugButton created");
@@ -106,7 +125,7 @@ public class MainActivity extends ActionBarActivity
 /*
      mBDLocationClient = ((BDLocationApplication)getApplication()).mBDLocationClient;
 
-        initLocation();
+        applyOption();
         mBDLocationClient.start();
         mBDLocationClient.requestLocation();
         Log.i("DEBUG", " mBDLocationClient " + mBDLocationClient.toString());
@@ -243,6 +262,11 @@ public class MainActivity extends ActionBarActivity
                locationService.refresh();
                debugMessage = locationService.debugMessage;
                debugLog("location debugMessage assigned");
+           }
+
+           if(mBDLocationClient!=null){
+               int code=mBDLocationClient.requestLocation();
+               debugLog("location request has returned code: "+code);
            }
 
 
