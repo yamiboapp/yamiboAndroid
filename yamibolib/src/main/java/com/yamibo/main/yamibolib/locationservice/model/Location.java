@@ -11,7 +11,9 @@ import java.util.Locale;
 
 /**
  * created by 牛奶
- * Clover: 增加 private field region，用于让程序可以根据地理位置选择合适的API服务（百度或Android）<br>
+ * Clover:
+ * TODO modify: <br>
+ *     增加 private field region，用于让程序可以根据地理位置选择合适的API服务（百度或Android）<br>
  * 增加private field mTime：可以构造能计算timeOffset的GPSCoordinate
  */
 public class Location implements Parcelable {
