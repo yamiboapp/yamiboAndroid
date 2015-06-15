@@ -18,12 +18,108 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wangxiaoyan on 15/5/25.
- * Clover: implemented on 01/06/25, use BDLocationApplication class based on Baidu sample, member variables are added correspondingly
+ * 这个类与上层用户交谈，检查环境变量(system settings)，读取更新间隔等参数，管理切换定位服务，定义常量和计算函数。
+ * Created by wangxiaoyan on 15/5/25.<br>
+ * Clover: 将这个类实例化，对定位服务进行启动刷新,读取定位数据。<br>
+ * 注意百度定位服务模式须在在主线程里使用。
+ * <p/>
+ * 基本使用方法 ：<br>
+ * 在activity中，运行<br>
+ * DefaultLocationService apiLocationService=new DefaultLocationService(getApplicationContext()),或单有参数的形式<br>
+ * apiLocationService.start();<br>
+ * apiLocationService.stop();<br>
+ * <p/>
+ *默认是单次更新请求。刷新监听请调用 refresh();<br>
+ * <p/>
+ * 可以将任何拥有LocationLisener接口的实例listener添加到队列:<br>
+ * addListener(listener), removeListener(listener);
+ * 已封装：帮助类BDLocationService和AndroidLocationService会建立一个相应的API定位监听器。
+ * <p/>
+ * 以下方法更改已注册的所有监听器的参数，并将作为下一次的监听器参数: <br>
+ * resetServiceOption(update_interval,provider);<br>
+ * 注解：百度定位模式下只能设置统一的监听参数。因此对AndroidAPI也作此简化处理。
+ *TODO user:若想使用GPS和网络混合provider并选择最优结果，推荐建立两个DefaultLocationService实例，分别监听网络和GPS并比较结果的精度：<br>
+ *单监听器模式下，AndroidAPI默认的Best模式会变成监听GPS，导致长时间无为之结果。<br>
+ *百度的单监听器在混合模式下，会将GPS和网络的结果混在一起返回，缺少文档说明。<br>
+ *
  */
 public class DefaultLocationService implements LocationService {
 
+
+
     private Context mContext;
+
+    /**
+     * 监听器队列
+     */
+    private List<LocationListener> activeListeners = new ArrayList<>();
+
+    /**
+     * 用于实例化 百度 BDLocationClient 或 Android locationManager
+     */
+    private APILocationService apiLocationService = null;
+
+    /**
+     * 任意定位服务取得的上次程序定位的结果
+     * TODO user:  add methods storing and reading lastKnownLocation
+     */
+    private Location lastKnownLocation = null;
+    /**
+     * 默认的serviceMode为百度定位（适用中国）或AndroidAPI定位（适用中国之外）
+     */
+    private int serviceMode=BAIDU_MODE;
+    // private int serviceMode=ANDROID_API_MODE;
+    /**
+     * 是否允许程序根据定位结果自动选择定位服务
+     */
+    private boolean isAutoSwitchService =false;
+
+
+
+
+    /**
+     * 当更新时间小于1000ms时，为单次更新
+     */
+    private int updateInterval =5000;
+
+    /**
+     * 默认选择GPS and/or Network进行定位
+     */
+    private int providerChoice=PROVIDER_NETWORK;
+
+    //No Use
+//    private boolean isStarted=false;
+//    private boolean isLocationDemand=false;
+
+
+    private boolean isLocationReceived=false;
+
+
+
+    /**
+     * 自动更新启动时的默认更新间隔
+     */
+    public static final int DEFAULT_UPDATE_INTERVAL=10*60*1000;//default requestLocation time 10min
+
+
+    public static final int BAIDU_MODE=0;
+    public static final int ANDROID_API_MODE=1;
+    /**
+     * 同时用GPS和Network
+     */
+    public static final int PROVIDER_BEST=0;
+    /**
+     *   只用Network
+     */
+    public static final int PROVIDER_NETWORK=1;
+    /**
+     * 只用GPS
+     */
+    public static final int PROVIDER_GPS=2;
+
+
+
+
 
 
     /**
@@ -293,5 +389,9 @@ public class DefaultLocationService implements LocationService {
 
         debugLog("LocationService receive location from BDLocation");
         debugShow(BDLocationApplication.toStringOutput(mBDlocationResult));
+    }
+
+    public void onReceiveLocation(Location locationResult) {
+        debugLog("code to be updated");
     }
 }
