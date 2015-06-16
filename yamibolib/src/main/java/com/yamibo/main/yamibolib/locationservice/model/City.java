@@ -5,11 +5,18 @@ import android.os.Parcelable;
 
 public class City implements Parcelable {
 
+    /**
+     * TODO question: what are id and flag? Use 0,0 for the present constructoin. See the constructor blow.
+     */
     private int id;
     private String name;
     private int flag;
 
     public static final City DEFAULT = new City(0, "上海", 0);
+
+    public City(String name){
+        this(0,name,0);
+    }
 
     public City(int id, String name, int flag) {
         this.id = id;
