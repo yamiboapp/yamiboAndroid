@@ -140,7 +140,9 @@ public class debugLocationActivity extends ActionBarActivity {
             }
             double latitude = Double.parseDouble(editLatitude.getText().toString());
             double longtitude = Double.parseDouble(editLongitude.getText().toString());
-            locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
+            //android is slow in china
+            //locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
+            locationService.onReceiveLocation(locationService.realCoordsToLocationViaBD(latitude, longtitude));
         }
         else{
             debugLog("null editText pointers!");

@@ -359,29 +359,6 @@ public class BDLocationService implements APILocationService {
         double offsetLongitude=longtitude;
         String address=null;
         City city=null;
-        //TODO
-     /*   try {
-            List<Address> addresses=gCoder.getFromLocation(latitude,longtitude,1);
-            if(addresses!=null&&addresses.size()>0){
-                Address returnedAddress=addresses.get(0);
-                String strCity = returnedAddress.getLocality();
-//                String state = returnedAddress.getAdminArea();
-//                String country =returnedAddress.getCountryName();
-//                String postalCode =returnedAddress.getPostalCode();
-//                String knownName = returnedAddress.getFeatureName(); // Only if available else return NULL
-
-                StringBuilder strReturnedAddress=new StringBuilder("");
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-                }
-                address= strReturnedAddress.toString();
-                Log.w("My Current loction address", "" + address);
-                city=new City(strCity);
-            }
-
-        } catch (IOException e) {
-            debugLog("error gcoder "+ e.toString());
-        }*/
         int accuracy=0;
         int isInCN;
         long mTime =System.currentTimeMillis();
@@ -397,15 +374,34 @@ public class BDLocationService implements APILocationService {
         }
         else
             isInCN= Location.NOT_IN_CN;
+        //read addres by BD using offsetCoords
+        try {
+            JSONObject jsonAddress= new util().geocodingViaBD(offsetLatitude, offsetLongitude);
+            address=(String)jsonAddress.get("address");
+            city=new City((String)jsonAddress.get("city"));
+        } catch (Exception e) {
+            debugLog("error geocoding offsetCoords via BD" + e.toString());  }
 
         Location Location =new Location
                 (latitude,longtitude,offsetLatitude,offsetLongitude,address,city,accuracy,isInCN,mTime);
         return Location;
     }
 
-    //TODO
+    /**
+     * use real coords to judge country (not far from offset coords)
+     * @param latitude
+     * @param longtitude
+     * @return return true if encouter an error
+     */
     private boolean isInChinaViaBD(double latitude, double longtitude) {
-        return true;
+        JSONObject addressViaBD=new util().geocodingViaBD(latitude,longtitude);
+        try{
+            return addressViaBD.get("country").equals("中国");
+        }
+        catch (Exception e){
+            debugLog("error locate country via BD"+e.toString());
+            return true;
+        }
     }
 
     /**
@@ -432,7 +428,7 @@ public class BDLocationService implements APILocationService {
                     offsetLatitude = (double) bdCoord.get("offsetLatitude");
                     offsetLatitude = (double) bdCoord.get("offsetLongitude");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    debugLog("error "+e.toString());
                 }
             }
         }

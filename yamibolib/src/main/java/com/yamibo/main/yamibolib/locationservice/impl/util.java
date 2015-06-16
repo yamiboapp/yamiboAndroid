@@ -106,6 +106,46 @@ public class util {
                 return null;
             }
         } catch (JSONException e) {
+            debugLog("error reading Json " + e.toString());
+            return null;
+        }
+    }
+
+
+    /**
+     * @param offsetLatitude 维度
+     * @param offsetLongitude 经度
+     * @return
+     * 输入百度地址，格式为JSONObject {"address":string,"city":string,"country":string} <br>
+     * 详见百度Geocoding API文档示例 http://developer.baidu.com/map/index.php?title=webapi/guide/webservice-geocoding
+     */
+    public JSONObject geocodingViaBD(double offsetLatitude, double offsetLongitude) {
+        final String BD_APP_KEY = "VFfjj9gziQzqzF9iEvulSewx";
+        final String BD_APP_SECURITY_CODE ="2C:E0:AF:82:2B:07:B0:7D:13:2B:AE:EB:1A:20:D5:D0:BD:F7:FD:5F;com.yamibo.main.yamibolib";
+        /**
+         * eg: http://api.map.baidu.com/geocoder/v2/?coordtype=bd09ll&output=json&pois=0&location=39.9167,116.3833&ak=VFfjj9gziQzqzF9iEvulSewx&mcode=2C:E0:AF:82:2B:07:B0:7D:13:2B:AE:EB:1A:20:D5:D0:BD:F7:FD:5F;com.yamibo.main.yamibolib
+         * remove "callback=renderReverse" from BaiduSample
+         */
+        String url="http://api.map.baidu.com/geocoder/v2/?coordtype=bd09ll&output=json&pois=0&location="
+                +offsetLatitude+","+offsetLongitude
+                +"ak="+BD_APP_KEY +"&mcode="+ BD_APP_SECURITY_CODE;
+        try {
+            JSONObject obj=readJsonFromUrl(url);
+            int status=(int)obj.get("status");
+            if(status==0) {
+                JSONObject result=obj.getJSONObject("result");
+                JSONObject addressComponent=result.getJSONObject("addressComponent");
+                String address=(String)(result.get("formatted_address"));
+                String city=(String)(addressComponent.get("city"));
+                String country=(String)(addressComponent.get("country"));
+                String str="{\"address\":"+address+",\"city\":"+city+",country\":"+country+"}";
+                return new JSONObject(str);
+            }
+            else{
+                debugLog("BD API geocoding error status code"+ status);
+                return null;
+            }
+        } catch (JSONException e) {
             debugLog("error reading Json "+e.toString());
             return null;
         }
