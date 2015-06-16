@@ -6,69 +6,74 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.yamibo.main.yamiboandroid.debugLocationActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:id="@+id/textMessage"
-        android:layout_alignParentTop="true" />
+    <TextView android:text="API service instance is already constructed.     \nClick buttons to perform actions or reconstruct the API service by the chosen params.
+    \n can input realCoords (viewed as a new location arrived to the service; use AndroidAPI decode, slow)     \nNotice: Perform single undapte when interval&lt;1000ms.When autoSwitch is enabled, will autoswitch to the API based on the last known position&apos;s country." android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:id="@+id/debugShowMessage"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/start"
+        android:layout_alignRight="@+id/reconstructAPI"
+        android:layout_alignEnd="@+id/reconstructAPI"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="read input and start"
+        android:text="start"
         android:id="@+id/start"
         android:onClick="clickStart"
-        android:layout_below="@+id/textMessage"
+        android:layout_above="@+id/stop"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="173dp" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="stop"
         android:id="@+id/stop"
-        android:layout_below="@+id/start"
+        android:onClick="clickStop"
+        android:layout_above="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="clickStop" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="refresh"
         android:id="@+id/refresh"
-        android:layout_below="@+id/stop"
+        android:onClick="clickRefresh"
+        android:layout_above="@+id/addNewListener"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="clickRefresh" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="addNewListener"
         android:id="@+id/addNewListener"
-        android:layout_below="@+id/refresh"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="clickAddNewListener" />
+        android:onClick="clickAddNewListener"
+        android:layout_above="@+id/removeLastListener"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="removeLastListener"
         android:id="@+id/removeLastListener"
-        android:layout_below="@+id/addNewListener"
+        android:onClick="clickRemoveLastListener"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="clickRemoveLastListener" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="enter int updateInterval"
         android:id="@+id/textView"
-        android:layout_above="@+id/refresh"
-        android:layout_alignLeft="@+id/reconstructAPI"
-        android:layout_alignStart="@+id/reconstructAPI" />
+        android:layout_above="@+id/editInterval"
+        android:layout_alignRight="@+id/editInterval"
+        android:layout_alignEnd="@+id/editInterval" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -76,10 +81,14 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editInterval"
-        android:text="2000"
+        android:text="-1"
+        android:textColor="@android:color/holo_orange_light"
         android:layout_above="@+id/isAutoSwitchApi"
+        android:layout_alignRight="@+id/isUseBaidu"
+        android:layout_alignEnd="@+id/isUseBaidu"
         android:layout_alignLeft="@+id/isAutoSwitchApi"
-        android:layout_alignStart="@+id/isAutoSwitchApi" />
+        android:layout_alignStart="@+id/isAutoSwitchApi"
+        android:hint="int interval" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -91,26 +100,77 @@
         android:layout_toEndOf="@+id/removeLastListener"
         android:layout_marginLeft="34dp"
         android:layout_marginStart="34dp"
-        android:checked="false" />
+        android:checked="false"
+        android:textColor="@android:color/holo_orange_light"
+        android:hint="isAutoSwitchAPI" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="isUseBaidu (if false, use Android)"
+        android:text="isBaidu/Android)"
         android:id="@+id/isUseBaidu"
         android:layout_alignTop="@+id/removeLastListener"
+        android:checked="true"
+        android:textColor="@android:color/holo_orange_light"
+        android:layout_toEndOf="@+id/removeLastListener"
         android:layout_alignLeft="@+id/isAutoSwitchApi"
-        android:layout_alignStart="@+id/isAutoSwitchApi"
-        android:checked="true" />
+        android:layout_alignStart="@+id/isAutoSwitchApi" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="reconstruct service"
+        android:text="reconstr service"
         android:id="@+id/reconstructAPI"
         android:onClick="clickReconstructAPIService"
+        android:textColor="@android:color/holo_orange_light"
+        android:layout_alignBaseline="@+id/stop"
+        android:layout_alignBottom="@+id/stop"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/inputLongitude"
         android:layout_alignTop="@+id/start"
-        android:layout_toRightOf="@+id/start"
-        android:layout_toEndOf="@+id/start" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/removeLastListener"
+        android:layout_alignLeft="@+id/reconstructAPI"
+        android:layout_alignStart="@+id/reconstructAPI"
+        android:hint="longtitude"
+        android:text="116.3833"
+        android:textColor="@color/highlighted_text_material_light" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/inputLatitude"
+        android:layout_alignBottom="@+id/debugShowMessage"
+        android:layout_alignRight="@+id/isAutoSwitchApi"
+        android:layout_alignEnd="@+id/isAutoSwitchApi"
+        android:layout_alignLeft="@+id/inputLongitude"
+        android:layout_alignStart="@+id/inputLongitude"
+        android:hint="latitude"
+        android:text="39.9167"
+        android:textColor="@color/highlighted_text_material_light" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="input"
+        android:id="@+id/inputCoords"
+        android:layout_alignBottom="@+id/inputLongitude"
+        android:layout_toLeftOf="@+id/inputLongitude"
+        android:textColor="@color/highlighted_text_material_light"
+        android:nestedScrollingEnabled="false"
+        android:singleLine="false"
+        android:onClick="clickInputRealCoords" />
+
 
 </RelativeLayout>

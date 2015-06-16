@@ -15,7 +15,6 @@ import com.yamibo.main.yamibolib.locationservice.model.Location;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -196,7 +195,7 @@ class AndroidLocationService implements APILocationService {
     }
 
     @Override
-    public void resetServiceOption(int updateInterval, int providerChoice) {
+    public void resetAPIServiceOption(int updateInterval, int providerChoice) {
         setUpdateInterval(updateInterval);
         setProvider(providerChoice);
         refresh();
@@ -263,13 +262,15 @@ class AndroidLocationService implements APILocationService {
         }
     }
 
-
+    /**
+     * 此处使用Android的gCoder查询坐标的地理反编译。由网络条件限制可能较慢
+     */
     public Location toLocation(android.location.Location source) {
 
         double latitude=source.getLatitude();
         double longtitude=source.getLongitude();
         double offsetLatitude=latitude;
-        double offsetLongtitude=longtitude;
+        double offsetLongitude=longtitude;
         String address=null;
         City city=null;
         try {
@@ -292,31 +293,30 @@ class AndroidLocationService implements APILocationService {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            debugLog("error gcoder "+ e.toString());
         }
         int accuracy=(int)source.getAccuracy();
         int isInCN;
         long mTime = source.getTime();
-        if(isInChina(source)) {
+        if(isInChinaViaAndroid(source)) {
             isInCN = Location.IN_CN;
             //always convert the coord from Android API when in CN
             try {
-                JSONObject bdCoord = util.convertToBDCoord(latitude, longtitude);
+                JSONObject bdCoord = new util().convertToBDCoord(latitude, longtitude);
                 offsetLatitude = (double) bdCoord.get("offsetLatitude");
-                offsetLatitude = (double) bdCoord.get("offsetLongitude");
+                offsetLongitude = (double) bdCoord.get("offsetLongitude");
             } catch (Exception e) {
-                e.printStackTrace();
-            }
+                debugLog("error converting coords " + e.toString());  }
         }
         else
             isInCN= Location.NOT_IN_CN;
 
         Location Location =new Location
-                (latitude,longtitude,offsetLatitude,offsetLongtitude,address,city,accuracy,isInCN,mTime);
+                (latitude,longtitude,offsetLatitude,offsetLongitude,address,city,accuracy,isInCN,mTime);
         return Location;
     }
 
-    public boolean isInChina(android.location.Location location) {
+    public boolean isInChinaViaAndroid(android.location.Location location) {
         try {
             List<Address> addresses=gCoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
             if(addresses!=null&addresses.size()>0){
@@ -337,6 +337,7 @@ class AndroidLocationService implements APILocationService {
 
     void onReceiveLocation() {
         isLocationReceived=true;
+        debugLog("Android service onReceiveLocation. Unregister all Android listener whose isAutoRequestUpdate=false");
         for (AndroidListener androidListener : mapListeners.values())
             if (!androidListener.isAutoRequestUpdate)
                 unregisterListener(androidListener);

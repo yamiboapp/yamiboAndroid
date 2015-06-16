@@ -20,7 +20,7 @@ interface APILocationService {
     public void addListener(LocationListener listener);
     public void removeListener(LocationListener listener);
 
-    void resetServiceOption(int updateInterval, int providerChoice);
+    void resetAPIServiceOption(int updateInterval, int providerChoice);
 
     boolean isClientStarted();
 }

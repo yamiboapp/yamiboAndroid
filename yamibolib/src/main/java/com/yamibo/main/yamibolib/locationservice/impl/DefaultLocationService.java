@@ -4,10 +4,9 @@ import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClientOption;
-import com.yamibo.main.yamibolib.Utils.Log;
 import com.yamibo.main.yamibolib.locationservice.LocationListener;
 import com.yamibo.main.yamibolib.locationservice.LocationService;
 import com.yamibo.main.yamibolib.locationservice.model.City;
@@ -38,12 +37,16 @@ import static com.yamibo.main.yamibolib.locationservice.impl.util.debugLog;
  * <i>封装：帮助类BDLocationService和AndroidLocationService会建立一个相应的API定位监听器。</i>
  * <p/>
  * 以下方法更改已注册的所有监听器的参数，并将作为下一次的监听器参数: <br>
- * resetServiceOption(update_interval,provider);<br>
+ * resetAPIServiceOption(update_interval,provider);<br>
  *TODO user:若想使用GPS和网络混合provider并选择最优结果，推荐建立两个DefaultLocationService实例，分别监听网络和GPS并比较结果的精度：<br>
  *  <i>注解：百度定位模式下只能设置统一的监听参数。因此对AndroidAPI也作此简化处理。<br>
  *单监听器模式下，AndroidAPI默认的Best模式会变成监听GPS，导致长时间无为之结果。<br>
  *百度的单监听器在混合模式下，会将GPS和网络的结果混在一起返回，缺少文档说明。<br>
  *</i>
+ *
+* TODO user: 经测试，若在activity里注册本服务的实例，百度API自动刷新功能在离开当前activity后不会停止。所以请在离开activity前stop或者保存必要信息。
+ *TODO user: 定位服务的许多方法都是异步的，如果要sequential的使用这些方法，需要小心避免错误。
+ *
  */
 public class DefaultLocationService implements LocationService {
 
@@ -51,29 +54,29 @@ public class DefaultLocationService implements LocationService {
 
     private Context mContext;
 
-    //TODO reset the following to private
+
     /**
      * 用于实例化 百度 BDLocationClient 或 Android locationManager
      */
-    public APILocationService apiLocationService = null;
+    private APILocationService apiLocationService = null;
     /**
      * 监听器队列
      *
      */
-    public List<LocationListener> activeListeners = new ArrayList<>();
+    private List<LocationListener> activeListeners = new ArrayList<>();
     /**
      * 当更新时间小于1000ms时，为单次更新
      */
-    public int updateInterval =2000;
+    private int updateInterval =-1;
     /**
      * 默认的serviceMode为百度定位（适用中国）或AndroidAPI定位（适用中国之外）
      */
-    public int serviceMode=BAIDU_MODE;
+    private int serviceMode=BAIDU_MODE;
     //public int serviceMode=ANDROID_API_MODE;
     /**
      * 是否允许程序根据定位结果自动选择定位服务
      */
-    public boolean isAutoSwitchService =false;
+    private boolean isAutoSwitchService =false;
 
     /**
      * 任意定位服务取得的上次程序定位的结果
@@ -128,20 +131,11 @@ public class DefaultLocationService implements LocationService {
      * to be read by the textView for shown to mobile activity
      */
     public String debugMessage = null;
-
-    //Baidu service
-    // client and listener are in the BDLocationApplication's member field
-    private BDLocationApplication mBDLocationApplication = null;
-    private BDLocation mBDlocationResult = null;
-
-
-    /**
+    public TextView debugTextView=null;
+/**
      * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
      */
     private static final boolean IS_DEBUG_ENABLED = true;
-
-    private List<LocationListener> mListeners = new ArrayList<>();
-
 
 
     /**
@@ -366,7 +360,7 @@ public class DefaultLocationService implements LocationService {
      *让定位服务的所有已知监听器以新的参数连接并运行。
      */
     public void resetServiceOption(int updateInterval, int providerChoice){
-        apiLocationService.resetServiceOption(updateInterval, providerChoice);
+        apiLocationService.resetAPIServiceOption(updateInterval, providerChoice);
     }
 
 
@@ -466,20 +460,19 @@ public class DefaultLocationService implements LocationService {
      * 当任何一个监听器收到位置信息时，运行监听器队列中的每一个监听器。<p/>
      * 实现方法注解：AndroidAPI情形：当一个监听器设置为处于单次更新模式时，用unregister来停止它的更新功能，仍将其保留在监听器列表中。
      * 下次refresh时它会被重新注册并尝试获取位置信息。
-     *
+     * TODO user: 可以添加代码
      */
-    void onReceiveLocation(Location LocationResult) {
-        debugLog("client started? " + apiLocationService.isClientStarted());
+    public void onReceiveLocation(Location LocationResult) {
+        //记下最新的位置，设定flag
         this.lastKnownLocation = LocationResult;
-        debugLog("hasLocation"+hasLocation());
         isLocationReceived=true;
         debugLog("LocationService updated location from one listener");
-
+        //所有监听器LocationListener运行自定义方法
         for (LocationListener listener : activeListeners) {
             listener.onLocationChanged(this);
         }
         debugLog("all activeListeners perform their own actions");
-
+        //根据位置信息判断是否自动切换为baidu或AndroidAPI定位服务
         if(isAutoSwitchService) {
             debugLog("switch service!");
             if (lastKnownLocation.getRegion() == Location.IN_CN && serviceMode != BAIDU_MODE) {
@@ -491,8 +484,63 @@ public class DefaultLocationService implements LocationService {
                 debugLog("autoSwitch to Android mode");
             }
         }
-        debugLog("client started? " + apiLocationService.isClientStarted());
+        //debug code show lastKnownLocation
+        debugShow();
+
+        //TODO user 可以在此添加代码
+
     }
+
+    //debug output message to TextView
+    private void debugShow(String debugMessage) {
+                debugLog("\n" + debugMessage);
+                debugTextView.setText(debugMessage);
+    }
+    private void debugShow() {
+        if (debugTextView != null) {
+            String message = util.locationToDebugString(location());
+            debugLog("\n" + message);
+            debugTextView.setText(message);
+        }
+    }
+
+
+
+
+        /**
+         * android可能有网络连接的问题
+         */
+    public Location realCoordsToLocationViaAndroid(double latitude, double longtitude){
+        android.location.Location androidLocation=new android.location.Location("userInput");
+        androidLocation.setLatitude(latitude);
+        androidLocation.setLongitude(longtitude);
+        androidLocation.setTime(System.currentTimeMillis());
+        androidLocation.setAccuracy(0);
+
+        debugLog("create an androidLocationService for translate location");
+        AndroidLocationService androidLocationService=new AndroidLocationService(mContext,-1,PROVIDER_NETWORK,this);
+        return androidLocationService.toLocation(androidLocation);
+    }
+
+    /**
+     * 用Baidu来处理真实坐标
+     * @param latitude
+     * @param longtitude
+     * @return
+     */
+    public Location realCoordsToLocationViaBD(double latitude, double longtitude){
+        debugLog("create a BDLocationService for translate location");
+        BDLocationService bdLocationService=new BDLocationService(mContext,-1,PROVIDER_NETWORK,this);
+        return bdLocationService.realCoordsToLocationViaBD(latitude,longtitude);
+    }
+   /**
+     * removeLastListener in the active listener array. For debug activity.
+     */
+    public void removeLastListener(){
+        if(!activeListeners.isEmpty())
+            removeListener(activeListeners.get(activeListeners.size() - 1));
+    }
+
 
     /**
      *
@@ -512,18 +560,15 @@ public class DefaultLocationService implements LocationService {
         start();
     }
 
-    private void restart() {
-        stop();
-        resetReceivedFlag();
-        start();
-    }
-
     /**
-     * only for debug
+     * 选用新的默认参数构造API定位服务
      */
-    public void reconstructAPIService(){
+    public void reconstructAPIService(int updateInterval, int serviceMode, boolean isAutoSwitchService,int providerChoice){
         stop();
+        this.updateInterval=updateInterval;
+        this.serviceMode=serviceMode;
+        this.isAutoSwitchService=isAutoSwitchService;
+        this.providerChoice=providerChoice;
         constructAPIService();
-
     }
 }

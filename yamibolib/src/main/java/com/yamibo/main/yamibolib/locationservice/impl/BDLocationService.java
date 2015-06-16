@@ -4,20 +4,24 @@ package com.yamibo.main.yamibolib.locationservice.impl;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.yamibo.main.yamibolib.Utils.Log;
 import com.yamibo.main.yamibolib.locationservice.LocationListener;
 import com.yamibo.main.yamibolib.locationservice.LocationService;
 import com.yamibo.main.yamibolib.locationservice.model.City;
 import com.yamibo.main.yamibolib.locationservice.model.Location;
 
 import android.content.Context;
+import android.location.Address;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -112,7 +116,7 @@ public class BDLocationService implements APILocationService {
         this.supervisorService= supervisorService;
         bdLocationClient = new LocationClient(context);
         setUpdateInterval(updateInterval);
-        debugLog("updateInterval:" + updateInterval);
+        debugLog("construct BD service with updateInterval:" + updateInterval);
         setProvider(providerChoice);
         //myListener=new BDListener(null,this);
     }
@@ -162,7 +166,7 @@ public class BDLocationService implements APILocationService {
         option.setLocationMode(locationMode);//设置定位模式
         option.setCoorType(COORD_MODE);//返回的定位结果是百度经纬度
         option.setScanSpan(updateInterval);
-        debugLog("updateInterval:" + updateInterval);
+        debugLog("apply option updateInterval:" + updateInterval);
         option.setIsNeedAddress(IS_NEED_ADDRESS);
 
         bdLocationClient.setLocOption(option);
@@ -331,11 +335,11 @@ public class BDLocationService implements APILocationService {
     }
 
     @Override
-    public void resetServiceOption(int updateInterval, int providerChoice) {
+    public void resetAPIServiceOption(int updateInterval, int providerChoice) {
         setUpdateInterval(updateInterval);
         setProvider(providerChoice);
         applyOption();
-        debugLog("updateInterval:"+updateInterval);
+
     }
 
     @Override
@@ -343,6 +347,66 @@ public class BDLocationService implements APILocationService {
         return bdLocationClient.isStarted();
     }
 
+
+    /**
+     * 用Baidu来处理真实坐标
+     * @param latitude
+     * @param longtitude
+     * @return
+     */
+    public Location realCoordsToLocationViaBD(double latitude, double longtitude){
+        double offsetLatitude=latitude;
+        double offsetLongitude=longtitude;
+        String address=null;
+        City city=null;
+        //TODO
+     /*   try {
+            List<Address> addresses=gCoder.getFromLocation(latitude,longtitude,1);
+            if(addresses!=null&&addresses.size()>0){
+                Address returnedAddress=addresses.get(0);
+                String strCity = returnedAddress.getLocality();
+//                String state = returnedAddress.getAdminArea();
+//                String country =returnedAddress.getCountryName();
+//                String postalCode =returnedAddress.getPostalCode();
+//                String knownName = returnedAddress.getFeatureName(); // Only if available else return NULL
+
+                StringBuilder strReturnedAddress=new StringBuilder("");
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                address= strReturnedAddress.toString();
+                Log.w("My Current loction address", "" + address);
+                city=new City(strCity);
+            }
+
+        } catch (IOException e) {
+            debugLog("error gcoder "+ e.toString());
+        }*/
+        int accuracy=0;
+        int isInCN;
+        long mTime =System.currentTimeMillis();
+        if(isInChinaViaBD(latitude,longtitude)) {
+            isInCN = Location.IN_CN;
+            //always convert the coord from Android API when in CN
+            try {
+                JSONObject bdCoord = new util().convertToBDCoord(latitude, longtitude);
+                offsetLatitude = (double) bdCoord.get("offsetLatitude");
+                offsetLongitude = (double) bdCoord.get("offsetLongitude");
+            } catch (Exception e) {
+                debugLog("error converting coords " + e.toString());  }
+        }
+        else
+            isInCN= Location.NOT_IN_CN;
+
+        Location Location =new Location
+                (latitude,longtitude,offsetLatitude,offsetLongitude,address,city,accuracy,isInCN,mTime);
+        return Location;
+    }
+
+    //TODO
+    private boolean isInChinaViaBD(double latitude, double longtitude) {
+        return true;
+    }
 
     /**
      * @param source
@@ -357,14 +421,14 @@ public class BDLocationService implements APILocationService {
         double offsetLatitude=latitude;
         double offsetLongtitude=longtitude;
         String address=source.getAddrStr();
-        City city=null;//source.getCity();
+        City city=new City(source.getCity());
         int accuracy=(int)source.getRadius();
         int isInCN;
         if(isInChina(source)) {
             isInCN = Location.IN_CN;
             if(source.getLocType()==BDLocation.TypeGpsLocation) {
                 try {
-                    JSONObject bdCoord = util.convertToBDCoord(latitude, longtitude);
+                    JSONObject bdCoord =new util().convertToBDCoord(latitude, longtitude);
                     offsetLatitude = (double) bdCoord.get("offsetLatitude");
                     offsetLatitude = (double) bdCoord.get("offsetLongitude");
                 } catch (Exception e) {
@@ -389,7 +453,7 @@ public class BDLocationService implements APILocationService {
      */
     private static long toMTime(String strTime) {
         try{
-            DateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:", Locale.getDefault());
+            DateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
             Date currentDate= df.parse(strTime);
             long millisecond= currentDate.getTime();
             return millisecond;

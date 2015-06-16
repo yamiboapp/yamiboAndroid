@@ -17,13 +17,13 @@ import com.yamibo.main.yamibolib.locationservice.impl.DefaultLocationService;
 
 
 public class debugLocationActivity extends ActionBarActivity {
-    DefaultLocationService locationService;
     public static String debugMessage="Hello World";
     private static final boolean IS_DEBUG_ENABLED=true;
-    protected TextView textMessage;
-    protected Button btnStart, btnStop, btnRefresh, btnAddNewListener, btnRemoveLastListener;
-    protected CheckBox isAutoSwitchAPI, isUseBd;
-    EditText editInterval;
+    DefaultLocationService locationService;
+    TextView debugTextMessage;
+    Button btnStart, btnStop, btnRefresh, btnAddNewListener, btnRemoveLastListener, btnInputCoords;
+    CheckBox isAutoSwitchAPI, isUseBd;
+    EditText editInterval, editLatitude, editLongitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +41,13 @@ public class debugLocationActivity extends ActionBarActivity {
         isAutoSwitchAPI=(CheckBox)findViewById(R.id.isAutoSwitchApi);
         isUseBd=(CheckBox)findViewById(R.id.isUseBaidu);
         editInterval =(EditText)findViewById(R.id.editInterval);
+
+        debugTextMessage=(TextView)findViewById(R.id.debugShowMessage);
+        locationService.debugTextView=debugTextMessage;
+
+        btnInputCoords=(Button)findViewById(R.id.inputCoords);
+        editLatitude =(EditText)findViewById(R.id.inputLatitude);
+        editLongitude=(EditText)findViewById(R.id.inputLongitude);
     }
 
     @Override
@@ -98,60 +105,53 @@ public class debugLocationActivity extends ActionBarActivity {
             locationService.addListener(new LocationListener() {
                 @Override
                 public void onLocationChanged(LocationService sender) {
-                    debugLog("add a new Location Listener to activeListener array of size " + locationService.activeListeners.size());
+                    debugLog("custom action from Location Listener");
                 }
             });
         }
-
     }
     public void clickRemoveLastListener(View view) {
-        if(locationService.activeListeners!=null){
-            if(!locationService.activeListeners.isEmpty()) {
-                debugLog("activity demand remove the last available listener");
-                LocationListener lastListener = locationService.activeListeners.get(locationService.activeListeners.size() - 1);
-                locationService.removeListener(lastListener);
-            }
+        if (locationService != null) {
+            debugLog("activity demand remove the last available listener");
+                locationService.removeLastListener();
         }
     }
     public void clickReconstructAPIService(View view){
-        locationService.updateInterval=Integer.parseInt(editInterval.getText().toString());
+        int updateInterval=Integer.parseInt(editInterval.getText().toString());
+        int serviceMode;
         if(isUseBd.isChecked())
-            locationService.serviceMode=DefaultLocationService.BAIDU_MODE;
+            serviceMode=DefaultLocationService.BAIDU_MODE;
         else
-            locationService.serviceMode=DefaultLocationService.ANDROID_API_MODE;
-        locationService.isAutoSwitchService=isAutoSwitchAPI.isChecked();
-        if(locationService.activeListeners!=null){
+            serviceMode=DefaultLocationService.ANDROID_API_MODE;
+        boolean isAutoSwitchService=isAutoSwitchAPI.isChecked();
+        int providerChoice=DefaultLocationService.PROVIDER_NETWORK;//fixed
+
+        if(locationService!=null){
                 debugLog("activity demand reconstruct API service with new parameters");
-                locationService.reconstructAPIService();
+                locationService.reconstructAPIService(updateInterval, serviceMode, isAutoSwitchService, providerChoice);
         }
     }
 
-    public void updateMessage(View view) {
-        //startActivity(intent);
-/*        debugText=(TextView)findViewById(R.id.debug_text);
-        BDLocation result=mBDLocationClient.getLastKnownLocation();
-
-        debugMessage="request location returns"+mBDLocationClient.requestLocation()
-                +"\n"+"is started"+mBDLocationClient.isStarted();
-        if(result!=null)
-            debugMessage=debugMessage+"\n"+"getLastKnownLocation"+result.getLocType();
-        debugText.setText(debugMessage);
-*/
-        //The debugText in onCreate seems to be null here? relocate the element
-        if(IS_DEBUG_ENABLED) {
-            textMessage = (TextView) findViewById(R.id.textMessage);
-
-            if (textMessage != null){
-                debugLog("debugText created");
-                textMessage.setText(debugMessage);
-                debugLog("debugText updated");
-            } else
-                debugLog("debugText is a null pointer!");
+    public void clickInputRealCoords(View view){
+        if(editLatitude !=null&&editLongitude!=null) {
+            if(editLatitude.getText()==null|editLongitude.getText()==null){
+                debugLog("error input doubles");
+                return;
+            }
+            double latitude = Double.parseDouble(editLatitude.getText().toString());
+            double longtitude = Double.parseDouble(editLongitude.getText().toString());
+            locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
+        }
+        else{
+            debugLog("null editText pointers!");
         }
     }
+
     private void debugLog(String debugMessage){
         if(IS_DEBUG_ENABLED){
             Log.i("DEBUG_debugActivity:",debugMessage);
         }
     }
+
+
 }

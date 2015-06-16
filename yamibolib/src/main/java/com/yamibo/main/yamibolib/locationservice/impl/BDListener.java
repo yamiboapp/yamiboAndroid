@@ -34,10 +34,10 @@ class BDListener implements BDLocationListener {
 
         bdService.onReceiveLocation();
         //invoke service to retrieve this location
-       /* if(supervisorService !=null)
+       if(supervisorService !=null)
             supervisorService.onReceiveLocation(LocationResult);
         else
             debugLog("targetService not assigned!!");
-*/
+
     }
 }

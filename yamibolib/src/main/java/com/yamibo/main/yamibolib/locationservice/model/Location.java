@@ -54,7 +54,7 @@ public class Location implements Parcelable {
         this(latitude,longitude,offsetLatitude,offsetLongitude,address,city,DEFAULT_ACCRURACY,DEFAULT_REGION,DEFAULT_TIME);
     }
 
-    //add accurary
+    //todo modify: add missing accurary
 
     public Location(double latitude, double longitude, double offsetLatitude,
                     double offsetLongitude, String address, City city, int accuracy,
@@ -157,4 +157,6 @@ public class Location implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+
 }
