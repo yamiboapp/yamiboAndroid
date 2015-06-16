@@ -127,15 +127,6 @@ public class DefaultLocationService implements LocationService {
 
 
 
-    /**
-     * to be read by the textView for shown to mobile activity
-     */
-    public String debugMessage = null;
-    public TextView debugTextView=null;
-/**
-     * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
-     */
-    private static final boolean IS_DEBUG_ENABLED = true;
 
 
     /**
@@ -143,17 +134,13 @@ public class DefaultLocationService implements LocationService {
      * locationClient and Listener instantiated
      * link onReceived callback
      * listener not registered! service not started! use start();
-     *
      * Creat manager for BAIDU location by default
      * @param context
      */
     public DefaultLocationService(Context context) {
         mContext = context;
         //TODO user: read stored lastKnownLocation
-
         constructAPIService();
-
-
     }
 
     private void constructAPIService() {
@@ -241,9 +228,9 @@ public class DefaultLocationService implements LocationService {
      * @return 国内GPS模式：芯片坐标经过百度纠偏计算<br>
      *     国内网络查询：百度纠偏或Android坐标经过百度纠偏计算<br>
      *         国外：realCoordinate
-     *     <p>
-     *         provider信息未写入，因为lastKnownLocation未存储此信息。
-     *     </p>
+     *     <i>
+     *         注释：provider信息未写入，因为lastKnownLocation未存储此信息。
+     *     </i>
      */
     @Override
     public GPSCoordinate offsetCoordinate() {
@@ -253,21 +240,19 @@ public class DefaultLocationService implements LocationService {
 
     @Override
     public String address() {
-        return lastKnownLocation.address();
+        if(hasLocation())
+            return lastKnownLocation.address();
+        else
+            return null;
     }
 
     @Override
     public City city() {
-        return lastKnownLocation.city();
+        if(hasLocation())
+            return lastKnownLocation.city();
+        else
+            return null;
     }
-
-
-
-    /**
-     * Clover:
-     *
-     * register listener, init option, start service, requestLocation
-     */
 
     @Override
     /**
@@ -290,9 +275,8 @@ public class DefaultLocationService implements LocationService {
             addListener(listener);
         }
         else {
-            debugLog("Use existeing listeners");
+            debugLog("Use existing listeners");
         }
-
         return apiLocationService.start();
     }
 
@@ -383,13 +367,6 @@ public class DefaultLocationService implements LocationService {
     }
 
     /**
-     * NEED to be changed: LocationListener is not a parameter for BD listener servive;
-     * not used here
-     * maybe overload with no parameter?
-     */
-
-
-    /**
      * 删除监听器
      * @param listener
      * <i>封装：在APILocationService里删除相对应的位置监听器</i>
@@ -405,10 +382,13 @@ public class DefaultLocationService implements LocationService {
             debugLog("listener is null or not contained as activeListeners");
     }
 
-
-
     //TODO QUESTION: 这个方法用来做什么的？默认坐标是怎么回事？另外用户传来的GPS里并未指定address和City（使用默认的上海）<br>
-    // 目前仅当用户明确指定坐标时，将其当成offsetCoordinate并更新lastKnownResult
+    /**
+     * 当用户明确指定realCoords时，用百度geocoding将其翻译为Location并作为lastKnownResult,<br>
+     *     <i>
+     *         不调用onReceiveLocation方法
+     *     </i>
+      */
     @Override
     public void selectCoordinate(int type, GPSCoordinate coord) {
         switch (type){
@@ -418,11 +398,8 @@ public class DefaultLocationService implements LocationService {
                 debugLog("selectedLocation not stored");
                 return;
             case 0xFF01:
-                lastKnownLocation=new Location(coord.latitude(),coord.longitude(),
-                        coord.latitude(),coord.longitude(),"selected address",City.DEFAULT);
+                lastKnownLocation=realCoordsToLocationViaBD(coord.latitude(),coord.longitude());
         }
-
-
         return;
     }
 
@@ -485,24 +462,13 @@ public class DefaultLocationService implements LocationService {
             }
         }
         //debug code show lastKnownLocation
-        debugShow();
+        util.debugShow(util.locationToDebugString(location()));
 
         //TODO user 可以在此添加代码
 
     }
 
-    //debug output message to TextView
-    private void debugShow(String debugMessage) {
-                debugLog("\n" + debugMessage);
-                debugTextView.setText(debugMessage);
-    }
-    private void debugShow() {
-        if (debugTextView != null) {
-            String message = util.locationToDebugString(location());
-            debugLog("\n" + message);
-            debugTextView.setText(message);
-        }
-    }
+
 
 
 
@@ -510,10 +476,10 @@ public class DefaultLocationService implements LocationService {
         /**
          * android可能有网络连接的问题
          */
-    public Location realCoordsToLocationViaAndroid(double latitude, double longtitude){
+    public Location realCoordsToLocationViaAndroid(double latitude, double longitude){
         android.location.Location androidLocation=new android.location.Location("userInput");
         androidLocation.setLatitude(latitude);
-        androidLocation.setLongitude(longtitude);
+        androidLocation.setLongitude(longitude);
         androidLocation.setTime(System.currentTimeMillis());
         androidLocation.setAccuracy(0);
 
@@ -525,13 +491,13 @@ public class DefaultLocationService implements LocationService {
     /**
      * 用Baidu来处理真实坐标
      * @param latitude
-     * @param longtitude
+     * @param longitude
      * @return
      */
-    public Location realCoordsToLocationViaBD(double latitude, double longtitude){
+    public Location realCoordsToLocationViaBD(double latitude, double longitude) {
         debugLog("create a BDLocationService for translate location");
         BDLocationService bdLocationService=new BDLocationService(mContext,-1,PROVIDER_NETWORK,this);
-        return bdLocationService.realCoordsToLocationViaBD(latitude,longtitude);
+        return bdLocationService.realCoordsToLocationViaBD(latitude,longitude);
     }
    /**
      * removeLastListener in the active listener array. For debug activity.
@@ -571,4 +537,6 @@ public class DefaultLocationService implements LocationService {
         this.providerChoice=providerChoice;
         constructAPIService();
     }
+
+
 }

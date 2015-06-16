@@ -33,16 +33,16 @@ class AndroidListener implements android.location.LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        // send result to supervisorService
-        if(!isAutoRequestUpdate)
-            androidService.unregisterListener(this);
+
         debugLog("\n"+debugMessage + "onLocationChanged:\n" + location.toString());
 
         com.yamibo.main.yamibolib.locationservice.model.Location LocationResult = androidService.toLocation(location);
         //invoke service to retrieve this location
 
-        androidService.onReceiveLocation();
+        if(androidService!=null)
+            androidService.onReceiveLocation();
 
+        // send result to supervisorService
         if(supervisorService !=null)
             supervisorService.onReceiveLocation(LocationResult);
         else

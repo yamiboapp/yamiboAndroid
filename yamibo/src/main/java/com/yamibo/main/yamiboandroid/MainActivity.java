@@ -18,14 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.yamibo.main.yamibolib.locationservice.impl.DefaultLocationService;
-
-import static com.yamibo.main.yamibolib.locationservice.impl.BDLocationService.bdLocationToString;
-
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -39,13 +31,6 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-
-    /**
-     * TODO remove debug code
-     */
-    protected TextView debugText;
-    protected Button debugButton;
-    private static final boolean IS_DEBUG_ENABLED=true;
 
 
     @Override
@@ -61,15 +46,6 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        //TODO remove debug code
-        debugButton=(Button)findViewById(R.id.debug_button);
-        if(debugButton!=null)
-            debugLog("debugButton created");
-        //debugText reference seems to be null when called by goDebugLocation(), why?
-        debugText=(TextView)findViewById(R.id.debug_text);
-        if(debugText!=null)
-            debugLog("debugText created");
 
     }
 
@@ -174,17 +150,11 @@ public class MainActivity extends ActionBarActivity
 
     /**
      * Clover:
-     * DEBUG_CODE click the debugButton to show the debugMessage(should be the last time location)
+     * TODO debug DEBUG_CODE click the debugButton to show the debugMessage(should be the last time location)
      * and request a new loaction (won't be shown this time
      */
     public void goDebugLocation(View view) {
         Intent intent=new Intent(this, debugLocationActivity.class);
         startActivity(intent);
     }
-    private void debugLog(String debugMessage){
-        if(IS_DEBUG_ENABLED){
-            Log.i("main","DEBUG_"+debugMessage);
-        }
-    }
-
 }

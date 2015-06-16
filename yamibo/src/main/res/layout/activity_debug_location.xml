@@ -7,7 +7,7 @@
     tools:context="com.yamibo.main.yamiboandroid.debugLocationActivity">
 
     <TextView android:text="API service instance is already constructed.     \nClick buttons to perform actions or reconstruct the API service by the chosen params.
-    \n can input realCoords (viewed as a new location arrived to the service; use AndroidAPI decode, slow)     \nNotice: Perform single undapte when interval&lt;1000ms.When autoSwitch is enabled, will autoswitch to the API based on the last known position&apos;s country." android:layout_width="wrap_content"
+    \n use Baidu or AndroidAPI geocoder to read realCoords (viewed as a new location arrived to the service) \nNotice: Perform single undapte when interval&lt;1000ms.When autoSwitch is enabled, will autoswitch to the API based on the last known position&apos;s country." android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:id="@+id/debugShowMessage"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/start"
@@ -163,14 +163,26 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="input"
-        android:id="@+id/inputCoords"
+        android:text="geo_BD"
+        android:id="@+id/geocoderBD"
         android:layout_alignBottom="@+id/inputLongitude"
         android:layout_toLeftOf="@+id/inputLongitude"
         android:textColor="@color/highlighted_text_material_light"
         android:nestedScrollingEnabled="false"
         android:singleLine="false"
-        android:onClick="clickInputRealCoords" />
+        android:onClick="clickGeocodingBD" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="geoCoder_Android"
+        android:id="@+id/geocoderAndroid"
+        android:textColor="@color/highlighted_text_material_light"
+        android:onClick="clickGeocodingAndroid"
+        android:layout_above="@+id/start"
+        android:layout_toLeftOf="@+id/inputLongitude"
+        android:layout_toStartOf="@+id/inputLongitude" />
 
 
 </RelativeLayout>

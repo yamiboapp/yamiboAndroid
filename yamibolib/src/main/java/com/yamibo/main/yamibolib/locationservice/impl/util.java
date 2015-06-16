@@ -1,6 +1,7 @@
 package com.yamibo.main.yamibolib.locationservice.impl;
 
 import android.os.AsyncTask;
+import android.widget.TextView;
 
 import com.yamibo.main.yamibolib.Utils.Log;
 import com.yamibo.main.yamibolib.locationservice.model.Location;
@@ -34,11 +35,15 @@ public class util {
      * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
      */
     static final boolean IS_DEBUG_ENABLED=true;
+    /**
+     * to be read by the textView for shown to mobile activity
+     */
+    public static TextView debugTextView=null;
 
     private static final int READ_TIME_OUT = 1000;
     private static final int CONNECTION_TIME_OUT = 5000;
 
-    private static String readAll(Reader rd){
+    static String readAll(Reader rd){
         StringBuilder sb=new StringBuilder();
         int cp;
         try {
@@ -88,6 +93,10 @@ public class util {
                 +"&from=1&to=5&ak="+BD_APP_KEY +"&mcode="+ BD_APP_SECURITY_CODE;
         try {
             JSONObject obj=readJsonFromUrl(url);
+            if(obj==null){
+                debugLog("null read JSON from url");
+                return null;
+            }
             int status=(int)obj.get("status");
             JSONArray array=obj.getJSONArray("result");
             if(status==0) {
@@ -131,9 +140,15 @@ public class util {
                 +"ak="+BD_APP_KEY +"&mcode="+ BD_APP_SECURITY_CODE;
         try {
             JSONObject obj=readJsonFromUrl(url);
+            if(obj==null) {
+                debugLog("null read result");
+                return null;
+            }
             int status=(int)obj.get("status");
             if(status==0) {
                 JSONObject result=obj.getJSONObject("result");
+                if(result==null)
+                    return null;
                 JSONObject addressComponent=result.getJSONObject("addressComponent");
                 String address=(String)(result.get("formatted_address"));
                 String city=(String)(addressComponent.get("city"));
@@ -146,13 +161,13 @@ public class util {
                 return null;
             }
         } catch (JSONException e) {
-            debugLog("error reading Json "+e.toString());
+            debugLog("error reading Json " + e.toString());
             return null;
         }
     }
 
 
-    static void debugLog(String Message) {
+    public static void debugLog(String Message) {
         if (IS_DEBUG_ENABLED)
             Log.i("DefaultLocationSerivce", "DEBUG_" + Message);
     }
@@ -200,6 +215,14 @@ public class util {
                 return null;
             }
         }
+    }
+
+    //debug output message to TextView
+    public static void debugShow(String debugMessage) {
+        debugLog("\n" + debugMessage);
+        if(IS_DEBUG_ENABLED)
+            if(debugTextView!=null)
+                debugTextView.setText(debugMessage);
     }
 }
 

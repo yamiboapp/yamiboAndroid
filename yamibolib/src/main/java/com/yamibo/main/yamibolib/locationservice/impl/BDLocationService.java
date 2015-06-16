@@ -115,6 +115,7 @@ public class BDLocationService implements APILocationService {
     public BDLocationService(Context context, int updateInterval, int providerChoice, DefaultLocationService supervisorService) {
         this.supervisorService= supervisorService;
         bdLocationClient = new LocationClient(context);
+        mContext=context;
         setUpdateInterval(updateInterval);
         debugLog("construct BD service with updateInterval:" + updateInterval);
         setProvider(providerChoice);
@@ -201,14 +202,6 @@ public class BDLocationService implements APILocationService {
             debugLog("already in work");
             return true;
         }
-        /**
-         * debug: array seems not working so well
-         */
-        /*for(BDListener listener:mapListeners.values())
-            registerListener(listener);
-        */
-        /*if(myListener!=null)
-            registerListener(myListener);*/
         //parameter input in the register
         bdLocationClient.start();
         isStarted=true;
@@ -227,6 +220,10 @@ public class BDLocationService implements APILocationService {
      *
      */
     boolean requestLocation() {
+        if (bdLocationClient == null) {
+            debugLog("null bdClient");
+            return false;
+        }
         debugLog("Request BDLocation update");
 
         // bdLocationClient.start();
@@ -251,12 +248,20 @@ public class BDLocationService implements APILocationService {
      * 测试结果:添加新的监听器，无需重新start()
      */
     void registerListener(BDListener bdListener){
+        if(bdLocationClient==null){
+            debugLog("null bdLocationClient");
+            return;
+        }
         bdLocationClient.registerLocationListener(bdListener);
         debugLog("BDListenerBDListener added" + bdListener.toString());
         applyOption();
     }
 
     void unregisterListener(BDListener bdListener) {
+        if(bdLocationClient==null){
+            debugLog("null bdLocationClient");
+            return;
+        }
         bdLocationClient.unRegisterLocationListener(bdListener);
         debugLog("BDListener removed: " + bdListener.toString());
     }
@@ -296,9 +301,6 @@ public class BDLocationService implements APILocationService {
 
     @Override
     public boolean refresh() {
-        debugLog("BD refresh()");
-        if (bdLocationClient == null)
-            return false;
         return requestLocation();
     }
 
@@ -339,12 +341,14 @@ public class BDLocationService implements APILocationService {
         setUpdateInterval(updateInterval);
         setProvider(providerChoice);
         applyOption();
-
     }
 
     @Override
     public boolean isClientStarted() {
-        return bdLocationClient.isStarted();
+        if(bdLocationClient!=null)
+            return bdLocationClient.isStarted();
+        else
+            return false;
     }
 
 
@@ -367,20 +371,32 @@ public class BDLocationService implements APILocationService {
             //always convert the coord from Android API when in CN
             try {
                 JSONObject bdCoord = new util().convertToBDCoord(latitude, longtitude);
-                offsetLatitude = (double) bdCoord.get("offsetLatitude");
-                offsetLongitude = (double) bdCoord.get("offsetLongitude");
+                if(bdCoord!=null){
+                    offsetLatitude = (double) bdCoord.get("offsetLatitude");
+                    offsetLongitude = (double) bdCoord.get("offsetLongitude");
+                }
+                else
+                    debugLog("obtain null JSON");
             } catch (Exception e) {
-                debugLog("error converting coords " + e.toString());  }
+                debugLog("error converting coords " + e.toString());
+            }
         }
         else
             isInCN= Location.NOT_IN_CN;
         //read addres by BD using offsetCoords
         try {
             JSONObject jsonAddress= new util().geocodingViaBD(offsetLatitude, offsetLongitude);
-            address=(String)jsonAddress.get("address");
-            city=new City((String)jsonAddress.get("city"));
-        } catch (Exception e) {
-            debugLog("error geocoding offsetCoords via BD" + e.toString());  }
+            if(jsonAddress!=null){
+                address=(String)jsonAddress.get("address");
+                city=new City((String)jsonAddress.get("city"));
+            }
+            else {
+                debugLog("obtain null JSON");
+            }
+        }
+        catch (Exception e) {
+            debugLog("error geocoding offsetCoords via BD" + e.toString());
+        }
 
         Location Location =new Location
                 (latitude,longtitude,offsetLatitude,offsetLongitude,address,city,accuracy,isInCN,mTime);
@@ -396,7 +412,10 @@ public class BDLocationService implements APILocationService {
     private boolean isInChinaViaBD(double latitude, double longtitude) {
         JSONObject addressViaBD=new util().geocodingViaBD(latitude,longtitude);
         try{
-            return addressViaBD.get("country").equals("中国");
+            if(addressViaBD!=null)
+                return addressViaBD.get("country").equals("中国");
+            else
+                return true;
         }
         catch (Exception e){
             debugLog("error locate country via BD"+e.toString());
@@ -412,6 +431,8 @@ public class BDLocationService implements APILocationService {
      * 其它情形保持不变。<br>
      */
     public static Location toLocation(BDLocation source){
+        if(source==null)
+            return null;
         double latitude=source.getLatitude();
         double longtitude=source.getLongitude();
         double offsetLatitude=latitude;
@@ -425,8 +446,13 @@ public class BDLocationService implements APILocationService {
             if(source.getLocType()==BDLocation.TypeGpsLocation) {
                 try {
                     JSONObject bdCoord =new util().convertToBDCoord(latitude, longtitude);
-                    offsetLatitude = (double) bdCoord.get("offsetLatitude");
-                    offsetLatitude = (double) bdCoord.get("offsetLongitude");
+                    if(bdCoord!=null){
+                        offsetLatitude = (double) bdCoord.get("offsetLatitude");
+                        offsetLatitude = (double) bdCoord.get("offsetLongitude");
+                    }
+                    else
+                        debugLog("null JSONObject");
+
                 } catch (Exception e) {
                     debugLog("error "+e.toString());
                 }
@@ -455,7 +481,7 @@ public class BDLocationService implements APILocationService {
             return millisecond;
         }
         catch(Exception e){
-            e.printStackTrace();
+            debugLog("transform time error "+e.toString());
             return System.currentTimeMillis();
         }
     }
@@ -465,13 +491,16 @@ public class BDLocationService implements APILocationService {
     /**
      * 根据百度定位服务的升级可能会发生变化
      * @param location
-     * @return
+     * @return <br>
+     * return true when encounter error
      */
     public static boolean isInChina(BDLocation location){
+        if(location==null)
+            return true;
         if((location.getCountry())!=null)
             return(location.getCountry().equals("中国"));
         else
-            return false;
+            return true;
     }
 
     private void resetProgressFlag() {
@@ -479,7 +508,7 @@ public class BDLocationService implements APILocationService {
         isLocationReceived=false;
     }
     void onReceiveLocation() {
-        debugLog("BDservice onReiveLocation");
+        debugLog("BDservice onReceiveLocation");
         isLocationReceived=true;
     }
 

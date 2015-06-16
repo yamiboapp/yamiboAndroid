@@ -122,6 +122,8 @@ class AndroidLocationService implements APILocationService {
 
 
     boolean requestLocation(AndroidListener androidListener){
+        if(locationManager==null||androidListener==null)
+            return false;
         unregisterListener(androidListener);
         registerListener(androidListener);
         return true;//no more info avaialbe from registerListener
@@ -141,10 +143,12 @@ class AndroidLocationService implements APILocationService {
  removeListener(listener);
  */
 
-        try{for(AndroidListener androidListener:mapListeners.values())
-            locationManager.removeUpdates(androidListener);}
+        try{
+            for(AndroidListener androidListener:mapListeners.values())
+                locationManager.removeUpdates(androidListener);
+        }
         catch (Exception e){
-            debugLog("error remove all android listner updates "+e.toString());
+            debugLog("error remove all android listener updates "+e.toString());
         }finally {
             mapListeners.clear();
             isStarted=false;
@@ -216,6 +220,10 @@ class AndroidLocationService implements APILocationService {
      * @param androidListener
      */
     void registerListener(AndroidListener androidListener) {
+        if(locationManager==null){
+            debugLog("locationManager is null");
+            return;
+        }
         //check type is DefaultLoctionListner, if not, need a translation
         int tempInt;
         if (updateInterval<1000) {
@@ -228,12 +236,16 @@ class AndroidLocationService implements APILocationService {
         }
         locationManager.requestLocationUpdates
                 (provider, tempInt, MIN_DISTANCE, androidListener);
-        isLocationDemand = true;//TODO TEST:check if the above functions normally
+        isLocationDemand = true;
         debugLog("Android autoRequest sent with provider: "+provider);
     }
 
 
     void unregisterListener(AndroidListener androidListener) {
+        if(locationManager==null){
+            debugLog("locationManager is null");
+            return;
+        }
         //check type is DefaultLocationListener, if not, need a translation
         locationManager.removeUpdates(androidListener);
         debugLog("Android listener removed");
@@ -268,13 +280,13 @@ class AndroidLocationService implements APILocationService {
     public Location toLocation(android.location.Location source) {
 
         double latitude=source.getLatitude();
-        double longtitude=source.getLongitude();
+        double longitude=source.getLongitude();
         double offsetLatitude=latitude;
-        double offsetLongitude=longtitude;
+        double offsetLongitude=longitude;
         String address=null;
         City city=null;
         try {
-            List<Address> addresses=gCoder.getFromLocation(latitude,longtitude,1);
+            List<Address> addresses=gCoder.getFromLocation(latitude,longitude,1);
             if(addresses!=null&&addresses.size()>0){
                 Address returnedAddress=addresses.get(0);
                 String strCity = returnedAddress.getLocality();
@@ -302,9 +314,14 @@ class AndroidLocationService implements APILocationService {
             isInCN = Location.IN_CN;
             //always convert the coord from Android API when in CN
             try {
-                JSONObject bdCoord = new util().convertToBDCoord(latitude, longtitude);
-                offsetLatitude = (double) bdCoord.get("offsetLatitude");
-                offsetLongitude = (double) bdCoord.get("offsetLongitude");
+                JSONObject bdCoord = new util().convertToBDCoord(latitude, longitude);
+                if(bdCoord!=null){
+                    offsetLatitude = (double) bdCoord.get("offsetLatitude");
+                    offsetLongitude = (double) bdCoord.get("offsetLongitude");
+                }
+                else
+                    debugLog("null JSONObject");
+
             } catch (Exception e) {
                 debugLog("error converting coords " + e.toString());  }
         }
@@ -312,7 +329,7 @@ class AndroidLocationService implements APILocationService {
             isInCN= Location.NOT_IN_CN;
 
         Location Location =new Location
-                (latitude,longtitude,offsetLatitude,offsetLongitude,address,city,accuracy,isInCN,mTime);
+                (latitude,longitude,offsetLatitude,offsetLongitude,address,city,accuracy,isInCN,mTime);
         return Location;
     }
 
@@ -325,7 +342,7 @@ class AndroidLocationService implements APILocationService {
                 return country.equals("China");
             }
         } catch (IOException e) {
-            debugLog("EROOR: "+e);
+            debugLog("EROOR: "+e.toString());
         }
         return true;
     }

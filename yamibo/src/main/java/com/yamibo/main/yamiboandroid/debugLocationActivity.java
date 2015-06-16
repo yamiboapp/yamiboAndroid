@@ -14,14 +14,14 @@ import android.widget.TextView;
 import com.yamibo.main.yamibolib.locationservice.LocationListener;
 import com.yamibo.main.yamibolib.locationservice.LocationService;
 import com.yamibo.main.yamibolib.locationservice.impl.DefaultLocationService;
+import com.yamibo.main.yamibolib.locationservice.impl.util;
 
 
 public class debugLocationActivity extends ActionBarActivity {
-    public static String debugMessage="Hello World";
     private static final boolean IS_DEBUG_ENABLED=true;
     DefaultLocationService locationService;
     TextView debugTextMessage;
-    Button btnStart, btnStop, btnRefresh, btnAddNewListener, btnRemoveLastListener, btnInputCoords;
+    Button btnStart, btnStop, btnRefresh, btnAddNewListener, btnRemoveLastListener, btnGeocoderBD, btnGeocoderAndroid;
     CheckBox isAutoSwitchAPI, isUseBd;
     EditText editInterval, editLatitude, editLongitude;
     @Override
@@ -43,11 +43,13 @@ public class debugLocationActivity extends ActionBarActivity {
         editInterval =(EditText)findViewById(R.id.editInterval);
 
         debugTextMessage=(TextView)findViewById(R.id.debugShowMessage);
-        locationService.debugTextView=debugTextMessage;
+        util.debugTextView=debugTextMessage;
 
-        btnInputCoords=(Button)findViewById(R.id.inputCoords);
+        btnGeocoderBD =(Button)findViewById(R.id.geocoderBD);
+        btnGeocoderAndroid =(Button)findViewById(R.id.geocoderAndroid);
         editLatitude =(EditText)findViewById(R.id.inputLatitude);
         editLongitude=(EditText)findViewById(R.id.inputLongitude);
+
     }
 
     @Override
@@ -132,7 +134,22 @@ public class debugLocationActivity extends ActionBarActivity {
         }
     }
 
-    public void clickInputRealCoords(View view){
+    public void clickGeocodingBD(View view){
+        if(editLatitude !=null&&editLongitude!=null) {
+            if(editLatitude.getText()==null|editLongitude.getText()==null){
+                debugLog("error input doubles");
+                return;
+            }
+            double latitude = Double.parseDouble(editLatitude.getText().toString());
+            double longtitude = Double.parseDouble(editLongitude.getText().toString());
+            //locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
+            locationService.onReceiveLocation(locationService.realCoordsToLocationViaBD(latitude, longtitude));
+        }
+        else{
+            debugLog("null editText pointers!");
+        }
+    }
+    public void clickGeocodingAndroid(View view){
         if(editLatitude !=null&&editLongitude!=null) {
             if(editLatitude.getText()==null|editLongitude.getText()==null){
                 debugLog("error input doubles");
@@ -141,13 +158,14 @@ public class debugLocationActivity extends ActionBarActivity {
             double latitude = Double.parseDouble(editLatitude.getText().toString());
             double longtitude = Double.parseDouble(editLongitude.getText().toString());
             //android is slow in china
-            //locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
-            locationService.onReceiveLocation(locationService.realCoordsToLocationViaBD(latitude, longtitude));
+            locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
+            //locationService.onReceiveLocation(locationService.realCoordsToLocationViaBD(latitude, longtitude));
         }
         else{
             debugLog("null editText pointers!");
         }
     }
+
 
     private void debugLog(String debugMessage){
         if(IS_DEBUG_ENABLED){
