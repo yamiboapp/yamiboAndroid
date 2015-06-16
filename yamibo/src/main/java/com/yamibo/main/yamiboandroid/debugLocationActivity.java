@@ -16,7 +16,9 @@ import com.yamibo.main.yamibolib.locationservice.LocationService;
 import com.yamibo.main.yamibolib.locationservice.impl.DefaultLocationService;
 import com.yamibo.main.yamibolib.locationservice.impl.util;
 
-
+/**
+ * activity for debug location use. will not appear.
+ */
 public class debugLocationActivity extends ActionBarActivity {
     private static final boolean IS_DEBUG_ENABLED=true;
     DefaultLocationService locationService;

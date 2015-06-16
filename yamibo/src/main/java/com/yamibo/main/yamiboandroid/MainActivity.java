@@ -147,14 +147,4 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-
-    /**
-     * Clover:
-     * TODO debug DEBUG_CODE click the debugButton to show the debugMessage(should be the last time location)
-     * and request a new loaction (won't be shown this time
-     */
-    public void goDebugLocation(View view) {
-        Intent intent=new Intent(this, debugLocationActivity.class);
-        startActivity(intent);
-    }
 }

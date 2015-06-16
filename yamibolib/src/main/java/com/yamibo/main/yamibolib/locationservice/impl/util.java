@@ -34,7 +34,7 @@ public class util {
     /**
      * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
      */
-    static final boolean IS_DEBUG_ENABLED=true;
+    static final boolean IS_DEBUG_ENABLED=false;
     /**
      * to be read by the textView for shown to mobile activity
      */
@@ -219,10 +219,11 @@ public class util {
 
     //debug output message to TextView
     public static void debugShow(String debugMessage) {
-        debugLog("\n" + debugMessage);
-        if(IS_DEBUG_ENABLED)
-            if(debugTextView!=null)
+        if(IS_DEBUG_ENABLED) {
+            debugLog("\n" + debugMessage);
+            if (debugTextView != null)
                 debugTextView.setText(debugMessage);
+        }
     }
 }
 
