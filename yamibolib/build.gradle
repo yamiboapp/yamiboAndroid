@@ -19,7 +19,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+//    compile 'com.mcxiaoke.volley:library:1.0.+@aar'
+    compile fileTree(dir: 'src/main/libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
-    compile files('src/main/jniLibs/locSDK_5.3.jar')
 }
+
+

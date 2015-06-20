@@ -2,9 +2,7 @@ package com.yamibo.main.yamibolib.dataservice.http;
 
 import com.yamibo.main.yamibolib.dataservice.Response;
 
-import org.apache.http.NameValuePair;
-
-import java.util.List;
+import java.util.Map;
 
 public interface HttpResponse extends Response {
 
@@ -20,6 +18,6 @@ public interface HttpResponse extends Response {
      *
      * @return
      */
-    List<NameValuePair> headers();
+    Map<String, String> headers();
 
 }

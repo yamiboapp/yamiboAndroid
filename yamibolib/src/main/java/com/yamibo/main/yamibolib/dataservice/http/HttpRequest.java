@@ -3,10 +3,8 @@ package com.yamibo.main.yamibolib.dataservice.http;
 
 import com.yamibo.main.yamibolib.dataservice.Request;
 
-import org.apache.http.NameValuePair;
-
 import java.io.InputStream;
-import java.util.List;
+import java.util.Map;
 
 public interface HttpRequest extends Request {
 
@@ -38,7 +36,7 @@ public interface HttpRequest extends Request {
      *
      * @return
      */
-    List<NameValuePair> headers();
+    Map<String, String> headers();
 
     /**
      * 超时时间，单位毫秒
@@ -50,5 +48,12 @@ public interface HttpRequest extends Request {
     /**
      * 允许增加Headers
      */
-    void addHeaders(List<NameValuePair> headers);
+    void addHeaders(Map<String, String> headers);
+
+    /**
+     * 是否需要缓存
+     *
+     * @return
+     */
+    boolean isShouldCache();
 }
