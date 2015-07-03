@@ -5,6 +5,7 @@ import android.content.Context;
 import com.yamibo.main.yamibolib.accountservice.AccountListener;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.accountservice.LoginResultListener;
+import com.yamibo.main.yamibolib.model.UserProfile;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONObject;
@@ -22,7 +23,7 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
-    public JSONObject profile() {
+    public UserProfile profile() {
         return null;
     }
 
@@ -57,7 +58,7 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
-    public void update(JSONObject profile) {
+    public void update(UserProfile profile) {
 
     }
 
