@@ -6,6 +6,8 @@ import com.yamibo.main.yamibolib.locationservice.model.Location;
 import com.yamibo.main.yamibolib.model.GPSCoordinate;
 
 /**
+ *
+ * created by 牛奶
  * 定位服务
  * <p/>
  * 由于中国政府的2B需求，所有国内使用的地图采用的坐标都需要纠偏，我们简称为“纠偏坐标”<br>
