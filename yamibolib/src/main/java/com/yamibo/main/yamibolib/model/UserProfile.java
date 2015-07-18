@@ -131,4 +131,6 @@ public class UserProfile {
     public void setNewmypost(int newmypost) {
         this.newmypost = newmypost;
     }
+
+
 }
