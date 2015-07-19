@@ -1,5 +1,7 @@
 package com.yamibo.main.yamibolib.accountservice;
 
+import com.yamibo.main.yamibolib.model.UserProfile;
+
 import org.apache.http.NameValuePair;
 import org.json.JSONObject;
 
@@ -27,7 +29,7 @@ public interface AccountService {
      * 没有登录时返回null <br>
      * 注意用户账户信息不包含Token
      */
-    public JSONObject profile();
+    public UserProfile profile();
 
     /**
      * 没有登录时返回0
@@ -70,7 +72,7 @@ public interface AccountService {
      * 如传入的profile中带有UserID，则必须与当前的UserID一致，否则忽略<br>
      * 任意字段更新都会触发AccountListener.onProfileChanged事件<br>
      */
-    public void update(JSONObject profile);
+    public void update(UserProfile profile);
 
     /**
      * 用Activity implement AccountListener,在Activity里面会帮你removeListener
