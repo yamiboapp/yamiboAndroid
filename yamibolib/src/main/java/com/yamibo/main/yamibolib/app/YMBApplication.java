@@ -32,6 +32,10 @@ public class YMBApplication extends Application {
         return instance;
     }
 
+    public YMBApplication() {
+        instance = this;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

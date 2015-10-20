@@ -91,15 +91,22 @@ public class DefaultHttpService implements HttpService {
         }) {
             @Override
             public byte[] getBody() {
-                byte[] bytes = new byte[1024 * 4];
+                byte[] bytes = null;
                 try {
+                    bytes = new byte[req.input().available()];
                     req.input().read(bytes);
                     req.input().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return bytes;
+//                return req.input().toString().getBytes();
             }
+
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+            }
+
         };
         request.setTag(req.url());
         request.setShouldCache(req.isShouldCache());
