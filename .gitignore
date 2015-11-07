@@ -36,7 +36,7 @@ build/
 #Gradle
 .gradle/
 .DS_Store
-.gradle.properties
+gradle.properties
 
 additionalAssets/
 touch-version/
