@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.yamibo.main.yamibolib.dataservice.RequestHandler;
 import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by wangxiaoyan on 15/5/25.
@@ -114,7 +116,88 @@ public class DefaultHttpService implements HttpService {
     }
 
     @Override
-    public void abort(HttpRequest req, RequestHandler<HttpRequest, HttpResponse> handler, boolean mayInterruptIfRunning) {
+    public HttpResponse execSync(final HttpRequest req) {
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(volleyMethod(req), req.url(), null, null) {
+            @Override
+            public byte[] getBody() {
+                byte[] bytes = null;
+                try {
+                    bytes = new byte[req.input().available()];
+                    req.input().read(bytes);
+                    req.input().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bytes;
+            }
+
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+            }
+
+        };
+        future.setRequest(mQueue.add(request));
+        try {
+            final JSONObject result = future.get();
+            HttpResponse httpResponse = new HttpResponse() {
+                @Override
+                public int statusCode() {
+                    if (result != null) {
+                        return 200;
+                    } else {
+                        return 400;
+                    }
+                }
+
+                @Override
+                public Map<String, String> headers() {
+                    return null;
+                }
+
+                @Override
+                public Object result() {
+                    return result;
+                }
+
+                @Override
+                public Object error() {
+                    return null;
+                }
+            };
+            return httpResponse;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return new HttpResponse() {
+            @Override
+            public int statusCode() {
+                return 400;
+            }
+
+            @Override
+            public Map<String, String> headers() {
+                return null;
+            }
+
+            @Override
+            public Object result() {
+                return null;
+            }
+
+            @Override
+            public Object error() {
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void abort(HttpRequest req, RequestHandler<HttpRequest, HttpResponse> handler,
+                      boolean mayInterruptIfRunning) {
         mQueue.cancelAll(req.url());
     }
 

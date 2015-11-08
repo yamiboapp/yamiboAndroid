@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/titlebar_height"
+    android:paddingBottom="5dip"
+    android:paddingTop="5dip">
+
+    <FrameLayout
+        android:id="@+id/title_bar_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/title_bar_title"
+            style="@style/TitleBarTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxWidth="240dip"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/title_bar_subtitle"
+            style="@style/TitleBarSubTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/title_bar_left_view_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:gravity="center_vertical">
+
+        <com.dianping.base.widget.CustomImageButton
+            android:id="@+id/left_view"
+            android:layout_width="@dimen/title_bar_button_size"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:src="@drawable/title_back" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/title_bar_right_view_container"
+        style="@style/TitleBar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" />
+
+</FrameLayout>

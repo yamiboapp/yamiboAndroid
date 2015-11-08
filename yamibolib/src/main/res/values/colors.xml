@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="light_yellow">#fff6d7</color>
+
+    <color name="deep_yellow">#ffedbb</color>
+
+    <color name="light_brown">#6e2b19</color>
+
+    <color name="deep_brown">#551200</color>
+
+    <color name="text_color_default">#666666</color>
+
+
+    <!-- titlebar 颜色规范 -->
+    <color name="titlebar_main_title_text_color">#FF333333</color>
+    <color name="titlebar_sub_title_text_color">#FF333333</color>
+
+    <drawable name="title_background">#fcfcfc</drawable>
+
+    <color name="title_search_bar_hint_color">#999999</color>
+
+
+    <!--基础color-->
+    <color name="actionbar_title_color">#ffffff</color>
+    <color name="red">#ff0000</color>
+    <color name="blue">#5C869E</color>
+    <color name="green">#7700ff00</color>
+    <color name="yellow">#ff7000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="dark_black">#333333</color>
+    <color name="transparent">#00000000</color>
+    <color name="screen_background_white">#00ffffff</color>
+    <color name="translucent_background">#00000000</color>
+    <color name="white_background">#00ffffff</color>
+    <color name="gray_background">#F7F7F7</color>
+    <color name="deep_black">#323232</color>
+    <color name="solid_red">#f00</color>
+    <color name="solid_while">#888888</color>
+    <color name="solid_saffron">#ff6414</color>
+    <color name="solid_blue">#0000ff</color>
+    <color name="solid_green">#f0f0</color>
+    <color name="solid_yellow">#ffffff00</color>
+    <color name="saffron">#ffa649</color>
+    <color name="titlebackgroundcolor">#FFFE8625</color>
+    <color name="listitem_divide">#ffd4d3d3</color>
+    <color name="gray">#666664</color>
+    <color name="btn_focused_color_yellow">#FDFDFD</color>
+    <color name="btn_pressed_color_light">#FDFDFD</color>
+    <color name="btn_default_color_light">#FF5F11</color>
+    <color name="rounded_container_border">#ffb7babb</color>
+    <color name="base_start_color_default">#FFFFFF</color>
+    <color name="base_end_color_default">#FFFFFF</color>
+    <color name="base_start_color_pressed">#FFff7a13</color>
+    <color name="base_center_color_pressed">#FFff8c2f</color>
+    <color name="base_end_color_pressed">#FFffa254</color>
+    <color name="text_color_pressed">#ffffff</color>
+    <color name="yellow_1">#FFFF6501</color>
+    <color name="yellow_2">#FFFF9248</color>
+    <color name="item_click_top">#FFF29202</color>
+    <color name="item_click_bottom">#FFE69306</color>
+    <color name="title_pressed_color">#FFBFBFBF</color>
+
+    <!-- 视觉规范 字体颜色 -->
+    <color name="more_gray">#FFBFB9B0</color>
+    <color name="light_gray">#FF999999</color>
+    <color name="middle_gray">#FF969696</color>
+    <color name="deep_gray">#FF333333</color>
+    <color name="orange_red">#FFFF8000</color>
+    <color name="dark_gray">#FFABA9A5</color>
+    <color name="deep_orange_red">#FFE84200</color>
+    <color name="font_gray">#FF878787</color>
+    <color name="background_gray">#FFDCDCDC</color>
+    <color name="light_red">#FFFF6633</color>
+    <!-- 通用页面背景色 -->
+    <color name="common_bk_color">#FFF0F0F0</color>
+
+    <!-- list view -->
+    <color name="line_gray">#FFd7d7d7</color>
+    <color name="click_gray">#FFD9D9D9</color>
+    <color name="filter_gray">#FFF5F5F5</color>
+    <color name="inner_divider">#E1E1E1</color>
+    <color name="grid_click_gray">#FFcbcbcb</color>
+    <color name="divider_gray">#FFC9C9C9</color>
+
+    <!-- 图片详情页透明黑色背景 -->
+    <color name="alpha_black">#AA000000</color>
+    <color name="checkintopic_head_bg">#fafafa</color>
+    <color name="alpha_home_listview_black">#08000000</color>
+    <color name="alpha_home_listview_white">#AAFFFFFF</color>
+    <color name="btn_weight_normal">#FF6633</color>
+    <color name="btn_weight_disable">#CCCCCC</color>
+    <color name="btn_weight_press">#66FF6633</color>
+
+</resources>

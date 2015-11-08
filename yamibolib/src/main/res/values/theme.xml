@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Base" parent="@style/Theme.AppCompat">
+        <item name="android:windowTitleSize">@dimen/titlebar_height</item>
+        <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
+        <item name="android:buttonStyle">@style/CustomNormalButton</item>
+        <item name="android:textViewStyle">@style/CustomNormalTextView</item>
+        <item name="android:windowBackground">@color/deep_yellow</item>
+        <!-- listview -->
+        <!-- <item name="android:listViewStyle">@style/CustomListView</item> -->
+        <item name="android:drawingCacheQuality">auto</item>
+    </style>
+
+    <style name="Theme.Yamibo" parent="Theme.Base"></style>
+
+    <style name="CustomWindowTitleBackground">
+        <item name="android:background">@drawable/title_background</item>
+    </style>
+
+    <style name="CustomNormalButton" parent="android:Widget.Button">
+        <!--<item name="android:background">@drawable/btn_light</item>-->
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <!--<item name="android:textColor">@color/custom_btn_color</item>-->
+    </style>
+
+    <style name="CustomNormalTextView" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/text_color_default</item>
+    </style>
+</resources>
