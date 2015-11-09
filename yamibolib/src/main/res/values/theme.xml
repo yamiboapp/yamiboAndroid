@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Base" parent="@style/Theme.AppCompat">
+    <style name="Theme.Base" parent="android:Theme">
         <item name="android:windowTitleSize">@dimen/titlebar_height</item>
         <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
         <item name="android:buttonStyle">@style/CustomNormalButton</item>
@@ -19,9 +19,9 @@
     </style>
 
     <style name="CustomNormalButton" parent="android:Widget.Button">
-        <!--<item name="android:background">@drawable/btn_light</item>-->
+        <item name="android:background">@color/light_brown</item>
         <item name="android:textSize">@dimen/text_size_18</item>
-        <!--<item name="android:textColor">@color/custom_btn_color</item>-->
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="CustomNormalTextView" parent="android:Widget.TextView">

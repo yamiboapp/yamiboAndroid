@@ -16,7 +16,7 @@
     <color name="titlebar_main_title_text_color">#FF333333</color>
     <color name="titlebar_sub_title_text_color">#FF333333</color>
 
-    <drawable name="title_background">#fcfcfc</drawable>
+    <drawable name="title_background">#6e2b19</drawable>
 
     <color name="title_search_bar_hint_color">#999999</color>
 
@@ -43,7 +43,6 @@
     <color name="solid_green">#f0f0</color>
     <color name="solid_yellow">#ffffff00</color>
     <color name="saffron">#ffa649</color>
-    <color name="titlebackgroundcolor">#FFFE8625</color>
     <color name="listitem_divide">#ffd4d3d3</color>
     <color name="gray">#666664</color>
     <color name="btn_focused_color_yellow">#FDFDFD</color>

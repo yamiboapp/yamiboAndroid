@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/title_bar"
+    style="@style/TitleBar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/titlebar_height"
     android:paddingBottom="5dip"
@@ -40,7 +41,7 @@
         android:layout_gravity="left"
         android:gravity="center_vertical">
 
-        <com.dianping.base.widget.CustomImageButton
+        <com.yamibo.main.yamibolib.widget.CustomImageButton
             android:id="@+id/left_view"
             android:layout_width="@dimen/title_bar_button_size"
             android:layout_height="match_parent"

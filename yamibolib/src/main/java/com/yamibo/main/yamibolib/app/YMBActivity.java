@@ -3,14 +3,12 @@ package com.yamibo.main.yamibolib.app;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,11 +29,10 @@ import org.json.JSONObject;
 /**
  * Created by wangxiaoyan on 15/8/7.
  */
-public class YMBActivity extends ActionBarActivity {
+public class YMBActivity extends FragmentActivity {
 
     // utils
     protected static final String TAG = YMBActivity.class.getSimpleName();
-    private static SharedPreferences prefs;
 
     // life cycle
     public boolean isResumed = false;
@@ -62,11 +59,10 @@ public class YMBActivity extends ActionBarActivity {
     // life cycle
     //
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        prefs = preferences(this);
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (getParent() == null) { // 代表不是在嵌套的TabActivity中
             mTitleBar = initCustomTitle();
             mTitleBar.setLeftView(new ImageButton.OnClickListener() {
@@ -104,6 +100,22 @@ public class YMBActivity extends ActionBarActivity {
 
 
     //
+    // Utils
+    //
+
+    public SharedPreferences preferences() {
+        return getSharedPreferences(getPackageName(), MODE_PRIVATE);
+    }
+
+    public void startActivity(String scheme) {
+        super.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(scheme)));
+    }
+
+    public void startActivityForResult(String scheme, int requestCode) {
+        super.startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(scheme)), requestCode);
+    }
+
+    //
     // UI Utils
     //
 
@@ -127,7 +139,7 @@ public class YMBActivity extends ActionBarActivity {
 
 
     protected TitleBar initCustomTitle() {
-        return TitleBar.build(this, TitleBar.TITLE_TYPE_WIDE);
+        return TitleBar.build(this, TitleBar.TITLE_TYPE_STANDARD);
     }
 
     protected void onLeftTitleButtonClicked() {
@@ -487,12 +499,4 @@ public class YMBActivity extends ActionBarActivity {
 
         return i.getCharExtra(name, defaultValue);
     }
-
-    // Utils
-
-    public static SharedPreferences preferences(Context c) {
-        return c.getSharedPreferences(c.getPackageName(), MODE_PRIVATE);
-    }
-
-
 }

@@ -88,7 +88,7 @@
     <style name="TitleBar">
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">15dp</item>
-        <item name="android:background">@color/deep_yellow</item>
+        <item name="android:background">@drawable/title_background</item>
     </style>
 
     <style name="TitleBarTitleView">
