@@ -1,7 +1,6 @@
 package com.yamibo.main.yamiboandroid.login;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import com.yamibo.main.yamiboandroid.R;
 import com.yamibo.main.yamibolib.app.YMBActivity;
@@ -12,12 +11,13 @@ import com.yamibo.main.yamibolib.app.YMBActivity;
 public class LoginActivity extends YMBActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initView();
     }
 
     private void initView() {
         setContentView(R.layout.activity_login);
+        setTitle(getString(R.string.login));
     }
 }

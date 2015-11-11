@@ -14,36 +14,36 @@
 
     <!--&lt;!&ndash; 视觉规范 Button Weight &ndash;&gt;-->
     <!--<style name="NovaWeightButtonTheme" parent="android:Widget.Button">-->
-        <!--<item name="android:background">@drawable/btn_weight</item>-->
-        <!--<item name="android:textColor">@color/white</item>-->
-        <!--<item name="android:textSize">@dimen/text_large</item>-->
-        <!--<item name="android:shadowDy">-1</item>-->
-        <!--<item name="android:shadowColor">#AA3214</item>-->
-        <!--<item name="android:layout_gravity">center_horizontal</item>-->
+    <!--<item name="android:background">@drawable/btn_weight</item>-->
+    <!--<item name="android:textColor">@color/white</item>-->
+    <!--<item name="android:textSize">@dimen/text_large</item>-->
+    <!--<item name="android:shadowDy">-1</item>-->
+    <!--<item name="android:shadowColor">#AA3214</item>-->
+    <!--<item name="android:layout_gravity">center_horizontal</item>-->
     <!--</style>-->
 
     <!--&lt;!&ndash; 视觉规范 Button light &ndash;&gt;-->
     <!--<style name="NovaLightButtonTheme" parent="android:Widget.Button">-->
-        <!--<item name="android:background">@drawable/btn_light</item>-->
-        <!--<item name="android:textColor">@color/deep_gray</item>-->
-        <!--<item name="android:textSize">@dimen/text_large</item>-->
-        <!--<item name="android:shadowDy">1</item>-->
-        <!--<item name="android:shadowColor">@color/white</item>-->
-        <!--<item name="android:layout_gravity">center_horizontal</item>-->
+    <!--<item name="android:background">@drawable/btn_light</item>-->
+    <!--<item name="android:textColor">@color/deep_gray</item>-->
+    <!--<item name="android:textSize">@dimen/text_large</item>-->
+    <!--<item name="android:shadowDy">1</item>-->
+    <!--<item name="android:shadowColor">@color/white</item>-->
+    <!--<item name="android:layout_gravity">center_horizontal</item>-->
     <!--</style>-->
 
     <!--&lt;!&ndash; 视觉规范 Button Weight &ndash;&gt;-->
     <!--<style name="NovaWeightButton" parent="NovaWeightButtonTheme">-->
-        <!--<item name="android:layout_width">match_parent</item>-->
-        <!--<item name="android:layout_margin">10dip</item>-->
-        <!--<item name="android:layout_height">wrap_content</item>-->
+    <!--<item name="android:layout_width">match_parent</item>-->
+    <!--<item name="android:layout_margin">10dip</item>-->
+    <!--<item name="android:layout_height">wrap_content</item>-->
     <!--</style>-->
 
     <!--&lt;!&ndash; 视觉规范 Button light &ndash;&gt;-->
     <!--<style name="NovaLightButton" parent="NovaLightButtonTheme">-->
-        <!--<item name="android:layout_width">match_parent</item>-->
-        <!--<item name="android:layout_margin">10dip</item>-->
-        <!--<item name="android:layout_height">wrap_content</item>-->
+    <!--<item name="android:layout_width">match_parent</item>-->
+    <!--<item name="android:layout_margin">10dip</item>-->
+    <!--<item name="android:layout_height">wrap_content</item>-->
     <!--</style>-->
 
     <!-- 视觉规范 ListView Style -->
@@ -62,14 +62,14 @@
 
     <!--&lt;!&ndash; 双滚轮 左边 &ndash;&gt;-->
     <!--<style name="MainItemListView" parent="CustomListView">-->
-        <!--<item name="android:listSelector">@android:color/transparent</item>-->
-        <!--<item name="android:background">#efebe7</item>-->
+    <!--<item name="android:listSelector">@android:color/transparent</item>-->
+    <!--<item name="android:background">#efebe7</item>-->
     <!--</style>-->
 
     <!--&lt;!&ndash; 双滚轮 右边 &ndash;&gt;-->
     <!--<style name="SubItemListView" parent="CustomListView">-->
-        <!--<item name="android:background">#f3efeb</item>-->
-        <!--<item name="android:divider">@drawable/list_divider_holo_dark</item>-->
+    <!--<item name="android:background">#f3efeb</item>-->
+    <!--<item name="android:divider">@drawable/list_divider_holo_dark</item>-->
     <!--</style>-->
 
     <style name="CustomButtonMargin">
@@ -86,7 +86,7 @@
     </style>
 
     <style name="TitleBar">
-        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
         <item name="android:background">@drawable/title_background</item>
     </style>
@@ -99,16 +99,16 @@
     <style name="TitleBarArrrowTitleView" parent="TitleBarTitleView"></style>
 
     <style name="TitleBarSubTitleView">
-        <item name="android:textColor">#323232</item>
+        <item name="android:textColor">@color/titlebar_sub_title_text_color</item>
         <item name="android:textSize">@dimen/text_medium</item>
     </style>
 
     <!--<style name="CustomGridView" parent="android:Widget.AbsListView">-->
-        <!--<item name="android:listSelector">@drawable/grid_selector_background</item>-->
+    <!--<item name="android:listSelector">@drawable/grid_selector_background</item>-->
     <!--</style>-->
 
     <!--<style name="CustomHorizontal" parent="android:Widget.ProgressBar.Horizontal">-->
-        <!--<item name="android:progressDrawable">@drawable/progress_horizontal</item>-->
+    <!--<item name="android:progressDrawable">@drawable/progress_horizontal</item>-->
     <!--</style>-->
 
     <style name="dialog_fullscreen">
@@ -122,69 +122,69 @@
     <!--<style name="Animation.PopUp" />-->
 
     <!--<style name="Animation.PopUp.Left">-->
-        <!--<item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>-->
-        <!--<item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>-->
+    <!--<item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>-->
+    <!--<item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>-->
     <!--</style>-->
 
     <!--<style name="Animation.PopUp.Right">-->
-        <!--<item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>-->
-        <!--<item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>-->
+    <!--<item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>-->
+    <!--<item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>-->
     <!--</style>-->
 
     <!--<style name="Animation.PopUp.Center">-->
-        <!--<item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>-->
-        <!--<item name="@android:windowExitAnimation">@anim/shrink_from_top</item>-->
+    <!--<item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>-->
+    <!--<item name="@android:windowExitAnimation">@anim/shrink_from_top</item>-->
     <!--</style>-->
 
     <!--<style name="Animation.PopDown" />-->
 
     <!--<style name="Animation.PopDown.Left">-->
-        <!--<item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>-->
-        <!--<item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>-->
+    <!--<item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>-->
+    <!--<item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>-->
     <!--</style>-->
 
     <!--<style name="Animation.PopDown.Right">-->
-        <!--<item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>-->
-        <!--<item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>-->
+    <!--<item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>-->
+    <!--<item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>-->
     <!--</style>-->
 
     <!--<style name="Animation.PopDown.Center">-->
-        <!--<item name="@android:windowEnterAnimation">@anim/grow_from_top</item>-->
-        <!--<item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>-->
+    <!--<item name="@android:windowEnterAnimation">@anim/grow_from_top</item>-->
+    <!--<item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>-->
     <!--</style>-->
 
     <!--<style name="list_container">-->
-        <!--<item name="android:background">@drawable/background_view_rounded_container</item>-->
+    <!--<item name="android:background">@drawable/background_view_rounded_container</item>-->
     <!--</style>-->
 
     <!--<style name="list_item_top">-->
-        <!--<item name="android:clickable">true</item>-->
-        <!--<item name="android:paddingTop">10dip</item>-->
-        <!--<item name="android:paddingBottom">10dip</item>-->
-        <!--<item name="android:paddingLeft">10dip</item>-->
-        <!--<item name="android:paddingRight">10dip</item>-->
-        <!--<item name="android:gravity">center_vertical</item>-->
-        <!--<item name="android:background">@drawable/background_view_rounded_top</item>-->
+    <!--<item name="android:clickable">true</item>-->
+    <!--<item name="android:paddingTop">10dip</item>-->
+    <!--<item name="android:paddingBottom">10dip</item>-->
+    <!--<item name="android:paddingLeft">10dip</item>-->
+    <!--<item name="android:paddingRight">10dip</item>-->
+    <!--<item name="android:gravity">center_vertical</item>-->
+    <!--<item name="android:background">@drawable/background_view_rounded_top</item>-->
     <!--</style>-->
 
     <!--<style name="list_item_middle">-->
-        <!--<item name="android:clickable">true</item>-->
-        <!--<item name="android:paddingTop">10dip</item>-->
-        <!--<item name="android:paddingBottom">10dip</item>-->
-        <!--<item name="android:paddingLeft">10dip</item>-->
-        <!--<item name="android:paddingRight">10dip</item>-->
-        <!--<item name="android:gravity">center_vertical</item>-->
-        <!--<item name="android:background">@drawable/background_view_rounded_middle</item>-->
+    <!--<item name="android:clickable">true</item>-->
+    <!--<item name="android:paddingTop">10dip</item>-->
+    <!--<item name="android:paddingBottom">10dip</item>-->
+    <!--<item name="android:paddingLeft">10dip</item>-->
+    <!--<item name="android:paddingRight">10dip</item>-->
+    <!--<item name="android:gravity">center_vertical</item>-->
+    <!--<item name="android:background">@drawable/background_view_rounded_middle</item>-->
     <!--</style>-->
 
     <!--<style name="list_item_bottom">-->
-        <!--<item name="android:clickable">true</item>-->
-        <!--<item name="android:paddingTop">10dip</item>-->
-        <!--<item name="android:paddingBottom">10dip</item>-->
-        <!--<item name="android:paddingLeft">10dip</item>-->
-        <!--<item name="android:paddingRight">10dip</item>-->
-        <!--<item name="android:gravity">center_vertical</item>-->
-        <!--<item name="android:background">@drawable/background_view_rounded_bottom</item>-->
+    <!--<item name="android:clickable">true</item>-->
+    <!--<item name="android:paddingTop">10dip</item>-->
+    <!--<item name="android:paddingBottom">10dip</item>-->
+    <!--<item name="android:paddingLeft">10dip</item>-->
+    <!--<item name="android:paddingRight">10dip</item>-->
+    <!--<item name="android:gravity">center_vertical</item>-->
+    <!--<item name="android:background">@drawable/background_view_rounded_bottom</item>-->
     <!--</style>-->
 
     <style name="list_item_single">
