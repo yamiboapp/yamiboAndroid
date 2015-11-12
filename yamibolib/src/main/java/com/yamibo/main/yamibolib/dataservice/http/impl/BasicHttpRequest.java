@@ -50,11 +50,11 @@ public class BasicHttpRequest implements HttpRequest {
     }
 
     public static HttpRequest httpPost(String url, List<NameValuePair> forms) {
-        return new BasicHttpRequest(url, POST, new FormInputStream(forms), null);
+        return new BasicHttpRequest(url, POST, new FormInputStream(forms), null, 0, false);
     }
 
     public static HttpRequest httpPost(String url, InputStream input) {
-        return new BasicHttpRequest(url, POST, input, null);
+        return new BasicHttpRequest(url, POST, input, null, 0, false);
     }
 
     @Override

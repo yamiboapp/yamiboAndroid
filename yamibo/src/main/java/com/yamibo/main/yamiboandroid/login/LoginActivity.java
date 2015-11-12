@@ -131,7 +131,8 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
         showProgressDialog(getString(R.string.loading));
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("module", "login"));
-        params.add(new BasicNameValuePair("username", "userName"));
+        params.add(new BasicNameValuePair("username", userName));
+        params.add(new BasicNameValuePair("password", userPsd));
         if (questNum != 0) {
             params.add(new BasicNameValuePair("questionid", String.valueOf(questNum)));
             if (!TextUtils.isEmpty(answer)) {
@@ -148,18 +149,32 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
         if (mLoginRequest == req) {
             dismissDialog();
             if (resp.result() instanceof JSONObject) {
-                preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
                 JSONObject userProfile = (JSONObject) resp.result();
                 try {
-                    accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
-                    showToast(userProfile.getJSONObject("Message").optString("messagestr"));
+                    String messagerStr = userProfile.getJSONObject("Message").optString("messagestr");
+                    String messagerVal = userProfile.getJSONObject("Message").optString("messageval");
+                    showToast(messagerStr);
+                    if ("login_succeed".equals(messagerVal)) {
+                        preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
+                        accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
+
+                        finish();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mLoginResult = true;
             }
-            finish();
+
             mLoginRequest = null;
+        }
+    }
+
+    @Override
+    public void onRequestFailed(HttpRequest req, HttpResponse resp) {
+        if (mLoginRequest == req) {
+            dismissDialog();
+            mLoginRequest = null;
+            showToast(getString(R.string.network_fail));
         }
     }
 
@@ -171,11 +186,4 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
         super.onDestroy();
     }
 
-    @Override
-    public void onRequestFailed(HttpRequest req, HttpResponse resp) {
-        if (mLoginRequest == req) {
-            dismissDialog();
-            mLoginRequest = null;
-        }
-    }
 }

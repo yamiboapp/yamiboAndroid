@@ -12,7 +12,6 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -140,7 +139,7 @@ public class BasicItem extends LinearLayout {
 
         // itemSwitch
         itemSwitch = new Switch(context);
-        itemSwitch.setId(R.id.itemCheckBox);
+        itemSwitch.setId(R.id.itemSwitch);
         itemSwitch.setLayoutParams(new LinearLayout.LayoutParams(dip2px(26), dip2px(25)));
         itemSwitch.setChecked(checked == 1 ? true : false);
         itemSwitch.setPadding(0, 0, 0, 0);
@@ -213,8 +212,8 @@ public class BasicItem extends LinearLayout {
             }
         }
 
-        int checkboxId = R.id.itemCheckBox ^ getId();
-        CheckBox checkboxChild = (CheckBox) findViewById(R.id.itemCheckBox);
+        int checkboxId = R.id.itemSwitch ^ getId();
+        Switch checkboxChild = (Switch) findViewById(R.id.itemSwitch);
         Parcelable state = checkboxChild.onSaveInstanceState();
         if (state != null) {
             container.put(checkboxId, state);
@@ -235,8 +234,8 @@ public class BasicItem extends LinearLayout {
             }
         }
 
-        int checkboxId = R.id.itemCheckBox ^ getId();
-        CheckBox checkboxChild = (CheckBox) findViewById(R.id.itemCheckBox);
+        int checkboxId = R.id.itemSwitch ^ getId();
+        Switch checkboxChild = (Switch) findViewById(R.id.itemSwitch);
         Parcelable state = container.get(checkboxId);
         if (state != null) {
             checkboxChild.onRestoreInstanceState(state);

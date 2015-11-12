@@ -9,7 +9,7 @@
     <item name="itemSubTitle" type="id" />
     <item name="itemInput" type="id" />
     <item name="itemCount" type="id" />
-    <item name="itemCheckBox" type="id" />
+    <item name="itemSwitch" type="id" />
     <item name="itemArrow" type="id" />
     <item name="itemRight1stPic" type="id" />
 </resources>
