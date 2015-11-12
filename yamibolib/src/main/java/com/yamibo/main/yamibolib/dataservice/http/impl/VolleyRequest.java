@@ -20,9 +20,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by wangxiaoyan on 15/11/12.
@@ -33,7 +31,7 @@ public class VolleyRequest extends JsonObjectRequest {
     private static final String COOKIE_KEY = "Cookie";
     private static final String SESSION_COOKIE = "sessionid";
 
-    private final static String PERFER_COOKIE_STRINGARRAY = "com.yamibo.cookie_stringarray";
+    private final static String PERFER_COOKIE_STRING = "com.yamibo.cookie_string";
     private SharedPreferences preferences;
 
     private HttpRequest mHttpRequest;
@@ -62,15 +60,20 @@ public class VolleyRequest extends JsonObjectRequest {
     }
 
     public VolleyRequest(final HttpRequest httpRequest, final RequestHandler<HttpRequest, HttpResponse> requestHandler) {
-        super(httpRequest.method(), Environment.isDebug() ? httpRequest.url().replaceFirst("www.", "ceshi.") : httpRequest.url(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-            }
-        });
+        super(httpRequest.method(), Environment.isDebug() ? httpRequest.url().replaceFirst("www.", "ceshi.") : httpRequest.url(), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
         mHttpRequest = httpRequest;
         mRequestHandler = requestHandler;
         preferences = YMBApplication.preferences();
@@ -96,12 +99,10 @@ public class VolleyRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        Set<String> headers = preferences.getStringSet(PERFER_COOKIE_STRINGARRAY, null);
+        String headers = preferences.getString(PERFER_COOKIE_STRING, null);
         if (headers != null) {
             Map<String, String> header = new HashMap<>();
-            for (String cookie : headers) {
-                header.put(COOKIE_KEY, cookie);
-            }
+            header.put(COOKIE_KEY, headers);
             mHttpRequest.addHeaders(header);
         }
         return mHttpRequest.headers() != null ? mHttpRequest.headers() : super.getHeaders();
@@ -121,13 +122,7 @@ public class VolleyRequest extends JsonObjectRequest {
         final Response<JSONObject> superResponse = super.parseNetworkResponse(response);
         Map<String, String> responseHeaders = response.headers;
         if (responseHeaders != null) {
-            HashSet<String> cookies = new HashSet<>();
-            for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
-                if (SET_COOKIE_KEY.equals(entry.getKey())) {
-                    cookies.add(entry.getValue());
-                }
-            }
-            preferences.edit().putStringSet(PERFER_COOKIE_STRINGARRAY, cookies).commit();
+            preferences.edit().putString(PERFER_COOKIE_STRING, responseHeaders.get(SET_COOKIE_KEY)).commit();
         }
         Message message = mHandler.obtainMessage();
         message.what = MESSAGE_REQUEST_SUCCEED;

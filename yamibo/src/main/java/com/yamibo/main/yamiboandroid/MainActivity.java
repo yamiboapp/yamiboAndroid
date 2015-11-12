@@ -27,8 +27,6 @@ public class MainActivity extends YMBActivity {
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
 //    private CharSequence mTitle;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +41,7 @@ public class MainActivity extends YMBActivity {
 //                R.id.navigation_drawer,
 //                (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        startActivity("ymb://login");
-
+        login(null);
     }
 
 //    @Override
@@ -107,8 +104,8 @@ public class MainActivity extends YMBActivity {
 //    }
 
     /**
-//     * A placeholder fragment containing a simple view.
-//     */
+     //     * A placeholder fragment containing a simple view.
+     //     */
 //    public static class PlaceholderFragment extends Fragment {
 //        /**
 //         * The fragment argument representing the section number for this
