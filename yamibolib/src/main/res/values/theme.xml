@@ -19,7 +19,7 @@
     </style>
 
     <style name="CustomNormalButton" parent="android:Widget.Button">
-        <item name="android:background">@color/light_brown</item>
+        <item name="android:background">@drawable/btn_default</item>
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textColor">@color/white</item>
     </style>

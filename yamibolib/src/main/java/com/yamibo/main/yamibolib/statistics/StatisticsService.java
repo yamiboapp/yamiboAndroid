@@ -1,6 +1,7 @@
 package com.yamibo.main.yamibolib.statistics;
 
-import org.apache.http.NameValuePair;
+
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 
 import java.util.List;
 

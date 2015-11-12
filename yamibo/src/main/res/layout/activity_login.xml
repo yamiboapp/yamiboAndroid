@@ -13,10 +13,61 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/light_yellow"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_width"
+        android:paddingRight="@dimen/padding_width">
 
+        <include
+            android:id="@+id/user_name"
+            layout="@layout/custom_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basic_item_height" />
+
+
+        <include
+            layout="@layout/gray_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2px" />
+
+        <include
+            android:id="@+id/user_psd"
+            layout="@layout/custom_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basic_item_height" />
+
+        <include
+            layout="@layout/gray_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2px" />
+
+        <com.yamibo.main.yamibolib.widget.BasicItem
+            android:id="@+id/user_question"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basic_item_height">
+
+        </com.yamibo.main.yamibolib.widget.BasicItem>
+
+        <include
+            layout="@layout/gray_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2px" />
+
+        <include
+            android:id="@+id/user_answer"
+            layout="@layout/custom_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basic_item_height" />
 
     </LinearLayout>
 
-
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="@string/login" />
 </LinearLayout>

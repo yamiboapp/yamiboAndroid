@@ -1,44 +1,41 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
+import com.android.volley.Request;
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by wangxiaoyan on 15/6/17.
  */
 public class BasicHttpRequest implements HttpRequest {
 
-    public static final String GET = HttpGet.METHOD_NAME;
-    public static final String POST = HttpPost.METHOD_NAME;
-    public static final String PUT = HttpPut.METHOD_NAME;
-    public static final String DELETE = HttpDelete.METHOD_NAME;
+    public static final int GET = Request.Method.GET;
+    public static final int POST = Request.Method.POST;
+    public static final int PUT = Request.Method.PUT;
+    public static final int DELETE = Request.Method.DELETE;
 
-    private String method;
+    private int method;
     private InputStream input;
     private Map<String, String> headers;
     private long timeout;
     private String url;
     private boolean shouldCache = true;
 
-    public BasicHttpRequest(String url, String method, InputStream input) {
+    public BasicHttpRequest(String url, int method, InputStream input) {
         this(url, method, input, null, 0, true);
     }
 
-    public BasicHttpRequest(String url, String method, InputStream input,
+    public BasicHttpRequest(String url, int method, InputStream input,
                             Map<String, String> headers) {
         this(url, method, input, headers, 0, true);
     }
 
-    public BasicHttpRequest(String url, String method, InputStream input,
+    public BasicHttpRequest(String url, int method, InputStream input,
                             Map<String, String> headers, long timeout, boolean shouldCache) {
         this.url = url;
         this.method = method;
@@ -66,7 +63,7 @@ public class BasicHttpRequest implements HttpRequest {
     }
 
     @Override
-    public String method() {
+    public int method() {
         return method;
     }
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- BasicItem ids -->
+    <item name="queuing_info" type="id" />
+    <item name="email_edt" type="id" />
+    <item name="passwd_edt" type="id" />
+
+    <item name="itemTitle" type="id" />
+    <item name="itemSubTitle" type="id" />
+    <item name="itemInput" type="id" />
+    <item name="itemCount" type="id" />
+    <item name="itemCheckBox" type="id" />
+    <item name="itemArrow" type="id" />
+    <item name="itemRight1stPic" type="id" />
+</resources>

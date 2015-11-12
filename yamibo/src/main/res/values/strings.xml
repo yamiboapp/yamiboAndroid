@@ -14,7 +14,7 @@
     <string name="user_question_pc_type">您个人计算机的型号</string>
     <string name="user_question_fav_res">您最喜欢的餐馆名称</string>
     <string name="user_question_drive_last_four">驾驶执照最后四位数字</string>
-
+    <string name="user_name_or_psd_empty">用户名或密码为空</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

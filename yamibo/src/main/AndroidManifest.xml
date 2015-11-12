@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".login.LoginActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation"
             android:label="Login"
             android:screenOrientation="nosensor">
             <intent-filter>

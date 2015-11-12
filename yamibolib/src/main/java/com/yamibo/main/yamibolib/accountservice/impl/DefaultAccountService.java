@@ -6,13 +6,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.accountservice.AccountListener;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.accountservice.LoginResultListener;
 import com.yamibo.main.yamibolib.app.YMBApplication;
 import com.yamibo.main.yamibolib.model.UserProfile;
 
-import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,7 +74,9 @@ public class DefaultAccountService implements AccountService {
     @Override
     public void login(LoginResultListener listener, List<NameValuePair> params) {
         mLoginResultListener = listener;
-        mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("ymb://login")));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("ymb://login"));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -124,5 +126,11 @@ public class DefaultAccountService implements AccountService {
     @Override
     public void removeLoginResultListener() {
         mLoginResultListener = null;
+    }
+
+    public void onLoginCancel() {
+        if (mLoginResultListener != null) {
+            mLoginResultListener.onLoginCancel(this);
+        }
     }
 }

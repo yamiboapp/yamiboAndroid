@@ -52,4 +52,7 @@
     <!--导航栏 搜索框垂直距离-->
     <dimen name="title_search_bar_margin_vertical">8dp</dimen>
 
+    <dimen name="basic_item_height">50dp</dimen>
+
+    <dimen name="padding_width">25dp</dimen>
 </resources>

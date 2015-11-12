@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.yamibo.main.yamibolib.R;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
+import com.yamibo.main.yamibolib.accountservice.LoginResultListener;
 import com.yamibo.main.yamibolib.configservice.ConfigService;
 import com.yamibo.main.yamibolib.dataservice.http.HttpService;
 import com.yamibo.main.yamibolib.dataservice.http.impl.SealedMApiService;
@@ -40,6 +41,7 @@ public class YMBActivity extends FragmentActivity {
 
     // Service
     private SealedMApiService sealedMApiService;
+    private HttpService httpService;
     private ConfigService configService;
     private AccountService accountService;
     private LocationService locationService;
@@ -113,6 +115,18 @@ public class YMBActivity extends FragmentActivity {
 
     public void startActivityForResult(String scheme, int requestCode) {
         super.startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(scheme)), requestCode);
+    }
+
+    public void login(LoginResultListener listener) {
+        accountService().login(listener);
+    }
+
+    public void logout() {
+        accountService().logout();
+    }
+
+    public boolean isLogin() {
+        return accountService().isLogin();
     }
 
     //
@@ -290,6 +304,13 @@ public class YMBActivity extends FragmentActivity {
             return sealedMApiService;
         }
         return YMBApplication.instance().getService(name);
+    }
+
+    public HttpService httpService() {
+        if (httpService == null) {
+            httpService = (HttpService) getService("http");
+        }
+        return httpService;
     }
 
 

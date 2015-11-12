@@ -1,8 +1,7 @@
 package com.yamibo.main.yamibolib.accountservice;
 
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.model.UserProfile;
-
-import org.apache.http.NameValuePair;
 
 import java.util.List;
 
