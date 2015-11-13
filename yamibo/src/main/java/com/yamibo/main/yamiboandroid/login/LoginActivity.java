@@ -17,10 +17,13 @@ import com.yamibo.main.yamibolib.Utils.Environment;
 import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.accountservice.impl.DefaultAccountService;
 import com.yamibo.main.yamibolib.app.YMBActivity;
+import com.yamibo.main.yamibolib.dataservice.Request;
 import com.yamibo.main.yamibolib.dataservice.RequestHandler;
+import com.yamibo.main.yamibolib.dataservice.Response;
 import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
 import com.yamibo.main.yamibolib.dataservice.http.HttpResponse;
 import com.yamibo.main.yamibolib.dataservice.http.impl.BasicHttpRequest;
+import com.yamibo.main.yamibolib.dataservice.http.impl.DefaultRequestHandler;
 import com.yamibo.main.yamibolib.model.UserProfile;
 import com.yamibo.main.yamibolib.widget.BasicItem;
 import com.yamibo.main.yamibolib.widget.CustomEditText;
@@ -34,7 +37,7 @@ import java.util.List;
 /**
  * Created by wangxiaoyan on 15/11/9.
  */
-public class LoginActivity extends YMBActivity implements View.OnClickListener, RequestHandler<HttpRequest, HttpResponse> {
+public class LoginActivity extends YMBActivity implements View.OnClickListener {
 
     private CustomEditText mUserName;
     private CustomEditText mUserPsw;
@@ -127,7 +130,7 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
 
     private void login(String userName, String userPsd, int questNum, String answer) {
         if (mLoginRequest != null) {
-            httpService().abort(mLoginRequest, this, true);
+            httpService().abort(mLoginRequest, mLoginRequestHandler, true);
         }
         showProgressDialog(getString(R.string.loading));
         List<NameValuePair> params = new ArrayList<>();
@@ -142,52 +145,9 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
         }
 
         mLoginRequest = BasicHttpRequest.httpPost(Environment.HTTP_ADDRESS, params);
-        httpService().exec(mLoginRequest, this);
+        httpService().exec(mLoginRequest, mLoginRequestHandler);
     }
 
-    @Override
-    public void onRequestFinish(HttpRequest req, HttpResponse resp) {
-        if (mLoginRequest == req) {
-            dismissDialog();
-            if (resp.result() instanceof JSONObject) {
-                JSONObject userProfile = (JSONObject) resp.result();
-                try {
-                    String messagerStr = userProfile.getJSONObject("Message").optString("messagestr");
-                    String messagerVal = userProfile.getJSONObject("Message").optString("messageval");
-
-                    String auth = userProfile.getJSONObject("Variables").optString("auth");
-
-                    showToast(messagerStr);
-
-
-                    if (auth == null || "null".equals(auth)) {//auth无效时
-                        accountService().logout();
-                        accountService().update(null);
-                    } else {//auth有效时
-                        if ("login_succeed".equals(messagerVal)) {
-                            preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
-                            accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
-
-                            finish();
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            mLoginRequest = null;
-        }
-    }
-
-    @Override
-    public void onRequestFailed(HttpRequest req, HttpResponse resp) {
-        if (mLoginRequest == req) {
-            dismissDialog();
-            mLoginRequest = null;
-            showToast(getString(R.string.network_fail));
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -197,4 +157,45 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
         super.onDestroy();
     }
 
+    /**
+     * 登录后数据获取处理相关
+     */
+    DefaultRequestHandler mLoginRequestHandler = new DefaultRequestHandler(this, new DefaultRequestHandler.OnRequestListener() {
+
+        @Override
+        public void onTheRequestFinish(Request req, Response resp) {
+            if (mLoginRequest == req) {
+                dismissDialog();
+                if (resp.result() instanceof JSONObject) {
+                    JSONObject userProfile = (JSONObject) resp.result();
+                    try {
+                        String messagerStr = userProfile.getJSONObject("Message").optString("messagestr");
+                        String messagerVal = userProfile.getJSONObject("Message").optString("messageval");
+
+                        showToast(messagerStr);
+
+                        if ("login_succeed".equals(messagerVal)) {
+                            preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
+                            accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
+
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                mLoginRequest = null;
+            }
+        }
+
+        @Override
+        public void onTheRequestFailed(Request req, Response resp) {
+            if (mLoginRequest == req) {
+                dismissDialog();
+                mLoginRequest = null;
+                showToast(getString(R.string.network_fail));
+            }
+        }
+    });
 }
