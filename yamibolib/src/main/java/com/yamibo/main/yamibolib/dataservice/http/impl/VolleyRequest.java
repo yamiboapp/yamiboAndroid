@@ -1,8 +1,8 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 
 import com.android.volley.AuthFailureError;
@@ -40,7 +40,7 @@ public class VolleyRequest extends JsonObjectRequest {
     private final static int MESSAGE_REQUEST_SUCCEED = 0;
     private final static int MESSAGE_REQUEST_FAILED = 1;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private Handler mHandler = new Handler(/*Looper.getMainLooper()*/) {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MESSAGE_REQUEST_SUCCEED) {
@@ -99,7 +99,7 @@ public class VolleyRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        String headers = preferences.getString(PERFER_COOKIE_STRING, null);
+        String headers = preferences.getString(perferCookieKey(mHttpRequest), null);
         if (headers != null) {
             Map<String, String> header = new HashMap<>();
             header.put(COOKIE_KEY, headers);
@@ -122,12 +122,16 @@ public class VolleyRequest extends JsonObjectRequest {
         final Response<JSONObject> superResponse = super.parseNetworkResponse(response);
         Map<String, String> responseHeaders = response.headers;
         if (responseHeaders != null) {
-            preferences.edit().putString(PERFER_COOKIE_STRING, responseHeaders.get(SET_COOKIE_KEY)).commit();
+            preferences.edit().putString(perferCookieKey(mHttpRequest), responseHeaders.get(SET_COOKIE_KEY)).commit();
         }
         Message message = mHandler.obtainMessage();
         message.what = MESSAGE_REQUEST_SUCCEED;
         message.obj = new BasicHttpResponse(response.statusCode, responseHeaders, superResponse.result, null);
         mHandler.sendMessage(message);
         return superResponse;
+    }
+
+    private String perferCookieKey(HttpRequest request) {
+        return PERFER_COOKIE_STRING + Uri.parse(request.url()).getHost();
     }
 }
