@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed -->
+    <item android:drawable="@color/alpha_home_listview_black" android:state_pressed="true" />
+
+    <!-- Normal -->
+    <item android:drawable="@color/transparent" />
+
+</selector>

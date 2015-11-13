@@ -1,5 +1,7 @@
 package com.yamibo.main.yamibolib.model;
 
+import org.json.JSONObject;
+
 /**
  * Created by Remiany on 2015/6/8 0008.
  */
@@ -13,12 +15,40 @@ public class UserProfile {
     String groupid;
     String formhash;
     String ismoderator;
-    String  readaccess;
-//    notice
+    String readaccess;
+    //    notice
     int newpush;
     int newpm;
     int newprompt;
     int newmypost;
+
+    JSONObject userProfile;
+
+    public UserProfile(JSONObject userprofile) {
+        this.userProfile = userprofile;
+        cookiepre = userprofile.optString("cookiepre");
+        auth = userprofile.optString("auth");
+
+        saltkey = userprofile.optString("saltkey");
+        member_uid = userprofile.optString("member_uid");
+        member_username = userprofile.optString("member_username");
+        member_avatar = userprofile.optString("member_avatar");
+        groupid = userprofile.optString("groupid");
+        formhash = userprofile.optString("formhash");
+        ismoderator = userprofile.optString("ismoderator");
+        readaccess = userprofile.optString("readaccess");
+
+
+        newpush = userprofile.optInt("newpush");
+        newpm = userprofile.optInt("newpm");
+        newprompt = userprofile.optInt("newprompt");
+        newmypost = userprofile.optInt("newmypost");
+    }
+
+    @Override
+    public String toString() {
+        return userProfile.toString();
+    }
 
     public String getCookiepre() {
         return cookiepre;

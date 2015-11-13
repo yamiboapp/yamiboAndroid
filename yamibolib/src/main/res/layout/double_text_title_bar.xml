@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_bar"
+    style="@style/TitleBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/titlebar_height"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+        <TextView
+            android:id="@android:id/title"
+            style="@style/TitleBarTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxWidth="240dip" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/text_size_14"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.yamibo.main.yamibolib.widget.CustomImageButton
+        android:id="@+id/left_title_button"
+        android:layout_width="@dimen/title_bar_button_size"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:src="@drawable/title_back" />
+
+    <Button
+        android:id="@+id/right_title_text_button_left"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/right_title_text_button"
+        android:gravity="center"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:text="删除"
+        android:textColor="@color/titlebar_action_hint_text_color"
+        android:textSize="@dimen/text_size_15"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/right_title_text_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingLeft="15dip"
+        android:paddingRight="5dip"
+        android:text="取消"
+        android:textColor="@color/titlebar_action_hint_text_color"
+        android:textSize="@dimen/text_size_15"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/title_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:textColor="@color/titlebar_action_hint_text_color"
+        android:textSize="@dimen/text_size_15"
+        android:visibility="gone" />
+
+</RelativeLayout>

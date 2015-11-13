@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">yamibolib</string>
+    <string name="app_name">百合会</string>
+    <string name="loading">载入中</string>
+    <string name="network_fail">网络错误，请重试</string>
 </resources>

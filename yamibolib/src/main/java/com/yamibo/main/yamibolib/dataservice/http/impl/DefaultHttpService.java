@@ -2,11 +2,8 @@ package com.yamibo.main.yamibolib.dataservice.http.impl;
 
 import android.content.Context;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.yamibo.main.yamibolib.dataservice.RequestHandler;
 import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
@@ -15,8 +12,7 @@ import com.yamibo.main.yamibolib.dataservice.http.HttpService;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by wangxiaoyan on 15/5/25.
@@ -33,95 +29,33 @@ public class DefaultHttpService implements HttpService {
     @Override
     public void exec(final HttpRequest req, final RequestHandler<HttpRequest, HttpResponse> handler) {
         if (req == null) return;
-        JsonObjectRequest request = new JsonObjectRequest(volleyMethod(req), req.url(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(final JSONObject response) {
-                if (handler != null) {
-                    handler.onRequestFinish(req, new HttpResponse() {
-                        @Override
-                        public int statusCode() {
-                            return 200;
-                        }
-
-                        @Override
-                        public Map<String, String> headers() {
-                            return null;
-                        }
-
-                        @Override
-                        public Object result() {
-                            return response;
-                        }
-
-                        @Override
-                        public Object error() {
-                            return null;
-                        }
-                    });
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(final VolleyError error) {
-                if (handler != null) {
-                    handler.onRequestFailed(req, new HttpResponse() {
-                        @Override
-                        public int statusCode() {
-                            return 400;
-                        }
-
-                        @Override
-                        public Map<String, String> headers() {
-                            return null;
-                        }
-
-                        @Override
-                        public Object result() {
-                            return null;
-                        }
-
-                        @Override
-                        public Object error() {
-                            return error;
-                        }
-                    });
-                }
-            }
-        }) {
-            @Override
-            public byte[] getBody() {
-                byte[] bytes = new byte[1024 * 4];
-                try {
-                    req.input().read(bytes);
-                    req.input().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return bytes;
-            }
-        };
+        VolleyRequest request = new VolleyRequest(req, handler);
         request.setTag(req.url());
         request.setShouldCache(req.isShouldCache());
         mQueue.add(request);
     }
 
     @Override
-    public void abort(HttpRequest req, RequestHandler<HttpRequest, HttpResponse> handler, boolean mayInterruptIfRunning) {
-        mQueue.cancelAll(req.url());
+    public HttpResponse execSync(final HttpRequest req) {
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        VolleyRequest request = new VolleyRequest(req);
+        request.setShouldCache(req.isShouldCache());
+        future.setRequest(mQueue.add(request));
+        try {
+            final JSONObject result = future.get();
+            return new BasicHttpResponse(result != null ? 200 : 400, null, result, null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return new BasicHttpResponse(400, null, null, null);
     }
 
-    private int volleyMethod(HttpRequest request) {
-        switch (request.method()) {
-            case BasicHttpRequest.GET:
-                return Request.Method.GET;
-            case BasicHttpRequest.POST:
-                return Request.Method.POST;
-            case BasicHttpRequest.PUT:
-                return Request.Method.PUT;
-            case BasicHttpRequest.DELETE:
-                return Request.Method.DELETE;
-        }
-        return Request.Method.GET;
+    @Override
+    public void abort(HttpRequest req, RequestHandler<HttpRequest, HttpResponse> handler,
+                      boolean mayInterruptIfRunning) {
+        mQueue.cancelAll(req.url());
     }
 }

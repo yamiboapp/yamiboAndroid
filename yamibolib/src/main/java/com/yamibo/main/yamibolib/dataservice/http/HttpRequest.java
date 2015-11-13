@@ -14,7 +14,7 @@ public interface HttpRequest extends Request {
      *
      * @return
      */
-    String method();
+    int method();
 
     /**
      * HTTP输入流<br>

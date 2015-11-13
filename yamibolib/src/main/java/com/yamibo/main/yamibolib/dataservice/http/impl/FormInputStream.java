@@ -1,8 +1,7 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
 import com.yamibo.main.yamibolib.Utils.Log;
-
-import org.apache.http.NameValuePair;
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,7 +14,8 @@ import java.util.List;
 
 public class FormInputStream extends InputStream {
     public static final String ISO_8859_1 = "ISO-8859-1";
-    public static final String DEFAULT_CHARSET = ISO_8859_1;
+    public static final String UTF_8 = "UTF-8";
+    public static final String DEFAULT_CHARSET = UTF_8;
 
     private List<NameValuePair> form;
     private String charsetName;
@@ -73,5 +73,10 @@ public class FormInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         return mInputStream.read();
+    }
+
+    @Override
+    public int available() throws IOException {
+        return mInputStream.available();
     }
 }
