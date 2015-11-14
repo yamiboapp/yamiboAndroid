@@ -1,9 +1,12 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
+import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -11,11 +14,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.yamibo.main.yamibolib.Utils.Environment;
+import com.yamibo.main.yamibolib.Utils.Log;
+import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.app.YMBApplication;
 import com.yamibo.main.yamibolib.dataservice.RequestHandler;
 import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
 import com.yamibo.main.yamibolib.dataservice.http.HttpResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -127,7 +133,29 @@ public class VolleyRequest extends JsonObjectRequest {
         Message message = mHandler.obtainMessage();
         message.what = MESSAGE_REQUEST_SUCCEED;
         message.obj = new BasicHttpResponse(response.statusCode, responseHeaders, superResponse.result, null);
+        handlerUserProfile(superResponse.result);
         mHandler.sendMessage(message);
         return superResponse;
+    }
+
+    /**
+     * 从底层截获用户信息，为用户的登录状态做判断
+     *
+     * @param userProfile
+     */
+    protected void handlerUserProfile(JSONObject userProfile) {
+        try {
+            String auth = userProfile.getJSONObject("Variables").optString("auth");
+            if (TextUtils.isEmpty(auth) || "null".equals(auth)) {//auth无效时
+                AccountService accountService = YMBApplication.instance().accountService();
+                if (accountService.profile() == null) {
+                    return;
+                }
+                accountService.logout();
+                accountService.update(null);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
