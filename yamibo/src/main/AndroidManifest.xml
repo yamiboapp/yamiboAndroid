@@ -12,11 +12,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="nosensor">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".login.LoginActivity"
@@ -32,6 +28,17 @@
                 <data
                     android:host="login"
                     android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".message.MessageActivity"
+            android:configChanges="orientation"
+            android:label="Message"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
