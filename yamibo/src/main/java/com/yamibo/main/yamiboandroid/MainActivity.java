@@ -1,58 +1,77 @@
 package com.yamibo.main.yamiboandroid;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.yamibo.main.yamibolib.app.YMBActivity;
+import com.yamibo.main.yamibolib.app.model.DrawerFragmentInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class MainActivity extends YMBActivity {
-//        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends YMBActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    private DrawerLayout mDrawerLayout;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-//    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
 //    private CharSequence mTitle;
+
+    List<DrawerFragmentInfo> mDrawerFragmentInfos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        mNavigationDrawerFragment = (NavigationDrawerFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 //        mTitle = getTitle();
-//
+        initFragments();
 //        // Set up the drawer.
-//        mNavigationDrawerFragment.setUp(
-//                R.id.navigation_drawer,
-//                (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
         login(null);
     }
 
-//    @Override
-//    public void onNavigationDrawerItemSelected(int position) {
-//        // update the main content by replacing fragments
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-//                .commit();
-//    }
-//
+    private void initFragments() {
+        mDrawerFragmentInfos = new ArrayList<DrawerFragmentInfo>();
+        mDrawerFragmentInfos.add(new DrawerFragmentInfo("论坛", null));
+        mDrawerFragmentInfos.add(new DrawerFragmentInfo("收藏", null));
+        mDrawerFragmentInfos.add(new DrawerFragmentInfo("消息", null));
+        mDrawerFragmentInfos.add(new DrawerFragmentInfo("附近的人", null));
+        mDrawerFragmentInfos.add(new DrawerFragmentInfo("设置", null));
+        mNavigationDrawerFragment.setDrawerFragmentInfos(mDrawerFragmentInfos);
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        if (mDrawerFragmentInfos == null) {
+            return;
+        }
+
+        DrawerFragmentInfo info = mDrawerFragmentInfos.get(position);
+        if (info.getFragment() == null) {
+            Toast.makeText(MainActivity.this, "position:" + position + " title:" + info.getTitle(), Toast.LENGTH_SHORT).show();
+        } else {
+            // update the main content by replacing fragments
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction()
+//                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+//                    .commit();
+        }
+    }
+
 //    public void onSectionAttached(int number) {
 //        switch (number) {
 //            case 1:

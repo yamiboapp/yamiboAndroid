@@ -1,16 +1,15 @@
 package com.yamibo.main.yamiboandroid;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +17,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.yamibo.main.yamibolib.Utils.Log;
+import com.yamibo.main.yamibolib.app.YMBApplication;
+import com.yamibo.main.yamibolib.app.model.DrawerFragmentInfo;
+import com.yamibo.main.yamibolib.model.UserProfile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -58,6 +68,11 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private List<DrawerFragmentInfo> mDrawerFragmentInfos;
+
+    private TextView tvMemberUsername, tvMemberUid, tvMemberPoints, tvMemberGroup;
+    private ImageView ivMemberAvater;
+
     public NavigationDrawerFragment() {
     }
 
@@ -89,25 +104,40 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+        RelativeLayout layout = (RelativeLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+
+        tvMemberUsername = (TextView) layout.findViewById(R.id.member_username);
+        tvMemberUid = (TextView) layout.findViewById(R.id.member_uid);
+        tvMemberPoints = (TextView) layout.findViewById(R.id.user_points);
+        tvMemberGroup = (TextView) layout.findViewById(R.id.groupid);
+        ivMemberAvater = (ImageView) layout.findViewById(R.id.member_avatar);
+
+        mDrawerListView = (ListView) layout.findViewById(R.id.listview_navigation_drawer);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                }));
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+
+        updateUserProfile();
+        return layout;
+    }
+
+    public List<DrawerFragmentInfo> getDrawerFragmentInfos() {
+        return mDrawerFragmentInfos;
+    }
+
+    public void setDrawerFragmentInfos(List<DrawerFragmentInfo> mDrawerFragmentInfos) {
+        this.mDrawerFragmentInfos = mDrawerFragmentInfos;
+        if (mDrawerFragmentInfos == null) {
+            Log.e("mDrawerFragmentInfos is null,please initialize");
+        } else {
+            mDrawerListView.setAdapter(new NavigationDrawerAdapter(mDrawerFragmentInfos, getActivity()));
+        }
     }
 
     public boolean isDrawerOpen() {
@@ -128,9 +158,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+//        ActionBar actionBar = getActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -260,15 +290,15 @@ public class NavigationDrawerFragment extends Fragment {
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
+//        ActionBar actionBar = getActionBar();
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//        actionBar.setTitle(R.string.app_name);
     }
 
-    private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
-    }
+//    private ActionBar getActionBar() {
+//        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+//    }
 
     /**
      * Callbacks interface that all activities using this fragment must implement.
@@ -278,5 +308,59 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    class NavigationDrawerAdapter extends BaseAdapter {
+        List<DrawerFragmentInfo> mTitles;
+        Context mContext;
+
+        NavigationDrawerAdapter(List<DrawerFragmentInfo> list, Context context) {
+            this.mTitles = list;
+            this.mContext = context;
+        }
+
+        @Override
+        public int getCount() {
+            return mTitles.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mTitles.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder holder = null;
+            if (view == null) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_navigation_drawer, null);
+                holder = new ViewHolder();
+                holder.tvTitle = (TextView) view.findViewById(R.id.page_title);
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder) view.getTag();
+            }
+
+            holder.tvTitle.setText(mTitles.get(i).getTitle());
+
+            return view;
+        }
+
+        class ViewHolder {
+            TextView tvTitle;
+        }
+    }
+
+    public void updateUserProfile() {
+        UserProfile profile = YMBApplication.instance().accountService().profile();
+        if (profile == null) {
+            return;
+        }
+        tvMemberUsername.setText(profile.getMember_username());
     }
 }
