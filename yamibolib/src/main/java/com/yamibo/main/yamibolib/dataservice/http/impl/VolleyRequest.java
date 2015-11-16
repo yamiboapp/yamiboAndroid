@@ -161,7 +161,7 @@ public class VolleyRequest extends JsonObjectRequest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+    }
 
     private String perferCookieKey(HttpRequest request) {
         return PERFER_COOKIE_STRING + Uri.parse(request.url()).getHost();

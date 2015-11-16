@@ -214,11 +214,19 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserProfile();
+    }
+
     public void updateUserProfile() {
         UserProfile profile = YMBApplication.instance().accountService().profile();
         if (profile == null) {
+            Log.e("remiany", "UserProfile is null");
             return;
         }
+
         tvMemberUsername.setText(profile.getMember_username());
 //        tvMemberGroup.setText(profile.getGroupid());
         tvMemberUid.setText(getActivity().getString(R.string.navigation_drawer_member_uid) + profile.getMember_uid());
