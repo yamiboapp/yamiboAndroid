@@ -25,34 +25,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="小霖"
             android:textColor="@color/light_yellow"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_16" />
 
         <TextView
             android:id="@+id/member_uid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="uid:233"
             android:textColor="@color/light_yellow"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_16" />
 
         <TextView
             android:id="@+id/groupid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="百合花蕾"
             android:textColor="@color/light_yellow"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_16" />
 
         <TextView
             android:id="@+id/user_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="积分:233"
             android:textColor="@color/light_yellow"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_16" />
     </LinearLayout>
 
     <ListView

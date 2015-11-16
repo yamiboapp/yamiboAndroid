@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -155,22 +154,15 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
                     String messagerStr = userProfile.getJSONObject("Message").optString("messagestr");
                     String messagerVal = userProfile.getJSONObject("Message").optString("messageval");
 
-                    String auth = userProfile.getJSONObject("Variables").optString("auth");
-
                     showToast(messagerStr);
 
+                    if ("login_succeed".equals(messagerVal)) {
+                        preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
+                        accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
 
-                    if (auth == null || "null".equals(auth)) {//auth无效时
-                        accountService().logout();
-                        accountService().update(null);
-                    } else {//auth有效时
-                        if ("login_succeed".equals(messagerVal)) {
-                            preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
-                            accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
-
-                            finish();
-                        }
+                        finish();
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

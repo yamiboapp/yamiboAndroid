@@ -6,6 +6,14 @@
     <string name="user_question">安全问题</string>
     <string name="user_answer">安全问题答案</string>
 
+    <string name="navigation_drawer_forum">论坛</string>
+    <string name="navigation_drawer_favforum">收藏</string>
+    <string name="navigation_drawer_mypm">消息</string>
+    <string name="navigation_drawer_nearby">附近的人</string>
+    <string name="navigation_drawer_set">设置</string>
+
+    <string name="navigation_drawer_member_uid">uid:</string>
+
     <string name="user_question_not_set">安全提问(未设置请忽略)</string>
     <string name="user_question_mather_name">母亲的名字</string>
     <string name="user_question_grandfather_name">爷爷的名字</string>

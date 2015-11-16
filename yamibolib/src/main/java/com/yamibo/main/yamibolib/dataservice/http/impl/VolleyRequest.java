@@ -1,9 +1,8 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
-import android.app.Application;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -15,7 +14,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.yamibo.main.yamibolib.R;
 import com.yamibo.main.yamibolib.Utils.Environment;
-import com.yamibo.main.yamibolib.Utils.Log;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.app.YMBApplication;
 import com.yamibo.main.yamibolib.dataservice.RequestHandler;
@@ -48,7 +46,7 @@ public class VolleyRequest extends JsonObjectRequest {
     private final static int MESSAGE_REQUEST_FAILED = 1;
     private final static int MESSAGE_USER_LOGINOUT = 2;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private Handler mHandler = new Handler(/*Looper.getMainLooper()*/) {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MESSAGE_REQUEST_SUCCEED) {
@@ -109,7 +107,7 @@ public class VolleyRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        String headers = preferences.getString(PERFER_COOKIE_STRING, null);
+        String headers = preferences.getString(perferCookieKey(mHttpRequest), null);
         if (headers != null) {
             Map<String, String> header = new HashMap<>();
             header.put(COOKIE_KEY, headers);
@@ -132,7 +130,7 @@ public class VolleyRequest extends JsonObjectRequest {
         final Response<JSONObject> superResponse = super.parseNetworkResponse(response);
         Map<String, String> responseHeaders = response.headers;
         if (responseHeaders != null) {
-            preferences.edit().putString(PERFER_COOKIE_STRING, responseHeaders.get(SET_COOKIE_KEY)).commit();
+            preferences.edit().putString(perferCookieKey(mHttpRequest), responseHeaders.get(SET_COOKIE_KEY)).commit();
         }
         Message message = mHandler.obtainMessage();
         message.what = MESSAGE_REQUEST_SUCCEED;
@@ -141,6 +139,7 @@ public class VolleyRequest extends JsonObjectRequest {
         mHandler.sendMessage(message);
         return superResponse;
     }
+
 
     /**
      * 从底层截获用户信息，为用户的登录状态做判断
@@ -162,5 +161,9 @@ public class VolleyRequest extends JsonObjectRequest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+    private String perferCookieKey(HttpRequest request) {
+        return PERFER_COOKIE_STRING + Uri.parse(request.url()).getHost();
     }
 }
