@@ -20,7 +20,7 @@ public class MainActivity extends YMBActivity implements NavigationDrawerFragmen
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
 
-    List<DrawerFragmentInfo> mDrawerFragmentInfos;
+    private List<DrawerFragmentInfo> mDrawerFragmentInfos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends YMBActivity implements NavigationDrawerFragmen
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        login(null);
+//        login(null);
     }
 
     /**
@@ -62,13 +62,11 @@ public class MainActivity extends YMBActivity implements NavigationDrawerFragmen
 
         DrawerFragmentInfo info = mDrawerFragmentInfos.get(position);
         if (info.getFragment() == null) {
-            Toast.makeText(MainActivity.this, "position:" + position + " title:" + info.getTitle(), Toast.LENGTH_SHORT).show();
+            showToast("position:" + position + " title:" + info.getTitle());
         } else {
             Fragment fragment = mDrawerFragmentInfos.get(position).getFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
     }
 

@@ -153,16 +153,13 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
                 try {
                     String messagerStr = userProfile.getJSONObject("Message").optString("messagestr");
                     String messagerVal = userProfile.getJSONObject("Message").optString("messageval");
-
                     showToast(messagerStr);
-
                     if ("login_succeed".equals(messagerVal)) {
                         preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
                         accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
 
                         finish();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
