@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.android.volley.toolbox.CookieHelper;
+import com.yamibo.main.yamibolib.R;
+import com.yamibo.main.yamibolib.Utils.Environment;
 import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.accountservice.AccountListener;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
@@ -16,6 +20,8 @@ import com.yamibo.main.yamibolib.model.UserProfile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,8 +93,10 @@ public class DefaultAccountService implements AccountService {
     @Override
     public void logout() {
         preferences.edit().remove(PRE_USER_DATA).commit();
+        mUserProfile = null;
+        removeCookies();
+        Toast.makeText(YMBApplication.instance(), YMBApplication.instance().getString(R.string.reminder_login_out), Toast.LENGTH_SHORT).show();
         for (AccountListener listener : mAccountListeners) {
-            mUserProfile = null;
             listener.onAccountChanged(this);
         }
     }
@@ -105,7 +113,7 @@ public class DefaultAccountService implements AccountService {
             preferences.edit().remove(PRE_USER_DATA).commit();
         }
         for (AccountListener listener : mAccountListeners) {//触发所有的AccountListener.onAccountChanged事件
-            listener.onProfileChanged(this);
+            listener.onAccountChanged(this);
         }
     }
 
@@ -131,6 +139,15 @@ public class DefaultAccountService implements AccountService {
     public void onLoginCancel() {
         if (mLoginResultListener != null) {
             mLoginResultListener.onLoginCancel(this);
+        }
+    }
+
+    private void removeCookies() {
+        String url = Environment.isDebug() ? Environment.HTTP_ADDRESS.replaceFirst("www.", "ceshi.") : Environment.HTTP_ADDRESS;
+        try {
+            CookieHelper.removeCookies(mContext, new URL(url));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
     }
 }

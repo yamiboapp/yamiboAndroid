@@ -81,4 +81,7 @@ public class CookieHelper {
         return mPerference;
     }
 
+    public static void removeCookies(Context context, URL url) {
+        perference(context).edit().remove(perferCookieKey(url)).commit();
+    }
 }

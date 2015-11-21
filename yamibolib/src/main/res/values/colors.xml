@@ -11,6 +11,8 @@
 
     <color name="text_color_default">#666666</color>
 
+    <color name="button_custom">#932f1f</color>
+
 
     <!-- titlebar 颜色规范 -->
     <color name="titlebar_main_title_text_color">#ffffff</color>

@@ -14,41 +14,61 @@
         android:orientation="vertical"
         android:padding="25dp">
 
-        <ImageView
+        <com.yamibo.main.yamibolib.widget.YMBNetworkImageView
             android:id="@+id/member_avatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/icon_logo" />
 
-        <TextView
-            android:id="@+id/member_username"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/user_detail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textColor="@color/light_yellow"
-            android:textSize="@dimen/text_size_16" />
+            android:background="@color/light_brown"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="25dp"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/member_uid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/light_yellow"
-            android:textSize="@dimen/text_size_16" />
+            <TextView
+                android:id="@+id/member_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
 
-        <TextView
-            android:id="@+id/groupid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textColor="@color/light_yellow"
-            android:textSize="@dimen/text_size_16" />
+            <TextView
+                android:id="@+id/member_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
 
-        <TextView
-            android:id="@+id/user_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/light_yellow"
-            android:textSize="@dimen/text_size_16" />
+            <TextView
+                android:id="@+id/groupid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/user_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/round_button_shape"
+            android:text="@string/login"
+            android:textSize="@dimen/text_medium_1" />
     </LinearLayout>
 
     <ListView

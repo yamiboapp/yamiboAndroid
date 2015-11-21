@@ -157,11 +157,12 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
                     if ("login_succeed".equals(messagerVal)) {
                         preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
                         accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
-
+                        mLoginResult = true;
                         finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    showToast(getString(R.string.network_fail));
                 }
             }
 

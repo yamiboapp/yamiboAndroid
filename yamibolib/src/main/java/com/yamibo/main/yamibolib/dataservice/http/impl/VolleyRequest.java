@@ -3,14 +3,12 @@ package com.yamibo.main.yamibolib.dataservice.http.impl;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.yamibo.main.yamibolib.R;
 import com.yamibo.main.yamibolib.Utils.Environment;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.app.YMBApplication;
@@ -34,7 +32,6 @@ public class VolleyRequest extends JsonObjectRequest {
 
     private final static int MESSAGE_REQUEST_SUCCEED = 0;
     private final static int MESSAGE_REQUEST_FAILED = 1;
-    private final static int MESSAGE_USER_LOGINOUT = 2;
 
     private Handler mHandler = new Handler(/*Looper.getMainLooper()*/) {
         @Override
@@ -47,8 +44,6 @@ public class VolleyRequest extends JsonObjectRequest {
                 if (mRequestHandler != null) {
                     mRequestHandler.onRequestFailed(mHttpRequest, (BasicHttpResponse) msg.obj);
                 }
-            } else if (msg.what == MESSAGE_USER_LOGINOUT) {
-                Toast.makeText(YMBApplication.instance(), YMBApplication.instance().getString(R.string.reminder_login_out), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -133,9 +128,7 @@ public class VolleyRequest extends JsonObjectRequest {
                 if (accountService.profile() == null) {
                     return;
                 }
-                mHandler.sendEmptyMessage(MESSAGE_USER_LOGINOUT);
                 accountService.logout();
-                accountService.update(null);
             }
         } catch (JSONException e) {
             e.printStackTrace();
