@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.yamibo.main.yamiboandroid.R;
@@ -36,6 +38,17 @@ public class MessageListViewAdapter extends BaseSwipeAdapter{
 
     @Override
     public void fillValues(int i, View convertView) {
+        ViewHolder viewHolder;
+        if(convertView == null){
+            viewHolder = new ViewHolder();
+            viewHolder.messagePotraitImg = (ImageView) convertView.findViewById(R.id.img_message_potrait);
+            viewHolder.messageSenderTxt = (TextView) convertView.findViewById(R.id.txt_message_sender);
+            viewHolder.messageContentTxt = (TextView) convertView.findViewById(R.id.txt_message_content);
+            viewHolder.messageReceiveDateTxt = (TextView) convertView.findViewById(R.id.txt_message_receive_date);
+            convertView.setTag(viewHolder);
+        } else viewHolder = (ViewHolder) convertView.getTag();
+
+        
 
     }
 
@@ -55,6 +68,9 @@ public class MessageListViewAdapter extends BaseSwipeAdapter{
     }
 
     class ViewHolder{
-
+        public ImageView messagePotraitImg;
+        public TextView messageSenderTxt;
+        public TextView messageContentTxt;
+        public TextView messageReceiveDateTxt;
     }
 }
