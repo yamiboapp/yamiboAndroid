@@ -103,9 +103,14 @@ public class DefaultAccountService implements AccountService {
     }
 
     public void showToast(String msg) {
-        Looper.prepare();
-        Toast.makeText(YMBApplication.instance(), msg, Toast.LENGTH_SHORT).show();
-        Looper.loop();
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            Looper.prepare();
+            Toast.makeText(YMBApplication.instance(), msg, Toast.LENGTH_SHORT).show();
+            Looper.loop();
+        } else {
+            Toast.makeText(YMBApplication.instance(), msg, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
