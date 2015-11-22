@@ -29,6 +29,23 @@
         android:name="com.yamibo.main.yamibolib.app.YMBApplication"
         android:allowBackup="true">
 
+        <activity
+            android:name=".Utils.CrashActivity"
+            android:configChanges="orientation"
+            android:label="crash"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="crash"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+
         <!-- 在application标签中声明百度 service组件-->
         <service
             android:name="com.baidu.location.f"

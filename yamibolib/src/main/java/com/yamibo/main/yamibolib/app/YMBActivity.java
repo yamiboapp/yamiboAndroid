@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.yamibo.main.yamibolib.R;
+import com.yamibo.main.yamibolib.Utils.CrashReportHelper;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.accountservice.LoginResultListener;
 import com.yamibo.main.yamibolib.configservice.ConfigService;
@@ -81,6 +82,11 @@ public class YMBActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         isResumed = true;
+        if (getIntent().getData() != null) {
+            CrashReportHelper.putUrlSchemaOnShow(getIntent().getData().toString());
+        } else {
+            CrashReportHelper.putUrlSchemaOnShow(this.getLocalClassName());
+        }
     }
 
     @Override
