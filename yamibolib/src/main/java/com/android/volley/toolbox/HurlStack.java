@@ -111,7 +111,7 @@ public class HurlStack implements HttpStack {
         }
 
         if (CookieHelper.hasCookies(mContext, parsedUrl)) {
-            connection.addRequestProperty(CookieHelper.COOKIE_KEY, CookieHelper.cookieArray(mContext, parsedUrl));
+            connection.addRequestProperty(CookieHelper.COOKIE_KEY, CookieHelper.getCookies(mContext, parsedUrl));
         }
 
         setConnectionParametersForRequest(connection, request);
@@ -132,7 +132,7 @@ public class HurlStack implements HttpStack {
         for (Entry<String, List<String>> header : connection.getHeaderFields().entrySet()) {
             if (header.getKey() != null) {
                 if (CookieHelper.SET_COOKIE_KEY.equals(header.getKey())) {
-                    Header h = new BasicHeader(header.getKey(), CookieHelper.cookieString(mContext, parsedUrl, header.getValue()));
+                    Header h = new BasicHeader(header.getKey(), CookieHelper.setCookies(mContext, parsedUrl, header.getValue()));
                     response.addHeader(h);
                     continue;
                 }
