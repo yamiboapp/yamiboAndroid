@@ -25,6 +25,8 @@ public class Environment {
 
     private static String mapiUserAgent;
 
+    public static final String HTTP_ADDRESS = "http://www.yamibo.com/chobits/index.php";
+
 
     private static PackageInfo packageInfo;
 

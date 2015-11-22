@@ -1,9 +1,7 @@
 package com.yamibo.main.yamibolib.accountservice;
 
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.model.UserProfile;
-
-import org.apache.http.NameValuePair;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -37,9 +35,9 @@ public interface AccountService {
     public int id();
 
     /**
-     * 没有登录时返回null
+     * 判断是否登陆
      */
-    public String token();
+    public boolean isLogin();
 
     /**
      * 不需要remove listener. AccountService发送完消息后会自动remove listener
@@ -75,13 +73,13 @@ public interface AccountService {
     public void update(UserProfile profile);
 
     /**
-     * 用Activity implement AccountListener,在Activity里面会帮你removeListener
+     * 用Activity implement AccountListener
      * </p>注意listener里面不要做耗时的动作
      */
     public void addListener(AccountListener listener);
 
     /**
-     * 用Activity implement AccountListener,在Activity里面会帮你removeListener
+     * 用Activity implement AccountListener
      */
     public void removeListener(AccountListener listener);
 

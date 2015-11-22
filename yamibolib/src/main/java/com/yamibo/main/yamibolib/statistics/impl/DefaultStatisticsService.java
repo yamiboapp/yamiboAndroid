@@ -2,9 +2,8 @@ package com.yamibo.main.yamibolib.statistics.impl;
 
 import android.content.Context;
 
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.statistics.StatisticsService;
-
-import org.apache.http.NameValuePair;
 
 import java.util.List;
 

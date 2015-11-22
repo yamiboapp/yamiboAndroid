@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.yamibo.main.yamibolib.widget.CustomEditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="63dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/text_color_default"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dip"
+        android:layout_marginTop="14dip"
+        android:background="@null"
+        android:src="@drawable/navibar_search_icon_search"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@null"
+        android:drawablePadding="8dip"
+        android:paddingRight="3dip"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/text_color_default" />
+
+    <ImageButton
+        android:id="@+id/edit_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@null"
+        android:paddingRight="10dip"
+        android:src="@drawable/close"
+        android:visibility="gone" />
+
+</com.yamibo.main.yamibolib.widget.CustomEditText>

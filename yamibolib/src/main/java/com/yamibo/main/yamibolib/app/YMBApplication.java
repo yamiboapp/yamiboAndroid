@@ -1,6 +1,8 @@
 package com.yamibo.main.yamibolib.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.configservice.ConfigService;
@@ -40,6 +42,15 @@ public class YMBApplication extends Application {
     public void onCreate() {
         super.onCreate();
         locationService().start();
+    }
+
+    // Utils
+    public static SharedPreferences preferences(Context c) {
+        return c.getSharedPreferences(c.getPackageName(), MODE_PRIVATE);
+    }
+
+    public static SharedPreferences preferences() {
+        return YMBApplication.instance().getSharedPreferences(YMBApplication.instance().getPackageName(), MODE_PRIVATE);
     }
 
     public Object getService(String name) {

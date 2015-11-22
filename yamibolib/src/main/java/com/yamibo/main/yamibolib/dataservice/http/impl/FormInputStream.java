@@ -1,8 +1,7 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
 import com.yamibo.main.yamibolib.Utils.Log;
-
-import org.apache.http.NameValuePair;
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

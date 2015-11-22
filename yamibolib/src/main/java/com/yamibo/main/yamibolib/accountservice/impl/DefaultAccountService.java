@@ -1,15 +1,28 @@
 package com.yamibo.main.yamibolib.accountservice.impl;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Looper;
+import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.android.volley.toolbox.CookieHelper;
+import com.yamibo.main.yamibolib.R;
+import com.yamibo.main.yamibolib.Utils.Environment;
+import com.yamibo.main.yamibolib.Utils.NameValuePair;
 import com.yamibo.main.yamibolib.accountservice.AccountListener;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.accountservice.LoginResultListener;
+import com.yamibo.main.yamibolib.app.YMBApplication;
 import com.yamibo.main.yamibolib.model.UserProfile;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +31,27 @@ import java.util.List;
  */
 public class DefaultAccountService implements AccountService {
     private Context mContext;
-    UserProfile mUserProfile;
-    List<AccountListener> mAccountListeners;
+    private UserProfile mUserProfile;
+    private List<AccountListener> mAccountListeners;
+    private LoginResultListener mLoginResultListener;
+    private SharedPreferences preferences;
+
+    private final static String PRE_USER_DATA = "com.yamibo.user_data";
+
 
     public DefaultAccountService(Context context) {
         mContext = context;
-        mAccountListeners = new ArrayList<AccountListener>();
+        mAccountListeners = new ArrayList<>();
+        preferences = YMBApplication.preferences(mContext);
+        String userData = preferences.getString(PRE_USER_DATA, null);
+
+        if (!TextUtils.isEmpty(userData)) {
+            try {
+                mUserProfile = new UserProfile(new JSONObject(userData));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -41,18 +69,21 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
-    public String token() {
-        //尚不确定应该返回那部分的参数
-        return null;
+    public boolean isLogin() {
+        return mUserProfile != null;
     }
 
     @Override
     public void login(LoginResultListener listener) {
-
+        login(listener, null);
     }
 
     @Override
     public void login(LoginResultListener listener, List<NameValuePair> params) {
+        mLoginResultListener = listener;
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("ymb://login"));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -62,63 +93,68 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     public void logout() {
+        preferences.edit().remove(PRE_USER_DATA).commit();
+        mUserProfile = null;
+        removeCookies();
+        showToast(YMBApplication.instance().getString(R.string.reminder_login_out));
         for (AccountListener listener : mAccountListeners) {
-            mUserProfile = null;
+            listener.onAccountChanged(this);
+        }
+    }
+
+    public void showToast(String msg) {
+        Looper.prepare();
+        Toast.makeText(YMBApplication.instance(), msg, Toast.LENGTH_SHORT).show();
+        Looper.loop();
+    }
+
+    @Override
+    public void update(UserProfile profile) {
+        mUserProfile = profile;
+        if (profile != null) {
+            preferences.edit().putString(PRE_USER_DATA, mUserProfile.toString()).commit();
+            if (mLoginResultListener != null) {
+                mLoginResultListener.onLoginSuccess(this);
+            }
+        } else {
+            preferences.edit().remove(PRE_USER_DATA).commit();
+        }
+        for (AccountListener listener : mAccountListeners) {//触发所有的AccountListener.onAccountChanged事件
             listener.onAccountChanged(this);
         }
     }
 
     @Override
-    public void update(UserProfile profile) {
-        if (mUserProfile == null) {
-            mUserProfile = profile;
-            for (AccountListener listener : mAccountListeners) {//触发所有的AccountListener.onAccountChanged事件
-                listener.onAccountChanged(this);
-            }
-        } else {
-            if (profile.getMember_uid() == mUserProfile.getMember_uid()) {//只有两次uid一致的时候，才进行更新，否则不做处理
-                if (updateProfile(mUserProfile, profile)) {//信息有更新
-                    for (AccountListener listener : mAccountListeners) {//触发所有的AccountListener.onAccountChanged事件
-                        listener.onProfileChanged(this);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 更新新旧两个用户信息的方法
-     *
-     * @param former 原来的用户信息
-     * @param latter 新得到的用户信息
-     * @return
-     */
-    public boolean updateProfile(UserProfile former, UserProfile latter) {
-        boolean flag = false;
-        //用户组id
-        if (former.getGroupid() != latter.getGroupid()) {
-            former.setGroupid(latter.getGroupid());
-            mUserProfile = latter;
-            return true;
-        }
-
-
-        return flag;
-    }
-
-
-    @Override
     public void addListener(AccountListener listener) {
-        mAccountListeners.add(listener);
+        if (listener != null) {
+            mAccountListeners.add(listener);
+        }
     }
 
     @Override
     public void removeListener(AccountListener listener) {
-        mAccountListeners.remove(listener);
+        if (listener != null && mAccountListeners.contains(listener)) {
+            mAccountListeners.remove(listener);
+        }
     }
 
     @Override
     public void removeLoginResultListener() {
+        mLoginResultListener = null;
+    }
 
+    public void onLoginCancel() {
+        if (mLoginResultListener != null) {
+            mLoginResultListener.onLoginCancel(this);
+        }
+    }
+
+    private void removeCookies() {
+        String url = Environment.isDebug() ? Environment.HTTP_ADDRESS.replaceFirst("www.", "ceshi.") : Environment.HTTP_ADDRESS;
+        try {
+            CookieHelper.removeCookies(mContext, new URL(url));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 }
