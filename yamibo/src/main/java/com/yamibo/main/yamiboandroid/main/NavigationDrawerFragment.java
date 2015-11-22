@@ -58,7 +58,10 @@ public class NavigationDrawerFragment extends YMBFragment implements LoginResult
             new MenuItem(R.drawable.bg_menu_pm_rest, R.string.navigation_drawer_mypm, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    startActivity("ymb://message");
+                    if (mDrawerLayout != null) {
+                        mDrawerLayout.closeDrawer(mFragmentContainerView);
+                    }
                 }
             }),
             new MenuItem(R.drawable.bg_menu_nearby_rest, R.string.navigation_drawer_nearby, new View.OnClickListener() {
