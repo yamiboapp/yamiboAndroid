@@ -5,10 +5,11 @@ import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
 import com.yamibo.main.yamiboandroid.R;
-import com.yamibo.main.yamiboandroid.message.listener.TabOnclickListener;
-import com.yamibo.main.yamibolib.app.YMBActivity;
 import com.yamibo.main.yamiboandroid.message.adapter.MessageViewPagerAdapter;
 import com.yamibo.main.yamiboandroid.message.listener.PageChangeListener;
+import com.yamibo.main.yamiboandroid.message.listener.TabOnclickListener;
+import com.yamibo.main.yamibolib.app.YMBActivity;
+import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
 import com.yamibo.main.yamibolib.widget.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class MessageActivity extends YMBActivity{
     private TextView publicMessageTxt;
     private TextView tabLineTxt;
 
+    private HttpRequest mPrivateMessageRequest;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +36,7 @@ public class MessageActivity extends YMBActivity{
 
     private void initView() {
         setContentView(R.layout.activity_message);
-        setTitle("信息");
+        setTitle(R.string.message);
 
         messageViewPager= (NoScrollViewPager) findViewById(R.id.viewpager_message);
         privateMessageTxt = (TextView) findViewById(R.id.txt_message_private);
@@ -52,4 +56,13 @@ public class MessageActivity extends YMBActivity{
         publicMessageTxt.setOnClickListener(new TabOnclickListener(0,messageViewPager));
         privateMessageTxt.setOnClickListener(new TabOnclickListener(1,messageViewPager));
     }
+
+//    private void loadPrivateMessage(String page){
+//        loadMessageExecutor("mypm",page,mPrivateMessageRequest);
+//    }
+
+
+
+
+
 }
