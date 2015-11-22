@@ -34,10 +34,10 @@ public class SealedMApiService implements HttpService, RequestHandler<HttpReques
 		}
 	}
 
-    @Override
-    public HttpResponse execSync(HttpRequest req) {
-        return service.execSync(req);
-    }
+//    @Override
+//    public HttpResponse execSync(HttpRequest req) {
+//        return service.execSync(req);
+//    }
 
     @Override
     public void abort(HttpRequest req, RequestHandler<HttpRequest, HttpResponse> handler,
