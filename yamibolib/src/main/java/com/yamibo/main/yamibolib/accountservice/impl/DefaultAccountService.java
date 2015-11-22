@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -95,10 +96,16 @@ public class DefaultAccountService implements AccountService {
         preferences.edit().remove(PRE_USER_DATA).commit();
         mUserProfile = null;
         removeCookies();
-        Toast.makeText(YMBApplication.instance(), YMBApplication.instance().getString(R.string.reminder_login_out), Toast.LENGTH_SHORT).show();
+        showToast(YMBApplication.instance().getString(R.string.reminder_login_out));
         for (AccountListener listener : mAccountListeners) {
             listener.onAccountChanged(this);
         }
+    }
+
+    public void showToast(String msg) {
+        Looper.prepare();
+        Toast.makeText(YMBApplication.instance(), msg, Toast.LENGTH_SHORT).show();
+        Looper.loop();
     }
 
     @Override

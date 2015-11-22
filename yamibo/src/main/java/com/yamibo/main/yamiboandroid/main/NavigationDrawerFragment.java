@@ -245,6 +245,8 @@ public class NavigationDrawerFragment extends YMBFragment implements LoginResult
     }
 
     public void updateUserProfile() {
+        if (getActivity() == null)
+            return;
         UserProfile profile = accountService().profile();
         if (accountService().isLogin()) {
             mUserDetail.setVisibility(View.VISIBLE);

@@ -7,6 +7,8 @@
     <string name="user_question">安全问题</string>
     <string name="user_answer">安全问题答案</string>
 
+    <string name="test">测试</string>
+
     <string name="navigation_drawer_forum">论坛</string>
     <string name="navigation_drawer_favforum">收藏</string>
     <string name="navigation_drawer_mypm">消息</string>
