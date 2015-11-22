@@ -65,7 +65,7 @@ public class SettingActivity extends YMBActivity implements View.OnClickListener
 
                 @Override
                 public void onRequestFailed(HttpRequest req, HttpResponse resp) {
-
+                    Log.e(resp.toString());
                 }
             });
         }

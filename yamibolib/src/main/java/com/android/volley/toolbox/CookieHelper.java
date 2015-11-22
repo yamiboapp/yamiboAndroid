@@ -5,15 +5,13 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by wangxiaoyan on 15/11/12.
  */
 public class CookieHelper {
-    private final static String COOKIE_DIVIDER = "__YMB_COOKIE__";
+    private final static String COOKIE_DIVIDER = ";";
     public static final String SET_COOKIE_KEY = "Set-Cookie";
     public static final String COOKIE_KEY = "Cookie";
     public static final String SESSION_COOKIE = "sessionid";
@@ -29,15 +27,9 @@ public class CookieHelper {
      * @param url
      * @return
      */
-    public static List<String> cookieArray(Context context, URL url) {
-        List<String> cookieList = new ArrayList<>();
-        if (context == null || url == null) return cookieList;
-        String[] cookies = perference(context).getString(perferCookieKey(url), "").split(COOKIE_DIVIDER);
-        if (cookies != null && cookies.length > 0) {
-            cookieList = Arrays.asList(cookies);
-        }
-
-        return cookieList;
+    public static String cookieArray(Context context, URL url) {
+        if (context == null || url == null) return "";
+        return perference(context).getString(perferCookieKey(url), "");
     }
 
     /**
@@ -50,11 +42,13 @@ public class CookieHelper {
         StringBuilder sb = new StringBuilder("");
         if (cookieList == null || context == null || url == null) return sb.toString();
 
+        String cookie;
         for (int i = 0; i < cookieList.size(); i++) {
+            cookie = cookieList.get(i).substring(0, cookieList.get(i).indexOf(';'));
             if (i == cookieList.size() - 1) {//last one
-                sb.append(cookieList.get(i));
+                sb.append(cookie);
             } else {
-                sb.append(cookieList.get(i)).append(COOKIE_DIVIDER);
+                sb.append(cookie).append(COOKIE_DIVIDER);
             }
         }
 

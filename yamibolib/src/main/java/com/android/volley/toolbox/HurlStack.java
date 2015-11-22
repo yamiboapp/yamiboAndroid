@@ -111,10 +111,7 @@ public class HurlStack implements HttpStack {
         }
 
         if (CookieHelper.hasCookies(mContext, parsedUrl)) {
-            List<String> cookies = CookieHelper.cookieArray(mContext, parsedUrl);
-            for (String cookie : cookies) {
-                connection.addRequestProperty(CookieHelper.COOKIE_KEY, cookie);
-            }
+            connection.addRequestProperty(CookieHelper.COOKIE_KEY, CookieHelper.cookieArray(mContext, parsedUrl));
         }
 
         setConnectionParametersForRequest(connection, request);
