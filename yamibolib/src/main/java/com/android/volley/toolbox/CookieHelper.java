@@ -49,14 +49,18 @@ public class CookieHelper {
         Map<String, String> localCookiesMap = new HashMap<>();
         String[] localCookiesArray = localCookies.split(COOKIE_DIVIDER);
         for (String localCookie : localCookiesArray) {
-            localCookiesMap.put(getCookieName(localCookie), getCookieValue(localCookie));
+            if (!TextUtils.isEmpty(localCookie)) {
+                localCookiesMap.put(getCookieName(localCookie), getCookieValue(localCookie));
+            }
         }
         for (int i = 0; i < cookieList.size(); i++) {
             cookie = cookieList.get(i);
             if (cookie.contains(COOKIE_DIVIDER)) {
                 cookie = cookieList.get(i).substring(0, cookieList.get(i).indexOf(COOKIE_DIVIDER));
             }
-            localCookiesMap.put(getCookieName(cookie), getCookieValue(cookie));
+            if (!TextUtils.isEmpty(cookie)) {
+                localCookiesMap.put(getCookieName(cookie), getCookieValue(cookie));
+            }
         }
         if (localCookiesMap.size() > 0) {
             for (Map.Entry<String, String> entry : localCookiesMap.entrySet()) {
