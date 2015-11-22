@@ -3,7 +3,6 @@ package com.yamibo.main.yamiboandroid.login;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.yamibo.main.yamiboandroid.R;
-import com.yamibo.main.yamiboandroid.message.MessageActivity;
 import com.yamibo.main.yamibolib.Utils.BasicNameValuePair;
 import com.yamibo.main.yamibolib.Utils.Environment;
 import com.yamibo.main.yamibolib.Utils.NameValuePair;
@@ -159,15 +157,12 @@ public class LoginActivity extends YMBActivity implements View.OnClickListener, 
                     if ("login_succeed".equals(messagerVal)) {
                         preferences().edit().putString(PERFER_USER_NAME, mUserName.mEdit.getText().toString().trim()).apply();
                         accountService().update(new UserProfile(userProfile.getJSONObject("Variables")));
-
-                        //finish();     //在这稍微改了一下
-                        Intent intent = new Intent();
-                        intent.setClass(this, MessageActivity.class);
-                        startActivity(intent);
+                        mLoginResult = true;
                         finish();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    showToast(getString(R.string.network_fail));
                 }
             }
 

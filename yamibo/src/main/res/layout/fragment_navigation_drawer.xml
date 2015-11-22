@@ -1,5 +1,82 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent" android:dividerHeight="0dp"
-    android:background="#cccc" tools:context=".NavigationDrawerFragment" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/deep_yellow"
+    tools:context=".NavigationDrawerFragment">
+
+    <LinearLayout
+        android:id="@+id/user_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_brown"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <com.yamibo.main.yamibolib.widget.YMBNetworkImageView
+            android:id="@+id/member_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/icon_logo" />
+
+        <LinearLayout
+            android:id="@+id/user_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_brown"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="25dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/member_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/member_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/groupid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/user_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_yellow"
+                android:textSize="@dimen/text_size_16" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/round_button_shape"
+            android:text="@string/login"
+            android:textSize="@dimen/text_medium_1" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listview_navigation_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_info_layout"
+        android:background="@color/light_yellow"
+        android:divider="@color/deep_brown"></ListView>
+
+</RelativeLayout>

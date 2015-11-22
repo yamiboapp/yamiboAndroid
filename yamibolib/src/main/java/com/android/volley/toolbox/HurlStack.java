@@ -16,6 +16,8 @@
 
 package com.android.volley.toolbox;
 
+import android.content.Context;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
@@ -50,6 +52,7 @@ import javax.net.ssl.SSLSocketFactory;
 public class HurlStack implements HttpStack {
 
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
+    private Context mContext;
 
     /**
      * An interface for transforming URLs before use.
@@ -65,24 +68,25 @@ public class HurlStack implements HttpStack {
     private final UrlRewriter mUrlRewriter;
     private final SSLSocketFactory mSslSocketFactory;
 
-    public HurlStack() {
-        this(null);
+    public HurlStack(Context context) {
+        this(context, null);
     }
 
     /**
      * @param urlRewriter Rewriter to use for request URLs
      */
-    public HurlStack(UrlRewriter urlRewriter) {
-        this(urlRewriter, null);
+    public HurlStack(Context context, UrlRewriter urlRewriter) {
+        this(context, urlRewriter, null);
     }
 
     /**
      * @param urlRewriter      Rewriter to use for request URLs
      * @param sslSocketFactory SSL factory to use for HTTPS connections
      */
-    public HurlStack(UrlRewriter urlRewriter, SSLSocketFactory sslSocketFactory) {
+    public HurlStack(Context context, UrlRewriter urlRewriter, SSLSocketFactory sslSocketFactory) {
         mUrlRewriter = urlRewriter;
         mSslSocketFactory = sslSocketFactory;
+        mContext = context;
     }
 
     @Override
@@ -101,16 +105,18 @@ public class HurlStack implements HttpStack {
         }
         URL parsedUrl = new URL(url);
         HttpURLConnection connection = openConnection(parsedUrl, request);
+
         for (String headerName : map.keySet()) {
-            if (CookieHelper.COOKIE_KEY.equals(headerName)) {
-                List<String> cookies = CookieHelper.cookieArray(map.get(headerName));
-                for (String cookie : cookies) {
-                    connection.addRequestProperty(headerName, cookie);
-                }
-                continue;
-            }
             connection.addRequestProperty(headerName, map.get(headerName));
         }
+
+        if (CookieHelper.hasCookies(mContext, parsedUrl)) {
+            List<String> cookies = CookieHelper.cookieArray(mContext, parsedUrl);
+            for (String cookie : cookies) {
+                connection.addRequestProperty(CookieHelper.COOKIE_KEY, cookie);
+            }
+        }
+
         setConnectionParametersForRequest(connection, request);
         // Initialize HttpResponse with data from the HttpURLConnection.
         ProtocolVersion protocolVersion = new ProtocolVersion("HTTP", 1, 1);
@@ -129,7 +135,7 @@ public class HurlStack implements HttpStack {
         for (Entry<String, List<String>> header : connection.getHeaderFields().entrySet()) {
             if (header.getKey() != null) {
                 if (CookieHelper.SET_COOKIE_KEY.equals(header.getKey())) {
-                    Header h = new BasicHeader(header.getKey(), CookieHelper.cookieString(header.getValue()));
+                    Header h = new BasicHeader(header.getKey(), CookieHelper.cookieString(mContext, parsedUrl, header.getValue()));
                     response.addHeader(h);
                     continue;
                 }

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Yamibo">
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="nosensor">
@@ -41,12 +41,30 @@
             android:screenOrientation="nosensor">
         </activity>
         <activity
+            android:name=".settting.SettingActivity"
+            android:configChanges="orientation"
+            android:label="setting"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="setting"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
             android:name=".debugLocationActivity"
             android:label="@string/title_activity_debug_location"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.yamibo.main.yamiboandroid.MainActivity" />
+                android:value=".main.MainActivity" />
         </activity>
     </application>
 

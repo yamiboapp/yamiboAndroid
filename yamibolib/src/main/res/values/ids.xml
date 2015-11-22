@@ -11,5 +11,5 @@
     <item name="itemCount" type="id" />
     <item name="itemSwitch" type="id" />
     <item name="itemArrow" type="id" />
-    <item name="itemRight1stPic" type="id" />
+    <item name="itemLeft1stPic" type="id" />
 </resources>

@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.yamibo.main.yamibolib.R;
 
 public class BasicItem extends LinearLayout {
@@ -30,8 +29,7 @@ public class BasicItem extends LinearLayout {
     private EditText itemInput;
     private TextView itemCount;
     private Switch itemSwitch;
-    private NetworkImageView itemLeft1stPic;
-    private ImageView itemRight1stPic;
+    private ImageView itemLeft1stPic;
     private ImageView itemArrow;
     private String title;
     private String subTitle;
@@ -43,6 +41,7 @@ public class BasicItem extends LinearLayout {
     private int subTitle_textType;
     private int count_textType;
     private int input_textType;
+    private int iconResId;
     private int checked;
 
     public BasicItem(Context context) {
@@ -63,10 +62,21 @@ public class BasicItem extends LinearLayout {
         Resources resource = context.getResources();
         ColorStateList csl = resource.getColorStateList(R.color.text_color_default);
 
+        LinearLayout.LayoutParams paramLeft = new LinearLayout.LayoutParams(dip2px(30), dip2px(30));
+        paramLeft.setMargins(0, 0, dip2px(10), 0);
+
         // title lay
         itemTitleLay = new LinearLayout(context);
         itemTitleLay.setDuplicateParentStateEnabled(true);
         itemTitleLay.setGravity(Gravity.CENTER_VERTICAL);
+
+        //itemLeftFirstImage
+        itemLeft1stPic = new ImageView(context);
+        itemLeft1stPic.setId(R.id.itemLeft1stPic);
+        itemLeft1stPic.setLayoutParams(paramLeft);
+        itemLeft1stPic.setDuplicateParentStateEnabled(true);
+        itemTitleLay.addView(itemLeft1stPic);
+
         // title
         itemTitle = new TextView(context);
         itemTitle.setId(R.id.itemTitle);
@@ -81,16 +91,6 @@ public class BasicItem extends LinearLayout {
         itemTitle.setPadding(0, 0, dip2px(10), 0);
         itemTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         itemTitleLay.addView(itemTitle);
-
-        LinearLayout.LayoutParams paramLeft = new LinearLayout.LayoutParams(dip2px(30), dip2px(30));
-        paramLeft.setMargins(0, 0, dip2px(10), 0);
-
-        //itemLeftFirstImage
-        itemLeft1stPic = new NetworkImageView(context);
-        itemLeft1stPic.setId(R.id.itemRight1stPic);
-        itemLeft1stPic.setLayoutParams(paramLeft);
-        itemLeft1stPic.setDuplicateParentStateEnabled(true);
-        itemTitleLay.addView(itemLeft1stPic);
 
         // subTitle
         itemSubtitle = new TextView(context);
@@ -145,16 +145,6 @@ public class BasicItem extends LinearLayout {
         itemSwitch.setPadding(0, 0, 0, 0);
         addView(itemSwitch);
 
-        LinearLayout.LayoutParams paramRight = new LinearLayout.LayoutParams(dip2px(30), dip2px(30));
-        paramRight.setMargins(dip2px(10), 0, 0, 0);
-        //itemRightFirstImage
-        itemRight1stPic = new ImageView(context);
-        itemRight1stPic.setId(R.id.itemRight1stPic);
-        itemRight1stPic.setLayoutParams(paramRight);
-        itemRight1stPic.setDuplicateParentStateEnabled(true);
-        itemRight1stPic.setImageResource(0);
-        addView(itemRight1stPic);
-
         // itemArrow
         itemArrow = new ImageView(context);
         itemArrow.setId(R.id.itemArrow);
@@ -180,7 +170,7 @@ public class BasicItem extends LinearLayout {
         itemInput.setVisibility(input_hint != null || input != null ? View.VISIBLE : View.GONE);
         itemCount.setVisibility(count != null ? View.VISIBLE : View.GONE);
         itemSwitch.setVisibility(checked == 0 ? View.GONE : View.VISIBLE);
-        itemLeft1stPic.setVisibility(View.GONE);
+        itemLeft1stPic.setVisibility(iconResId == 0 ? View.GONE : View.VISIBLE);
         itemArrow.setVisibility(isClickable() ? View.VISIBLE : View.GONE);
 
         if (input_hint != null || input != null) {
@@ -316,6 +306,12 @@ public class BasicItem extends LinearLayout {
         build();
     }
 
+    public void setIconRes(int ResId) {
+        this.iconResId = ResId;
+        itemLeft1stPic.setImageResource(ResId);
+        build();
+    }
+
     public int getSubTitleTextType() {
         return subTitle_textType;
     }
@@ -370,14 +366,6 @@ public class BasicItem extends LinearLayout {
 
     public ImageView getItemArrow() {
         return itemArrow;
-    }
-
-    public NetworkImageView getItemLeft1stPic() {
-        return itemLeft1stPic;
-    }
-
-    public ImageView getItemRight1stPic() {
-        return itemRight1stPic;
     }
 
     public void setArrowImage(int resId) {
