@@ -50,7 +50,22 @@
                     android:scheme="ymb" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".location.LocationActivity"
+            android:configChanges="orientation"
+            android:label="location"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="location"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".debugLocationActivity"
