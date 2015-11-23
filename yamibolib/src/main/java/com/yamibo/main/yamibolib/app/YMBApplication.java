@@ -3,7 +3,10 @@ package com.yamibo.main.yamibolib.app;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
+import com.yamibo.main.yamibolib.Utils.CrashReportHelper;
+import com.yamibo.main.yamibolib.Utils.Environment;
 import com.yamibo.main.yamibolib.accountservice.AccountService;
 import com.yamibo.main.yamibolib.configservice.ConfigService;
 import com.yamibo.main.yamibolib.dataservice.http.HttpService;
@@ -41,7 +44,21 @@ public class YMBApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        checkCrashReport();
         locationService().start();
+    }
+
+    private void checkCrashReport() {
+        CrashReportHelper.initialize(this);
+        CrashReportHelper.installSafeLooper();
+        if (CrashReportHelper.isAvailable()) {
+            CrashReportHelper.sendAndDelete();
+        }
+        if (CrashReportHelper.lastOutOfMemoryMills + 10000 > System.currentTimeMillis()) {
+            if (Environment.isDebug())
+                Toast.makeText(this, "内存不足", Toast.LENGTH_LONG).show();
+        }
+        CrashReportHelper.lastOutOfMemoryMills = 0;
     }
 
     // Utils

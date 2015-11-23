@@ -20,13 +20,13 @@ public interface DataService<T extends Request, R extends Response> {
     void exec(T req, RequestHandler<T, R> handler);
 
 
-    /**
-     * 同步获取Request请求<br>
-     * 返回Response
-     *
-     * @param req 要执行的Request请求，不可变
-     */
-    R execSync(T req);
+//    /**
+//     * 同步获取Request请求<br>
+//     * 返回Response
+//     *
+//     * @param req 要执行的Request请求，不可变
+//     */
+//    R execSync(T req);
 
     /**
      * 取消通过exec()方法执行的异步请求<br>
