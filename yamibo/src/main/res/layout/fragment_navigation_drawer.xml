@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/deep_yellow"
-    tools:context=".NavigationDrawerFragment">
+    tools:context=".NavigationDrawerFragment"
+    >
 
     <LinearLayout
         android:id="@+id/user_info_layout"
@@ -30,13 +31,27 @@
             android:padding="25dp"
             android:visibility="gone">
 
-            <TextView
-                android:id="@+id/member_username"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textColor="@color/light_yellow"
-                android:textSize="@dimen/text_size_16" />
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/member_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/light_yellow"
+                    android:textSize="@dimen/text_size_16" />
+
+                <ImageView
+                    android:id="@+id/iv_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/member_username"
+                    android:src="@drawable/girl"
+                    />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/member_uid"
@@ -46,7 +61,7 @@
                 android:textSize="@dimen/text_size_16" />
 
             <TextView
-                android:id="@+id/groupid"
+                android:id="@+id/grouptitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -70,13 +85,21 @@
             android:text="@string/login"
             android:textSize="@dimen/text_medium_1" />
     </LinearLayout>
-
+    <RelativeLayout
+        android:id="@+id/lv_relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/user_info_layout"
+        android:background="@color/light_yellow2"
+        >
     <ListView
         android:id="@+id/listview_navigation_drawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_info_layout"
         android:background="@color/light_yellow"
         android:divider="@color/deep_brown"></ListView>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

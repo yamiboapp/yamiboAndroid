@@ -15,7 +15,7 @@
     <string name="navigation_drawer_nearby">附近的人</string>
     <string name="navigation_drawer_set">设置</string>
 
-    <string name="navigation_drawer_member_uid">uid:</string>
+    <string name="navigation_drawer_member_uid">UID: </string>
 
     <string name="user_question_not_set">安全提问(未设置请忽略)</string>
     <string name="user_question_mather_name">母亲的名字</string>
