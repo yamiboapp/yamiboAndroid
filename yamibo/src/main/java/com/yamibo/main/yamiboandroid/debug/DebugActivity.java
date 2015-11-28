@@ -16,6 +16,7 @@ public class DebugActivity extends YMBActivity implements View.OnClickListener {
         setContentView(R.layout.activity_debug);
         findViewById(R.id.btn_test).setOnClickListener(this);
         findViewById(R.id.btn_show_crash).setOnClickListener(this);
+        findViewById(R.id.btn_debug_location).setOnClickListener(this);
 
         //            List<NameValuePair> params = new ArrayList<>();
 //            params.add(new BasicNameValuePair("module", "mypm"));
@@ -48,6 +49,9 @@ public class DebugActivity extends YMBActivity implements View.OnClickListener {
 
         } else if (v.getId() == R.id.btn_show_crash) {
             startActivity("ymb://crash");
+        }
+        else if (v.getId()==R.id.btn_debug_location){
+            startActivity("ymb://debugLocation");
         }
     }
 }
