@@ -49,8 +49,7 @@ public class DebugActivity extends YMBActivity implements View.OnClickListener {
 
         } else if (v.getId() == R.id.btn_show_crash) {
             startActivity("ymb://crash");
-        }
-        else if (v.getId()==R.id.btn_debug_location){
+        } else if (v.getId() == R.id.btn_debug_location) {
             startActivity("ymb://debugLocation");
         }
     }

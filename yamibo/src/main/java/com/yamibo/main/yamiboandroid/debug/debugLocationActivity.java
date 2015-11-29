@@ -23,13 +23,14 @@ import com.yamibo.main.yamibolib.locationservice.impl.util;
  * activity for debug location use. will not appear.
  */
 //public class debugLocationActivity extends YMBActivity {
-public class debugLocationActivity extends YMBActivity  {
-    private static final boolean IS_DEBUG_ENABLED=true;
+public class debugLocationActivity extends YMBActivity {
+    private static final boolean IS_DEBUG_ENABLED = true;
     DefaultLocationService locationService;
     TextView debugTextMessage;
     Button btnStart, btnStop, btnRefresh, btnAddNewListener, btnRemoveLastListener, btnGeocoderBD, btnGeocoderAndroid;
     CheckBox isAutoSwitchAPI, isUseBd;
     EditText editInterval, editLatitude, editLongitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,42 +39,41 @@ public class debugLocationActivity extends YMBActivity  {
 
         //locationService=new DefaultLocationService(getApplicationContext());
         //locationService.start();
-        locationService=(DefaultLocationService)this.locationService();//IMPORTANT: such application is registrated in the manifest file
+        locationService = (DefaultLocationService) this.locationService();//IMPORTANT: such application is registrated in the manifest file
 
-        btnStart=(Button)findViewById(R.id.start);
-        btnStop=(Button)findViewById(R.id.stop);
-        btnRefresh=(Button)findViewById(R.id.refresh);
-        btnAddNewListener=(Button)findViewById(R.id.addNewListener);
-        btnRemoveLastListener=(Button)findViewById(R.id.removeLastListener);
-        isAutoSwitchAPI=(CheckBox)findViewById(R.id.isAutoSwitchApi);
-        isUseBd=(CheckBox)findViewById(R.id.isUseBaidu);
-        editInterval =(EditText)findViewById(R.id.editInterval);
+        btnStart = (Button) findViewById(R.id.start);
+        btnStop = (Button) findViewById(R.id.stop);
+        btnRefresh = (Button) findViewById(R.id.refresh);
+        btnAddNewListener = (Button) findViewById(R.id.addNewListener);
+        btnRemoveLastListener = (Button) findViewById(R.id.removeLastListener);
+        isAutoSwitchAPI = (CheckBox) findViewById(R.id.isAutoSwitchApi);
+        isUseBd = (CheckBox) findViewById(R.id.isUseBaidu);
+        editInterval = (EditText) findViewById(R.id.editInterval);
 
-        debugTextMessage=(TextView)findViewById(R.id.debugShowMessage);
-        util.debugTextView=debugTextMessage;
+        debugTextMessage = (TextView) findViewById(R.id.debugShowMessage);
+        util.debugTextView = debugTextMessage;
 
-        btnGeocoderBD =(Button)findViewById(R.id.geocoderBD);
-        btnGeocoderAndroid =(Button)findViewById(R.id.geocoderAndroid);
-        editLatitude =(EditText)findViewById(R.id.inputLatitude);
-        editLongitude=(EditText)findViewById(R.id.inputLongitude);
+        btnGeocoderBD = (Button) findViewById(R.id.geocoderBD);
+        btnGeocoderAndroid = (Button) findViewById(R.id.geocoderAndroid);
+        editLatitude = (EditText) findViewById(R.id.inputLatitude);
+        editLongitude = (EditText) findViewById(R.id.inputLongitude);
 
     }
 
 
-    public void clickStart(View view){
+    public void clickStart(View view) {
         if (locationService != null) {
             debugLog("activity demand start");
 
 
             locationService.start();
-        }
-        else
+        } else
             debugLog("null service");
 
 
     }
 
-    public void clickStop(View view){
+    public void clickStop(View view) {
         if (locationService != null) {
             debugLog("activity demand stop");
             locationService.stop();
@@ -81,13 +81,14 @@ public class debugLocationActivity extends YMBActivity  {
 
     }
 
-    public void clickRefresh(View view){
+    public void clickRefresh(View view) {
         if (locationService != null) {
             debugLog("activity demand refresh");
             locationService.refresh();
         }
     }
-    public void clickAddNewListener(View view){
+
+    public void clickAddNewListener(View view) {
         if (locationService != null) {
             debugLog("activity demand add a new listener");
             locationService.addListener(new LocationListener() {
@@ -98,31 +99,33 @@ public class debugLocationActivity extends YMBActivity  {
             });
         }
     }
+
     public void clickRemoveLastListener(View view) {
         if (locationService != null) {
             debugLog("activity demand remove the last available listener");
-                locationService.removeLastListener();
+            locationService.removeLastListener();
         }
     }
-    public void clickReconstructAPIService(View view){
-        int updateInterval=Integer.parseInt(editInterval.getText().toString());
+
+    public void clickReconstructAPIService(View view) {
+        int updateInterval = Integer.parseInt(editInterval.getText().toString());
         int serviceMode;
-        if(isUseBd.isChecked())
-            serviceMode=DefaultLocationService.BAIDU_MODE;
+        if (isUseBd.isChecked())
+            serviceMode = DefaultLocationService.BAIDU_MODE;
         else
-            serviceMode=DefaultLocationService.ANDROID_API_MODE;
-        boolean isAutoSwitchService=isAutoSwitchAPI.isChecked();
-        int providerChoice=DefaultLocationService.PROVIDER_NETWORK;//fixed
+            serviceMode = DefaultLocationService.ANDROID_API_MODE;
+        boolean isAutoSwitchService = isAutoSwitchAPI.isChecked();
+        int providerChoice = DefaultLocationService.PROVIDER_NETWORK;//fixed
 
-        if(locationService!=null){
-                debugLog("activity demand reconstruct API service with new parameters");
-                locationService.reconstructAPIService(updateInterval, serviceMode, isAutoSwitchService, providerChoice);
+        if (locationService != null) {
+            debugLog("activity demand reconstruct API service with new parameters");
+            locationService.reconstructAPIService(updateInterval, serviceMode, isAutoSwitchService, providerChoice);
         }
     }
 
-    public void clickGeocodingBD(View view){
-        if(editLatitude !=null&&editLongitude!=null) {
-            if(editLatitude.getText()==null|editLongitude.getText()==null){
+    public void clickGeocodingBD(View view) {
+        if (editLatitude != null && editLongitude != null) {
+            if (editLatitude.getText() == null | editLongitude.getText() == null) {
                 debugLog("error input doubles");
                 return;
             }
@@ -130,14 +133,14 @@ public class debugLocationActivity extends YMBActivity  {
             double longtitude = Double.parseDouble(editLongitude.getText().toString());
             //locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
             locationService.onReceiveLocation(locationService.realCoordsToLocationViaBD(latitude, longtitude));
-        }
-        else{
+        } else {
             debugLog("null editText pointers!");
         }
     }
-    public void clickGeocodingAndroid(View view){
-        if(editLatitude !=null&&editLongitude!=null) {
-            if(editLatitude.getText()==null|editLongitude.getText()==null){
+
+    public void clickGeocodingAndroid(View view) {
+        if (editLatitude != null && editLongitude != null) {
+            if (editLatitude.getText() == null | editLongitude.getText() == null) {
                 debugLog("error input doubles");
                 return;
             }
@@ -146,20 +149,17 @@ public class debugLocationActivity extends YMBActivity  {
             //android is slow in china
             locationService.onReceiveLocation(locationService.realCoordsToLocationViaAndroid(latitude, longtitude));
             //locationService.onReceiveLocation(locationService.realCoordsToLocationViaBD(latitude, longtitude));
-        }
-        else{
+        } else {
             debugLog("null editText pointers!");
         }
     }
 
 
-    private void debugLog(String debugMessage){
-        if(IS_DEBUG_ENABLED){
-            Log.i("DEBUG_debugActivity:",debugMessage);
+    private void debugLog(String debugMessage) {
+        if (IS_DEBUG_ENABLED) {
+            Log.i("DEBUG_debugActivity:", debugMessage);
         }
     }
-
-
 
 
 }

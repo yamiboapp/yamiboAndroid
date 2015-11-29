@@ -76,6 +76,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="debug"
                     android:scheme="ymb" />
@@ -93,6 +94,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="debugLocation"
                     android:scheme="ymb" />
