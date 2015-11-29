@@ -3,6 +3,7 @@ package com.yamibo.main.yamibolib.locationservice.impl;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import com.yamibo.main.yamibolib.Utils.Environment;
 import com.yamibo.main.yamibolib.Utils.Log;
 import com.yamibo.main.yamibolib.locationservice.model.Location;
 
@@ -29,12 +30,16 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Clover on 2015-06-13.
+ * IMPORTANT: swith IS_DEBUG_ENABLED to false to turn off "debug_" information in the log
+ * 请根据app编译环境android studio的SHA1正确设置百度开发者控制台里的关于定位SDK的BD_APP_KEY and BD_AP_SECURITY_CODE。
+ * 如果此项不正确，GPS真实坐标转换为百度坐标的函数convertToBDCoord(latitude, longitude)应该会失败，真实坐标将被当作偏转坐标。另外，仅在debug中使用的，反地理编译的百度定位函数也会失败。
+ *
  */
 public class util {
     /**
      * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
      */
-    static final boolean IS_DEBUG_ENABLED=false;
+    static final boolean IS_DEBUG_ENABLED= Environment.IS_DEBUG_ENABLED;
     /**
      * to be read by the textView for shown to mobile activity
      */
@@ -42,6 +47,9 @@ public class util {
 
     private static final int READ_TIME_OUT = 1000;
     private static final int CONNECTION_TIME_OUT = 5000;
+
+    private static String BD_APP_KEY=Environment.BD_APP_KEY;
+    private static String BD_APP_SECURITY_CODE=Environment.BD_APP_SECURITY_CODE;
 
     static String readAll(Reader rd){
         StringBuilder sb=new StringBuilder();
@@ -84,11 +92,6 @@ public class util {
      * 详见百度坐标转换API文档示例 http://developer.baidu.com/map/index.php?title=webapi/guide/changeposition
      */
     public JSONObject convertToBDCoord(double latitude, double longitude) {
-        final String BD_APP_KEY = "VFfjj9gziQzqzF9iEvulSewx";
-        final String BD_APP_SECURITY_CODE ="2C:E0:AF:82:2B:07:B0:7D:13:2B:AE:EB:1A:20:D5:D0:BD:F7:FD:5F;com.yamibo.main.yamibolib";
-        /**
-         * et: http://api.map.baidu.com/geoconv/v1/?coords=116.3833,39.9167&from=1&to=5&ak=VFfjj9gziQzqzF9iEvulSewx&mcode=2C:E0:AF:82:2B:07:B0:7D:13:2B:AE:EB:1A:20:D5:D0:BD:F7:FD:5F;com.yamibo.main.yamibolib
-         */
         String url="http://api.map.baidu.com/geoconv/v1/?coords="+longitude+","+latitude
                 +"&from=1&to=5&ak="+BD_APP_KEY +"&mcode="+ BD_APP_SECURITY_CODE;
         try {
@@ -129,17 +132,12 @@ public class util {
      * 详见百度Geocoding API文档示例 http://developer.baidu.com/map/index.php?title=webapi/guide/webservice-geocoding
      */
     public JSONObject geocodingViaBD(double offsetLatitude, double offsetLongitude) {
-        final String BD_APP_KEY = "VFfjj9gziQzqzF9iEvulSewx";
-        final String BD_APP_SECURITY_CODE ="2C:E0:AF:82:2B:07:B0:7D:13:2B:AE:EB:1A:20:D5:D0:BD:F7:FD:5F;com.yamibo.main.yamibolib";
-        /**
-         * eg: http://api.map.baidu.com/geocoder/v2/?coordtype=bd09ll&output=json&pois=0&location=39.9167,116.3833&ak=VFfjj9gziQzqzF9iEvulSewx&mcode=2C:E0:AF:82:2B:07:B0:7D:13:2B:AE:EB:1A:20:D5:D0:BD:F7:FD:5F;com.yamibo.main.yamibolib
-         * remove "callback=renderReverse" from BaiduSample
-         */
         String url="http://api.map.baidu.com/geocoder/v2/?coordtype=bd09ll&output=json&pois=0&location="
                 +offsetLatitude+","+offsetLongitude
-                +"ak="+BD_APP_KEY +"&mcode="+ BD_APP_SECURITY_CODE;
+                +"&ak="+BD_APP_KEY +"&mcode="+ BD_APP_SECURITY_CODE;
         try {
             JSONObject obj=readJsonFromUrl(url);
+            debugLog("visit BAIDU API url "+url);
             if(obj==null) {
                 debugLog("null read result");
                 return null;
@@ -158,6 +156,7 @@ public class util {
             }
             else{
                 debugLog("BD API geocoding error status code"+ status);
+                debugLog("result is "+obj.toString());
                 return null;
             }
         } catch (JSONException e) {
@@ -173,7 +172,7 @@ public class util {
     }
 
     /**
-     * TODO remark: defaultLocale seems not work well with mTime.
+     * Remark: defaultLocale seems not work well with mTime.
      * @param location
      * @return
      */

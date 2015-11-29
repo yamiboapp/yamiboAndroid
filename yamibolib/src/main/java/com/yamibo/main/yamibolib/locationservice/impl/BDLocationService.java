@@ -376,7 +376,7 @@ public class BDLocationService implements APILocationService {
                     offsetLongitude = (double) bdCoord.get("offsetLongitude");
                 }
                 else
-                    debugLog("obtain null JSON");
+                    debugLog("obtain null JSON when call convertToBDCoord(latitude, longitude)");
             } catch (Exception e) {
                 debugLog("error converting coords " + e.toString());
             }
@@ -427,7 +427,7 @@ public class BDLocationService implements APILocationService {
      * @param source
      * @return
      * 注：百度坐标使用的偏转函数当应用在国外真实坐标（芯片坐标）的时候可能会出错，因此：<br>
-     * 若为国内+GPS的情形，应使用百度的偏转函数；<br>
+     * 若为国内+GPS的情形，应使用百度的偏转函数；若转换出错，依旧使用原始GPS坐标<br>
      * 其它情形保持不变。<br>
      */
     public static Location toLocation(BDLocation source){
@@ -451,7 +451,7 @@ public class BDLocationService implements APILocationService {
                         offsetLatitude = (double) bdCoord.get("offsetLongitude");
                     }
                     else
-                        debugLog("null JSONObject");
+                        debugLog("null JSONObject when call convertToBDCoord(latitude, longitude)");
 
                 } catch (Exception e) {
                     debugLog("error "+e.toString());

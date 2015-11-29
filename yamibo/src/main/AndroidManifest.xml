@@ -51,6 +51,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".location.LocationActivity"
+            android:configChanges="orientation"
+            android:label="location"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="location"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".debug.DebugActivity"
             android:configChanges="orientation"
             android:label="debug"
@@ -60,19 +76,27 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="debug"
                     android:scheme="ymb" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".debugLocationActivity"
+            android:name=".debug.debugLocationActivity"
             android:label="@string/title_activity_debug_location"
             android:parentActivityName=".main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".main.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="debugLocation"
+                    android:scheme="ymb" />
+            </intent-filter>
         </activity>
     </application>
 

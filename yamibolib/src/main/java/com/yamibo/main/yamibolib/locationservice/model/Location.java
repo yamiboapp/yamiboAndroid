@@ -12,7 +12,7 @@ import java.util.Locale;
 /**
  * created by 牛奶
  * Clover:
- * TODO modify: <br>
+ * REMARK modify: <br>
  *     增加 private field region，用于让程序可以根据地理位置选择合适的API服务（百度或Android）<br>
  * 增加private field mTime：可以构造能计算timeOffset的GPSCoordinate
  */
@@ -54,7 +54,7 @@ public class Location implements Parcelable {
         this(latitude,longitude,offsetLatitude,offsetLongitude,address,city,DEFAULT_ACCRURACY,DEFAULT_REGION,DEFAULT_TIME);
     }
 
-    //todo modify: add missing accurary
+    //REMARK modify: add missing accurary
 
     public Location(double latitude, double longitude, double offsetLatitude,
                     double offsetLongitude, String address, City city, int accuracy,
