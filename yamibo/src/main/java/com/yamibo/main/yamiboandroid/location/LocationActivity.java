@@ -1,9 +1,9 @@
 package com.yamibo.main.yamiboandroid.location;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.yamibo.main.yamiboandroid.R;
@@ -16,6 +16,7 @@ import com.yamibo.main.yamibolib.dataservice.http.HttpRequest;
 import com.yamibo.main.yamibolib.dataservice.http.HttpResponse;
 import com.yamibo.main.yamibolib.dataservice.http.impl.BasicHttpRequest;
 import com.yamibo.main.yamibolib.locationservice.LocationService;
+import com.yamibo.main.yamibolib.locationservice.model.Location;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,51 +26,42 @@ import org.json.JSONObject;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.yamibo.main.yamibolib.locationservice.impl.util.debugLog;
 import static com.yamibo.main.yamibolib.locationservice.impl.util.debugShow;
 
 /**
  * Created by Clover on 2015-11-22.
  * initiate and start the location service when creating the activity
- * TODO read user gender info from profile; update user location info to server
+ * TODO 每次初始化页面会自动上传新位置。是否需要隐私设置？
+ * TODO read user gender info from profile
+ * TODO 每次打开页面时的搜索偏好是否有记忆功能（存储于服务器）？还是初始化？
  */
 //public class LocationActivity extends YMBActivity implements View.OnClickListener, RequestHandler<HttpRequest, HttpResponse>{
 public class LocationActivity extends YMBActivity implements View.OnClickListener, RequestHandler<HttpRequest, HttpResponse>{
     private LocationService locationService;
+
+    //debug模式下底层自动切换
     private String API_HTTP_ADDRESS =Environment.HTTP_ADDRESS;
 
+    private int gender=2;
 
+    Location mLocation=null;
 
-
-    private int gender=-1;
-    private int DEBUG_GENDER=2;
-
-    private static JSONObject respResult=null;
-    //Button btnNearBoy,btnNearGirl, btnNearAll;
     TextView mInfo;
-    ListView resultList=null;
-    SimpleAdapter adapter=null;
 
-    static JSONArray nearbyArray=null;
-
-    //static JSONArray debugResult=null;
+    private SwipeRefreshLayout swipeContainer=null;
+    private NearbyAdapter customAdapter=null;
+    private ListView list=null;
+    private List<PersonItem> items=null;
 
     private HttpRequest mNearbyRequest;
-    HttpRequest updateReq=null;
+    private HttpRequest updateReq=null;
+
+    private static JSONObject respResult=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        if(Environment.IS_DEBUG_ENABLED) {
-            API_HTTP_ADDRESS = Environment.DEBUG_API_HTTP_ADDRESS;
-            //gender = DEBUG_GENDER;
-        }
-        else
-            API_HTTP_ADDRESS=Environment.HTTP_ADDRESS;
 
         gender=getGender();
 
@@ -81,25 +73,57 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         findViewById(R.id.btn_nearAll).setOnClickListener(this);
 
         mInfo=(TextView)findViewById(R.id.text_userInfo);
-        resultList=(ListView)findViewById(R.id.listView_result);
+        swipeContainer=(SwipeRefreshLayout)findViewById(R.id.swipeContainer);
+        list=(ListView)findViewById(R.id.listView_result);
 
-       mInfo.setText("我的位置：");
+
+        mInfo.setText("我的位置：");
 
         locationService=this.locationService();//IMPORTANT. the call will create a new service if not exist
         locationService.start();
-        if(locationService.hasLocation()&&Environment.IS_DEBUG_ENABLED) {
-            debugShow("already have location " + locationService.address());
-            mInfo.setText("我的位置：" + locationService.address());
+        if(locationService.hasLocation()) {
+            String message=null;
+            mLocation=locationService.location();
+            if(Environment.isDebug()) {
+                message = "我的位置：" + mLocation.address() + " offlat:" + mLocation.offsetLatitude()+" offlon"+mLocation.offsetLongitude();
+            }else
+                message="我的位置：" + mLocation.address();
+            debugShow("already have location " + message);
+            mInfo.setText(message);
         }
 
+        items=new ArrayList<PersonItem>();
+        debugShow("initialize adapter");
+        customAdapter = new NearbyAdapter(this, R.layout.person_item, items);
+        list.setAdapter(customAdapter);
 
         try{
+            debugShow("1st time fetch data");
             getNearby();
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                getNearby();
+                debugShow("refresh done");
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
+    //fecth items from nearby API, push result to ListView
     private void getNearby() {
         if (mNearbyRequest!= null) {
             httpService().abort(mNearbyRequest, this, true);
@@ -108,6 +132,14 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("module", "lbs"));
         params.add(new BasicNameValuePair("sousa", "get"));
+
+        if(locationService.hasLocation())
+            mLocation=locationService.location();
+        params.add(new BasicNameValuePair("lat",Double.toString(mLocation.offsetLatitude())));
+        params.add(new BasicNameValuePair("lon", Double.toString(mLocation.offsetLongitude())));
+        if(Environment.isDebug())
+            params.add(new BasicNameValuePair("page","0"));
+
         mNearbyRequest = BasicHttpRequest.httpPost(API_HTTP_ADDRESS, params);
         debugShow("connecting to " + API_HTTP_ADDRESS + params);
         debugShow("mNearbyRequest " + mNearbyRequest.toString());
@@ -128,50 +160,13 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
                 // output results
                 try {
                     JSONObject respVariables=(JSONObject)respResult.get("Variables");
-                    String Charset=(String)respResult.get("Charset");
-                    JSONObject notice=(JSONObject)respVariables.get("notice");
-                    JSONObject pageinfo=(JSONObject)respVariables.get("pageinfo");
+                    //JSONObject notice=(JSONObject)respVariables.get("notice");
+                    //JSONObject pageinfo=(JSONObject)respVariables.get("pageinfo");
 
-                    nearbyArray=(JSONArray)respVariables.get("result");
+                    items=JSONArrayToItems((JSONArray)respVariables.get("result"));
 
 
-                    //add more users to debug output
-                    if(Environment.IS_DEBUG_ENABLED) {
-                        JSONObject obj = new JSONObject();
-                        obj.put("uid", "201511");
-                        obj.put("username", "安达");
-                        obj.put("distance", "1.2KM");
-                        nearbyArray.put(obj);
-
-                        obj = new JSONObject();
-                        obj.put("uid", "201512");
-                        obj.put("username", "岛村");
-                        obj.put("distance", "1.3KM");
-
-                        nearbyArray.put(obj);
-
-                        for (int k = 0; k < 5; k++) {
-                            obj = new JSONObject();
-                            obj.put("uid", 201513 + k);
-                            obj.put("username", "少女" + (char) ((int) ('A') + k));
-                            obj.put("distance", (1.3 + k) + "KM");
-                            nearbyArray.put(obj);
-                        }
-                    }
-
-                    debugShow("Charset is "+Charset.toString());
-                    debugShow("pageinfo is "+pageinfo.toString());
-                    debugShow("Notice is "+notice.toString());
-                    for(int k=0;k<nearbyArray.length();k++)
-                        debugShow("user: "+nearbyArray.get(k));
-
-                    //update list view
-                    debugShow("update adapter");
-                    List<Map<String, Object>> ls=getData(nearbyArray);
-                    debugShow("getData of size"+ls.size()+" : "+ls.toString());
-                    adapter = new SimpleAdapter(this,ls,R.layout.person_item, new String[]{"near_logo","near_id","near_distance","near_intro"},
-                            new int[]{R.id.near_logo,R.id.near_id,R.id.near_distance,R.id.near_intro,});
-                    resultList.setAdapter(adapter);
+                    pushItemsToView();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -179,9 +174,7 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
                 }
             }
             mNearbyRequest = null;
-        }
-
-        if (updateReq == req) {
+        }else if(updateReq == req) {
             dismissDialog();
             int resultCode;
             try{
@@ -196,7 +189,7 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
                     }
                     else{
                         debugShow("result code "+resultCode+" unequal to 1");
-                        showToast("列表未更新");
+                        showToast(getString(R.string.refresh_fail));
                     }
                 }
             }catch (Exception e){
@@ -209,13 +202,12 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
 
     @Override
     public void onRequestFailed(HttpRequest req, HttpResponse resp) {
-        debugShow("debug_" + resp.toString());
+        debugShow(resp.toString());
         if (mNearbyRequest == req) {
             dismissDialog();
             mNearbyRequest = null;
             showToast(getString(R.string.network_fail));
-        }
-        if (updateReq== req) {
+        }else if(updateReq== req) {
             dismissDialog();
             updateReq = null;
             showToast(getString(R.string.network_fail));
@@ -226,12 +218,9 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
     public void onClick(View v) {
         if(v.getId()==R.id.btn_nearAll){
             updateNearby(0);
-        }
-
-        if(v.getId()==R.id.btn_nearBoy){
+        }else if(v.getId()==R.id.btn_nearBoy){
             updateNearby(1);
-        }
-        if(v.getId()==R.id.btn_nearGirl){
+        }else if(v.getId()==R.id.btn_nearGirl){
             updateNearby(2);
         }
 /*
@@ -243,6 +232,7 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
     }
 
     void updateNearby(int flag){
+        //updateSetting
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("module", "lbs"));
         params.add(new BasicNameValuePair("sousa", "set"));
@@ -253,52 +243,58 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         debugShow("request url " + updateReq.toString());
         showProgressDialog(getString(R.string.loading));
         httpService().exec(updateReq, this);
+
+        //fetch and update items view
+        pushItemsToView();
     }
 
-    void debugShowResult(JSONObject respResult){
-        try{
-            debugLog("print respResult");
-
-            JSONObject variables=(JSONObject)respResult.get("Variables");
-            JSONArray result=(JSONArray)variables.get("result");
-
-            debugShow("Charset is "+respResult.get("Charset").toString());
-            debugShow(variables.get("member_username").toString());
-            for(int k=0;k<result.length();k++) {
-                JSONObject obj=(JSONObject)result.get(k);
-                debugShow(obj.getString("uid") + " " + obj.getString("username") + " " + obj.getString("distance"));
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private List<Map<String,Object>> getData(JSONArray nearbyArray){
-        List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-        Map<String, Object> map=null;
-        int num;
-        try {
-            num=nearbyArray.length();
-            JSONObject obj=new JSONObject();
-            for (int k = 0; k < num; k++) {
-                obj=(JSONObject)nearbyArray.get(k);
-                map = new HashMap<String, Object>();
-                map.put("near_logo",R.drawable.noavatar_small);
-                map.put("near_id",obj.get("username"));
-                map.put("near_distance",obj.get("distance"));
-                //TODO need to fetch nearby user intro
-                map.put("near_intro","雪の季節");
-                debugShow("update JSONObject number " + k);
-                list.add(map);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    //TODO need to read profile from account
+    //TODO need to read gender from account
     int getGender(){
-        return DEBUG_GENDER;
+        if(Environment.isDebug())
+            return 2;//return female
+        else{
+            debugShow("gender not from profile");
+            return 2;
+        }
+    }
+
+    //push value of items to view
+    void pushItemsToView() {
+        debugShow("push items of size " + items.size()+" to ListView");
+        customAdapter.clear();
+        customAdapter.addAll(items);
+        debugShow("0th user id is" + items.get(0).getId());
+        debugShow("0th user id is" + items.get(0).getDistance());
+        debugShow("0th user id is" + items.get(0).getIntro());
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeContainer.setRefreshing(false);
+    }
+
+    private List<PersonItem> JSONArrayToItems(JSONArray people){
+        debugShow("input people of size"+people.length());
+        items=new ArrayList<PersonItem>();
+        try {
+            for (int k = 0; k < people.length(); k++) {
+                JSONObject person = (JSONObject) people.get(k);
+                //TODO need to update with API to fetch intro and logo
+                //Object logo = R.drawable.noavatar_small;
+                String intro = "雪の季節";
+                //items.add(new PersonItem(logo, person.getString("username"), person.getString("distance"), intro));
+                items.add(new PersonItem(person.getString("username"), person.getString("distance"), intro));
+            }
+            //add more users for debugging
+            if(Environment.isDebug()) {
+                items.add(new PersonItem("安达", "1.2KM", "雪の季節"));
+                items.add(new PersonItem("岛村", "1.2KM", "雪の季節"));
+                for(int k=0;k<5;k++){
+                    items.add(new PersonItem("少女"+(char)((int)('A')+k), "3."+k+"KM", "雪の季節"));
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        debugShow("return items of size"+items.size());
+        return items;
     }
 }

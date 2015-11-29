@@ -44,4 +44,5 @@
     <string name="view_all">性别不限</string>
     <string name="view_boy">只看汉子</string>
     <string name="view_girl">只看妹子</string>
+    <string name="refresh_fail">更新失败</string>
 </resources>

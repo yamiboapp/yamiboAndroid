@@ -30,16 +30,12 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Clover on 2015-06-13.
- * IMPORTANT: swith IS_DEBUG_ENABLED to false to turn off "debug_" information in the log
+ *
  * 请根据app编译环境android studio的SHA1正确设置百度开发者控制台里的关于定位SDK的BD_APP_KEY and BD_AP_SECURITY_CODE。
  * 如果此项不正确，GPS真实坐标转换为百度坐标的函数convertToBDCoord(latitude, longitude)应该会失败，真实坐标将被当作偏转坐标。另外，仅在debug中使用的，反地理编译的百度定位函数也会失败。
  *
  */
 public class util {
-    /**
-     * DEBUG_CODE, change the boolean flag to enable/disable Log.i message started with "DEBUG_"
-     */
-    static final boolean IS_DEBUG_ENABLED= Environment.IS_DEBUG_ENABLED;
     /**
      * to be read by the textView for shown to mobile activity
      */
@@ -167,7 +163,7 @@ public class util {
 
 
     public static void debugLog(String Message) {
-        if (IS_DEBUG_ENABLED)
+        if (Environment.isDebug())
             Log.i("DefaultLocationSerivce", "DEBUG_" + Message);
     }
 
@@ -218,7 +214,7 @@ public class util {
 
     //debug output message to TextView
     public static void debugShow(String debugMessage) {
-        if(IS_DEBUG_ENABLED) {
+        if(Environment.isDebug()) {
             debugLog("\n" + debugMessage);
             if (debugTextView != null)
                 debugTextView.setText(debugMessage);

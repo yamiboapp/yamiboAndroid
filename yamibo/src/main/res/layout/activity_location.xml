@@ -31,9 +31,7 @@
         android:text="my info"
         android:id="@+id/text_userInfo" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView_result" />
+    <include layout="@layout/person_list" />
+
 
 </LinearLayout>

@@ -29,13 +29,8 @@ public class Environment {
 
 
     public static final String HTTP_ADDRESS = "http://www.yamibo.com/chobits/index.php";
-    //OF no use?
-    //public static final String HTTP_ADDRESS = "http://ceshi.yamibo.com/forum.php";
-    //TODO: DEBUG API HTTP ADDRESS should be updated in final version
-    public static String DEBUG_API_HTTP_ADDRESS ="http://ceshi.yamibo.com/chobits/index.php?";
 
 
-    public static boolean IS_DEBUG_ENABLED=true;
 
     /**
      * 用于百度定位API服务
