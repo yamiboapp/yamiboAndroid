@@ -137,8 +137,8 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
             mLocation = locationService.location();
         params.add(new BasicNameValuePair("lat", Double.toString(mLocation.offsetLatitude())));
         params.add(new BasicNameValuePair("lon", Double.toString(mLocation.offsetLongitude())));
-        if (Environment.isDebug())
-            params.add(new BasicNameValuePair("page", "0"));
+
+        params.add(new BasicNameValuePair("page", Integer.toString(getPage())));
 
         mNearbyRequest = BasicHttpRequest.httpPost(API_HTTP_ADDRESS, params);
         debugShow("connecting to " + API_HTTP_ADDRESS + params);
@@ -295,5 +295,13 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         }
         debugShow("return items of size" + items.size());
         return items;
+    }
+
+    //TODO update page preference from user choice?
+    int getPage() {
+        if (Environment.isDebug())
+            return 1;
+        else
+            return 0;
     }
 }
