@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView android:id="@+id/near_logo"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:layout_margin="30px"
+        android:layout_marginLeft="45px"
+        android:layout_marginRight="5px" />
+
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30px"
+        android:layout_marginLeft="5px"
+        android:layout_weight="400">
+
+        <TextView android:id="@+id/near_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+             />
+        <TextView android:id="@+id/near_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <TextView android:id="@+id/near_intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30px"
+        android:layout_weight="180" />
+
+</LinearLayout>

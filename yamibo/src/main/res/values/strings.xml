@@ -39,4 +39,9 @@
     <string name="title_activity_debug_location">debugLocationActivity</string>
 
     <string name="hello_world">Hello world!</string>
+
+
+    <string name="view_all">性别不限</string>
+    <string name="view_boy">只看汉子</string>
+    <string name="view_girl">只看妹子</string>
 </resources>

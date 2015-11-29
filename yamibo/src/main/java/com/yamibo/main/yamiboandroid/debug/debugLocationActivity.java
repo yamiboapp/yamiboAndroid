@@ -22,7 +22,8 @@ import com.yamibo.main.yamibolib.locationservice.impl.util;
  * Clover
  * activity for debug location use. will not appear.
  */
-public class debugLocationActivity extends YMBActivity {
+//public class debugLocationActivity extends YMBActivity {
+public class debugLocationActivity extends YMBActivity  {
     private static final boolean IS_DEBUG_ENABLED=true;
     DefaultLocationService locationService;
     TextView debugTextMessage;
@@ -157,6 +158,8 @@ public class debugLocationActivity extends YMBActivity {
             Log.i("DEBUG_debugActivity:",debugMessage);
         }
     }
+
+
 
 
 }

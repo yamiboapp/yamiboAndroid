@@ -31,6 +31,9 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by Clover on 2015-06-13.
  * IMPORTANT: swith IS_DEBUG_ENABLED to false to turn off "debug_" information in the log
+ * 请根据app编译环境android studio的SHA1正确设置百度开发者控制台里的关于定位SDK的BD_APP_KEY and BD_AP_SECURITY_CODE。
+ * 如果此项不正确，GPS真实坐标转换为百度坐标的函数convertToBDCoord(latitude, longitude)应该会失败，真实坐标将被当作偏转坐标。另外，仅在debug中使用的，反地理编译的百度定位函数也会失败。
+ *
  */
 public class util {
     /**
@@ -169,7 +172,7 @@ public class util {
     }
 
     /**
-     * TODO remark: defaultLocale seems not work well with mTime.
+     * Remark: defaultLocale seems not work well with mTime.
      * @param location
      * @return
      */
