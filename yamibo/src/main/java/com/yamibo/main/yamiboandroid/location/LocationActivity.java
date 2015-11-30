@@ -133,10 +133,11 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         params.add(new BasicNameValuePair("module", "lbs"));
         params.add(new BasicNameValuePair("sousa", "get"));
 
-        if (locationService.hasLocation())
+        if (locationService.hasLocation()) {
             mLocation = locationService.location();
-        params.add(new BasicNameValuePair("lat", Double.toString(mLocation.offsetLatitude())));
-        params.add(new BasicNameValuePair("lon", Double.toString(mLocation.offsetLongitude())));
+            params.add(new BasicNameValuePair("lat", Double.toString(mLocation.offsetLatitude())));
+            params.add(new BasicNameValuePair("lon", Double.toString(mLocation.offsetLongitude())));
+        }
 
         params.add(new BasicNameValuePair("page", Integer.toString(getPage())));
 
@@ -262,9 +263,6 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         debugShow("push items of size " + items.size() + " to ListView");
         customAdapter.clear();
         customAdapter.addAll(items);
-        debugShow("0th user id is" + items.get(0).getId());
-        debugShow("0th user id is" + items.get(0).getDistance());
-        debugShow("0th user id is" + items.get(0).getIntro());
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeContainer.setRefreshing(false);
     }
@@ -277,19 +275,10 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
                 JSONObject person = (JSONObject) people.get(k);
                 //TODO need to update with API to fetch intro and logo
                 //Object logo = R.drawable.noavatar_small;
-                String intro = "雪の季節";
+                String intro = " ";
                 //items.add(new PersonItem(logo, person.getString("username"), person.getString("distance"), intro));
                 items.add(new PersonItem(person.getString("username"), person.getString("distance"), intro));
             }
-            //add more users for debugging
-            if (Environment.isDebug()) {
-                items.add(new PersonItem("安达", "1.2KM", "雪の季節"));
-                items.add(new PersonItem("岛村", "1.2KM", "雪の季節"));
-                for (int k = 0; k < 5; k++) {
-                    items.add(new PersonItem("少女" + (char) ((int) ('A') + k), "3." + k + "KM", "雪の季節"));
-                }
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
