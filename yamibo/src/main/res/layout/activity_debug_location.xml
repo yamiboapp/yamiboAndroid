@@ -1,14 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.yamibo.main.yamiboandroid.debugLocationActivity">
 
-    <TextView android:text="API service instance is already constructed.     \nClick buttons to perform actions or reconstruct the API service by the chosen params.
-    \n use Baidu or AndroidAPI geocoder to read realCoords (viewed as a new location arrived to the service) \nNotice: Perform single undapte when interval&lt;1000ms.When autoSwitch is enabled, will autoswitch to the API based on the last known position&apos;s country." android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:id="@+id/debugShowMessage"
+
+    <TextView
+        android:text="API service instance is already constructed.     \nClick buttons to perform actions or reconstruct the API service by the chosen params.
+    \n use Baidu or AndroidAPI geocoder to read realCoords (viewed as a new location arrived to the service) \nNotice: Perform single undapte when interval&lt;1000ms.When autoSwitch is enabled, will autoswitch to the API based on the last known position&apos;s country."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/debugShowMessage"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/start"
         android:layout_alignRight="@+id/reconstructAPI"

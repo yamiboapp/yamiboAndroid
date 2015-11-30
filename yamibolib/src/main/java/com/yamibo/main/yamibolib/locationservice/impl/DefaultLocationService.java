@@ -38,14 +38,14 @@ import static com.yamibo.main.yamibolib.locationservice.impl.util.debugLog;
  * <p/>
  * 以下方法更改已注册的所有监听器的参数，并将作为下一次的监听器参数: <br>
  * resetAPIServiceOption(update_interval,provider);<br>
- *TODO user:若想使用GPS和网络混合provider并选择最优结果，推荐建立两个DefaultLocationService实例，分别监听网络和GPS并比较结果的精度：<br>
+ *REMARK user:若想使用GPS和网络混合provider并选择最优结果，推荐建立两个DefaultLocationService实例，分别监听网络和GPS并比较结果的精度：<br>
  *  <i>注解：百度定位模式下只能设置统一的监听参数。因此对AndroidAPI也作此简化处理。<br>
  *单监听器模式下，AndroidAPI默认的Best模式会变成监听GPS，导致长时间无为之结果。<br>
  *百度的单监听器在混合模式下，会将GPS和网络的结果混在一起返回，缺少文档说明。<br>
  *</i>
  *
-* TODO user: 经测试，若在activity里注册本服务的实例，百度API自动刷新功能在离开当前activity后不会停止。所以请在离开activity前stop或者保存必要信息。
- *TODO user: 定位服务的许多方法都是异步的，如果要sequential的使用这些方法，需要小心避免错误。
+* REMAKR user: 经测试，若在activity里注册本服务的实例，百度API自动刷新功能在离开当前activity后不会停止。所以请在离开activity前stop或者保存必要信息。
+ *REMARK user: 定位服务的许多方法都是异步的，如果要sequential的使用这些方法，需要小心避免错误。
  *
  */
 public class DefaultLocationService implements LocationService {

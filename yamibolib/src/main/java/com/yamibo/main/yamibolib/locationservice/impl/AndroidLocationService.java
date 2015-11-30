@@ -320,7 +320,7 @@ class AndroidLocationService implements APILocationService {
                     offsetLongitude = (double) bdCoord.get("offsetLongitude");
                 }
                 else
-                    debugLog("null JSONObject");
+                    debugLog("null JSONObject when call convertToBDCoord(latitude, longitude)");
 
             } catch (Exception e) {
                 debugLog("error converting coords " + e.toString());  }

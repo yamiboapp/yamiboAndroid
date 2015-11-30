@@ -2,27 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="测试" />
 
     <Button
-        android:id="@+id/btn_show_crash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="显示最新的crash" />
+        android:text="@string/view_all"
+        android:id="@+id/btn_nearAll" />
 
     <Button
-        android:id="@+id/btn_debug_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="debug location services; should allow setting location modes in future" />
+        android:text="@string/view_girl"
+        android:id="@+id/btn_nearGirl" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_boy"
+        android:id="@+id/btn_nearBoy" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="my info"
+        android:id="@+id/text_userInfo" />
+
+    <include layout="@layout/person_list" />
+
+
 </LinearLayout>
