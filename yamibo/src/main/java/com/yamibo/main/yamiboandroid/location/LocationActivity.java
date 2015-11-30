@@ -36,6 +36,7 @@ import static com.yamibo.main.yamibolib.locationservice.impl.util.debugShow;
  * TODO 每次初始化页面会自动上传新位置。是否需要隐私设置？
  * TODO read user gender info from profile
  * TODO 每次打开页面时的搜索偏好是否有记忆功能（存储于服务器）？还是初始化？
+ * TODO 建议在什么页面里增加app重启定位服务（和网络服务）的选项
  */
 //public class LocationActivity extends YMBActivity implements View.OnClickListener, RequestHandler<HttpRequest, HttpResponse>{
 public class LocationActivity extends YMBActivity implements View.OnClickListener, RequestHandler<HttpRequest, HttpResponse> {
@@ -84,10 +85,13 @@ public class LocationActivity extends YMBActivity implements View.OnClickListene
         if (locationService.hasLocation()) {
             String message = null;
             mLocation = locationService.location();
+            String streetAddress = "未知";
+            if (mLocation.address() != null)
+                streetAddress = mLocation.address();
             if (Environment.isDebug()) {
-                message = "我的位置：" + mLocation.address() + " offlat:" + mLocation.offsetLatitude() + " offlon" + mLocation.offsetLongitude();
+                message = "我的位置：" + streetAddress + " offlat:" + mLocation.offsetLatitude() + " offlon" + mLocation.offsetLongitude();
             } else
-                message = "我的位置：" + mLocation.address();
+                message = "我的位置：" + streetAddress;
             debugShow("already have location " + message);
             mInfo.setText(message);
         }
