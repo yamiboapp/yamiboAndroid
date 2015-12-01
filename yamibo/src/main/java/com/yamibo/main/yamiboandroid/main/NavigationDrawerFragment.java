@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -44,29 +46,44 @@ public class NavigationDrawerFragment extends YMBFragment implements LoginResult
     private LinearLayout mUserDetail;
     private Button mLoginButton;
 
-    private TextView tvMemberUsername, tvMemberUid, tvMemberPoints, tvMemberGroup;
+    private TextView tvMemberUsername, tvMemberUid, tvMemberCredits, tvMemberGrouptitle;
+    private ImageView iv_gender;
     private YMBNetworkImageView ivMemberAvater;
 
-
     private MenuItem[] mMenuItems = new MenuItem[]{
+            //论坛
+            new MenuItem(R.drawable.bg_menu_forum_rest, R.string.navigation_drawer_forum, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            }),
+
+            //收藏
             new MenuItem(R.drawable.bg_menu_fav_rest, R.string.navigation_drawer_favforum, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
             }),
+
+            //消息
             new MenuItem(R.drawable.bg_menu_pm_rest, R.string.navigation_drawer_mypm, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
             }),
+
+            //附近的人
             new MenuItem(R.drawable.bg_menu_nearby_rest, R.string.navigation_drawer_nearby, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
             }),
+
+            //设置
             new MenuItem(R.drawable.bg_menu_set_rest, R.string.navigation_drawer_set, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,12 +124,14 @@ public class NavigationDrawerFragment extends YMBFragment implements LoginResult
                 R.layout.fragment_navigation_drawer, container, false);
 
         tvMemberUsername = (TextView) layout.findViewById(R.id.member_username);
+        iv_gender =  (ImageView) layout.findViewById(R.id.iv_gender);
         tvMemberUid = (TextView) layout.findViewById(R.id.member_uid);
-        tvMemberPoints = (TextView) layout.findViewById(R.id.user_points);
-        tvMemberGroup = (TextView) layout.findViewById(R.id.groupid);
+        tvMemberGrouptitle = (TextView) layout.findViewById(R.id.grouptitle);
+        tvMemberCredits = (TextView) layout.findViewById(R.id.user_points);
         ivMemberAvater = (YMBNetworkImageView) layout.findViewById(R.id.member_avatar);
 
         mDrawerListView = (ListView) layout.findViewById(R.id.listview_navigation_drawer);
+
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -185,6 +204,7 @@ public class NavigationDrawerFragment extends YMBFragment implements LoginResult
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (mDrawerLayout != null && isDrawerOpen()) {
             inflater.inflate(R.menu.global, menu);
+
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -252,10 +272,20 @@ public class NavigationDrawerFragment extends YMBFragment implements LoginResult
             mUserDetail.setVisibility(View.VISIBLE);
             mLoginButton.setVisibility(View.GONE);
             tvMemberUsername.setText(profile.getMember_username());
+            Log.d("profile.getGender()", String.valueOf(profile.getGender()));
+            if(profile.getGender() == 1){//男
+                iv_gender.setImageResource(R.drawable.boy);
+            }else if(profile.getGender() == 2){//女
+                iv_gender.setImageResource(R.drawable.girl);
+            }else{
+                iv_gender.setVisibility(View.GONE);
+            }
+
             ivMemberAvater.setImageUri(profile.getMember_avatar());
-//        tvMemberGroup.setText(profile.getGroupid());
+            tvMemberGrouptitle.setText(profile.getGrouptitle());
+            tvMemberCredits.setText("积分：" + profile.getCredits());
             tvMemberUid.setText(getActivity().getString(R.string.navigation_drawer_member_uid) + profile.getMember_uid());
-//        tvMemberPoints
+
         } else {
             mUserDetail.setVisibility(View.GONE);
             mLoginButton.setVisibility(View.VISIBLE);
