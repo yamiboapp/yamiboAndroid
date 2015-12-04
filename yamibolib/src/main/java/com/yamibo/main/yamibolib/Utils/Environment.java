@@ -26,6 +26,7 @@ public class Environment {
     private static String mapiUserAgent;
 
     public static final String HTTP_ADDRESS = "http://ceshi.yamibo.com/chobits/index.php";
+    public static final String PORTRAIT_BASE_ADDRESS = "http://ceshi.yamibo.com/uc_server/data/avatar";
 
 
     private static PackageInfo packageInfo;

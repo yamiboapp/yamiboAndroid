@@ -22,6 +22,7 @@ dependencies {
 //    compile 'com.mcxiaoke.volley:library:1.0.+@aar'
     compile fileTree(dir: 'src/main/libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
 }
 
 

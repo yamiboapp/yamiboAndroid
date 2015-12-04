@@ -51,6 +51,38 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".message.PrivateMsgTalkActivity"
+            android:configChanges="orientation"
+            android:label="Message"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="msgpritalk"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".message.PublicMsgTalkActivity"
+            android:configChanges="orientation"
+            android:label="Message"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="msgpubtalk"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".settting.SettingActivity"
             android:configChanges="orientation"
             android:label="setting"

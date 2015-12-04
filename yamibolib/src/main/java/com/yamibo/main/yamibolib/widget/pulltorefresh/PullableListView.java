@@ -6,6 +6,7 @@ import android.widget.ListView;
 
 public class PullableListView extends ListView implements Pullable
 {
+	public int LIMIT_NOT_ALLOW_UP = 15;	//当item小于多少个时禁止上拉
 
 	public PullableListView(Context context)
 	{
@@ -44,8 +45,10 @@ public class PullableListView extends ListView implements Pullable
 		if (getCount() == 0)
 		{
 			// 没有item的时候也可以上拉加载
-			return true;
-		} else if (getLastVisiblePosition() == (getCount() - 1))
+			return false;
+		}else if (getCount() <= LIMIT_NOT_ALLOW_UP)
+			return false;
+		else if (getLastVisiblePosition() == (getCount() - 1))
 		{
 			// 滑到底部了
 			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null

@@ -13,6 +13,7 @@
 
         <com.yamibo.main.yamibolib.widget.pulltorefresh.PullableListView
             android:id="@+id/content_view"
+            android:headerDividersEnabled="true"
             android:divider="#00000000"
             android:dividerHeight="18dp"
             android:layout_width="match_parent"
@@ -21,5 +22,4 @@
 
         <include layout="@layout/load_more" />
     </com.yamibo.main.yamibolib.widget.pulltorefresh.PullToRefreshLayout>
-
 </RelativeLayout>

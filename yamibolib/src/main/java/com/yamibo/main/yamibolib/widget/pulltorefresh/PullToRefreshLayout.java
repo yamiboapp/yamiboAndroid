@@ -22,6 +22,9 @@ import java.util.TimerTask;
 
 public class PullToRefreshLayout extends RelativeLayout
 {
+	//刷新结果停留的时间
+	public static final int RESULT_PAUSE_TIME = 200;
+
 	public static final String TAG = "PullToRefreshLayout";
 	// 初始状态
 	public static final int INIT = 0;
@@ -247,7 +250,7 @@ public class PullToRefreshLayout extends RelativeLayout
 					changeState(DONE);
 					hide();
 				}
-			}.sendEmptyMessageDelayed(0, 1000);
+			}.sendEmptyMessageDelayed(0, RESULT_PAUSE_TIME);
 		} else
 		{
 			changeState(DONE);
@@ -283,7 +286,7 @@ public class PullToRefreshLayout extends RelativeLayout
 		}
 		if (pullUpY < 0)
 		{
-			// 刷新结果停留1秒
+			// 刷新结果停留x秒
 			new Handler()
 			{
 				@Override
@@ -292,7 +295,7 @@ public class PullToRefreshLayout extends RelativeLayout
 					changeState(DONE);
 					hide();
 				}
-			}.sendEmptyMessageDelayed(0, 1000);
+			}.sendEmptyMessageDelayed(0, RESULT_PAUSE_TIME);
 		} else
 		{
 			changeState(DONE);
@@ -678,5 +681,6 @@ public class PullToRefreshLayout extends RelativeLayout
 		 */
 		void onLoadMore(PullToRefreshLayout pullToRefreshLayout);
 	}
+
 
 }
