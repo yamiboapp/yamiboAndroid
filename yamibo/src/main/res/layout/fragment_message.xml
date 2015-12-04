@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.yamibo.main.yamibolib.widget.pulltorefresh.PullToRefreshLayout
+        android:id="@+id/refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <include layout="@layout/refresh_head" />
+        <!-- 支持所有实现Pullable接口的View -->
+
+        <com.yamibo.main.yamibolib.widget.pulltorefresh.PullableListView
+            android:id="@+id/content_view"
+            android:headerDividersEnabled="true"
+            android:divider="#00000000"
+            android:dividerHeight="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/deep_yellow"/>
+
+        <include layout="@layout/load_more" />
+    </com.yamibo.main.yamibolib.widget.pulltorefresh.PullToRefreshLayout>
+</RelativeLayout>

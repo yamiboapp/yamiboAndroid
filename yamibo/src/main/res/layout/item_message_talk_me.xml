@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/talk_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/talk_item_useful"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_yellow"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <!--What you want to show in SurfaceView-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_msg_talk_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15-11-15" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llayout_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_msg_talk_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~23333333~" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <com.yamibo.main.yamibolib.widget.YMBNetworkImageView
+                android:id="@+id/img_msg_talk_potrait"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/icon_logo" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.5"
+        android:background="@color/gray"></LinearLayout>
+</LinearLayout>
