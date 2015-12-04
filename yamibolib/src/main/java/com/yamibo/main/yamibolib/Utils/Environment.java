@@ -17,8 +17,6 @@ import java.util.UUID;
 
 /**
  * Created by wangxiaoyan on 15/4/20.
- * Clover: add IS_DEBUG_ENABLED to toggle debug information output in Log
- * 使用百度定位服务时需要
  */
 public class Environment {
 
@@ -29,7 +27,7 @@ public class Environment {
 
 
     public static final String HTTP_ADDRESS = "http://www.yamibo.com/chobits/index.php";
-
+    public static final String PORTRAIT_BASE_ADDRESS = "http://www.yamibo.com/uc_server/data/avatar";
 
 
     /**
@@ -40,7 +38,7 @@ public class Environment {
     public static final String BD_APP_KEY = "VFfjj9gziQzqzF9iEvulSewx";
     public static final String BD_APP_SECURITY_CODE ="93:F3:F9:4E:FE:17:14:66:31:43:21:5E:0A:21:DA:A5:86:FD:97:6C;com.yamibo.main.yamibolib";
 
-
+    
 
     private static PackageInfo packageInfo;
 

@@ -30,6 +30,10 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
 
+    <string name="message">信息</string>
+    <string name="message_talk_private">个人消息对话列表</string>
+    <string name="message_talk_public">公共消息对话列表</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
