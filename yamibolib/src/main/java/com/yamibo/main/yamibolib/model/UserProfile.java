@@ -16,11 +16,18 @@ public class UserProfile {
     String formhash;
     String ismoderator;
     String readaccess;
+    String grouptitle;
+    String credits;
+
+
+
     //    notice
     int newpush;
     int newpm;
     int newprompt;
     int newmypost;
+    int gender;
+
 
     JSONObject userProfile;
 
@@ -43,6 +50,8 @@ public class UserProfile {
         newpm = userprofile.optInt("newpm");
         newprompt = userprofile.optInt("newprompt");
         newmypost = userprofile.optInt("newmypost");
+
+
     }
 
     @Override
@@ -162,5 +171,28 @@ public class UserProfile {
         this.newmypost = newmypost;
     }
 
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public String getGrouptitle() {
+        return grouptitle;
+    }
+
+    public void setGrouptitle(String grouptitle) {
+        this.grouptitle = grouptitle;
+    }
+
+    public String getCredits() {
+        return credits;
+    }
+
+    public void setCredits(String credits) {
+        this.credits = credits;
+    }
 
 }

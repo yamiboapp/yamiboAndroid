@@ -2,8 +2,10 @@
 <resources>
 
     <color name="light_yellow">#fff6d7</color>
+    <color name="light_yellow2">#FFE284</color>
 
     <color name="deep_yellow">#ffedbb</color>
+
 
     <color name="light_brown">#6e2b19</color>
 
