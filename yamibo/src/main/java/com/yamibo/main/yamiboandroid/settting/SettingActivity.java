@@ -105,7 +105,7 @@ public class SettingActivity extends YMBActivity implements View.OnClickListener
         mVersion=(BasicItem)findViewById(R.id.version);
         currentVersion=Environment.versionCode();
 
-        mVersion.setTitle(getResources().getString(R.string.version)+" "+versionToString(currentVersion));
+        mVersion.setTitle(getResources().getString(R.string.version)+" "+Environment.versionName());
 
         mDeveloper=(BasicItem)findViewById(R.id.developer);
         mDeveloper.setTitle("开发者");
