@@ -25,6 +25,7 @@ public class Environment {
 
     private static String mapiUserAgent;
 
+    public static final String DOMAIN_ADDRESS = "http://www.yamibo.com/";
 
     public static final String HTTP_ADDRESS = "http://www.yamibo.com/chobits/index.php";
     public static final String PORTRAIT_BASE_ADDRESS = "http://www.yamibo.com/uc_server/data/avatar";
