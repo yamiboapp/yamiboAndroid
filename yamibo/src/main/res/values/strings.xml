@@ -49,4 +49,11 @@
     <string name="view_boy">只看汉子</string>
     <string name="view_girl">只看妹子</string>
     <string name="refresh_fail">更新失败</string>
+
+    <string name="authors">牛奶\n Clover\n remiany\n mhsj6621\n lightsmeki</string>
+    <string name="developer">开发者</string>
+    <string name="version">版本</string>
+    <string name="title_developer">开发者</string>
+    <string name="newVersion_key">new version</string>
+
 </resources>
