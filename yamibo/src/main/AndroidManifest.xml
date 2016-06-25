@@ -35,6 +35,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".web.WebActivity"
+            android:configChanges="orientation"
+            android:label="web"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="web"
+                    android:scheme="ymb" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".message.MessageActivity"
             android:configChanges="orientation"
             android:label="Message"

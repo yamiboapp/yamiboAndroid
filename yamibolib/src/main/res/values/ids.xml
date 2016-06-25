@@ -12,4 +12,6 @@
     <item name="itemSwitch" type="id" />
     <item name="itemArrow" type="id" />
     <item name="itemLeft1stPic" type="id" />
+
+    <item name="banner" type="id" />
 </resources>

@@ -1,6 +1,7 @@
 package com.yamibo.main.yamibolib.dataservice.http.impl;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
@@ -33,7 +34,7 @@ public class VolleyRequest extends JsonObjectRequest {
     private final static int MESSAGE_REQUEST_SUCCEED = 0;
     private final static int MESSAGE_REQUEST_FAILED = 1;
 
-    private Handler mHandler = new Handler(/*Looper.getMainLooper()*/) {
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MESSAGE_REQUEST_SUCCEED) {
